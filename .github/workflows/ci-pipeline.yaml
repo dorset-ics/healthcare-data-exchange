@@ -24,7 +24,7 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Build and Publish Swagger Docs
-              run: bash ${{ github.workspace }}/.pipelines/scripts/generate-swagger.sh ${{ github.workspace }}/artifacts
+              run: mkdir -p ${{ github.workspace }}/swagger-artifacts && bash ${{ github.workspace }}/.pipelines/scripts/generate-swagger.sh ${{ github.workspace }}/swagger-artifacts
               env:
                   ASPNETCORE_ENVIRONMENT: 'Local'
 
@@ -32,7 +32,7 @@ jobs:
               uses: actions/upload-artifact@v2
               with:
                   name: SwaggerDoc
-                  path: ${{ github.workspace }}/artifacts/dex-swagger.json
+                  path: ${{ github.workspace }}/swagger-artifacts/dex-swagger.json
             
     static_code_analysis:
         name: Static Code Analysis
