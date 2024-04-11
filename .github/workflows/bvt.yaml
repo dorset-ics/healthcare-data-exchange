@@ -24,7 +24,7 @@ on:
         required: true
       MESH_PASSWORD:
         required: true
-      NVDAPIKEY: # needs to be changed to NVD_API_KEY to match convention later
+      NVD_API_KEY:
         required: true
 
 jobs:

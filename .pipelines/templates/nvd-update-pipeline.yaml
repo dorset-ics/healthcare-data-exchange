@@ -59,7 +59,7 @@ stages:
                 unzip -uq ./dependency-check.zip -d $(Pipeline.Workspace)/odc/app/$VERSION
               fi
               
-              $(Pipeline.Workspace)/odc/app/$VERSION/dependency-check/bin/dependency-check.sh --updateonly --nvdApiKey $(nvdApiKey) --data $(Pipeline.Workspace)/odc/data --nvdValidForHours ${{ parameters.nvdValidForHours }} $PURGE ${{ parameters.additionalArguments }}
+              $(Pipeline.Workspace)/odc/app/$VERSION/dependency-check/bin/dependency-check.sh --updateonly --nvdApiKey $(NVD_API_KEY) --data $(Pipeline.Workspace)/odc/data --nvdValidForHours ${{ parameters.nvdValidForHours }} $PURGE ${{ parameters.additionalArguments }}
             displayName: Update NVD
                 
           - task: ArchiveFiles@2
