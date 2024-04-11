@@ -21,6 +21,7 @@ repos:
         exclude: ^data/.*
       - id: check-added-large-files
         args: ['--maxkb=1000']
+        exclude: src/Infrastructure/Terminology/SnomedCodes.json
       - id: check-json
         exclude: ^data/.* | ^templates/.*
       - id: detect-private-key
