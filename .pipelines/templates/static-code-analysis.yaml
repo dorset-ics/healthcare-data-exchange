@@ -1,0 +1,79 @@
+steps:
+  - task: Gitleaks@2
+    displayName: GitLeaks Secret Scanning
+    inputs:
+      scanlocation: '$(Build.SourcesDirectory)'
+      configtype: 'custom'
+      configfile: '$(Build.SourcesDirectory)/.pipelines/configurations/.gitleaks.toml'
+      scanmode: 'nogit'
+      reportformat: 'sarif'
+      
+  - task: DownloadPipelineArtifact@2
+    displayName: Download NVD Artifact
+    inputs:
+      buildType: 'specific'
+      project: $(System.TeamProject)
+      definition: 'NVD Cache Update'
+      buildVersionToDownload: 'latest'
+      branchName: 'refs/heads/main'
+      artifactName: 'NVD'
+      path: '$(Pipeline.Workspace)/odc'
+  
+  - task: ExtractFiles@1
+    displayName: Unpack NVD
+    inputs:
+      archiveFilePatterns: '$(Pipeline.Workspace)/odc/NVD.zip'
+      destinationFolder: '$(Pipeline.Workspace)/odc/data'
+      overwriteExistingFiles: true
+      
+  - task: dependency-check-build-task@6
+    displayName: 'OWASP Dependency Check'
+    inputs:
+      projectName: $(System.TeamProject)
+      scanPath: '**/*.csproj'
+      format: 'JUNIT'
+      reportsDirectory: '$(System.DefaultWorkingDirectory)/dependency-scan-results'
+      failOnCVSS: '8'
+      additionalArguments: --noupdate --data $(Pipeline.Workspace)/odc/data
+
+  - task: PublishTestResults@2
+    displayName: 'Publish OWASP Dependency Check Results'
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '$(System.DefaultWorkingDirectory)/dependency-scan-results/*junit.xml'
+      testRunTitle: 'Dependency check'
+      searchFolder: '$(Common.TestResultsDirectory)'
+
+  - script: |
+      dotnet tool install -g Microsoft.CST.DevSkim.CLI
+      devskim analyze --source-code $(Build.SourcesDirectory)/src --output-file $(Build.SourcesDirectory)/devskim-results.sarif -f sarif
+    displayName: 'DevSkim Security Analysis'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish DevSkim Security Analysis Results'
+    inputs:
+      PathtoPublish: '$(Build.SourcesDirectory)/devskim-results.sarif'
+      ArtifactName: 'CodeAnalysisLogs'
+      publishLocation: 'Container'
+      
+  - script: |
+      if grep -q -E '("DevSkimSeverity":"Critical"|"DevSkimSeverity":"Important")' $(Build.SourcesDirectory)/devskim-results.sarif; then
+       echo "Critical or Important severity found in devskim-results.sarif. Failing the pipeline."
+       exit 1
+      fi
+    displayName: 'Fail If Critical or Important Severity Found'
+  
+  
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.x'
+
+  - script: |
+      echo "##vso[task.setvariable variable=PY]$(python -VV)"
+    displayName: Set version variables
+
+  - script: python -m pip install --upgrade pre-commit
+    displayName: Install pre-commit
+
+  - script: pre-commit run --all-files --show-diff-on-failure
+    displayName: Run pre-commit checks

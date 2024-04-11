@@ -1,0 +1,40 @@
+{
+  "organisations": [
+    {
+      "OrganisationCode": "Z1010",
+      "Name": "THE ROYAL GROUP OF HOSPITALS \u0026 DENTAL HOSPITAL HSS",
+      "HighLevelHealthGeography": "ZE0",
+      "AddressLine1": "274 GROSVENOR ROAD",
+      "AddressLine2": "",
+      "AddressLine3": "",
+      "AddressLine4": "BELFAST",
+      "AddressLine5": "COUNTY ANTRIM",
+      "PostCode": "BT12 6BA",
+      "OpenDate": "19930401",
+      "CloseDate": "20070331",
+      "StatusCode": "C",
+      "OrganisationSubtypeCode": "T",
+      "ParentOrganisationCode": "",
+      "ContactTelephoneNumber": "",
+      "AmendedRecordIndicator": "0"
+    },
+    {
+      "OrganisationCode": "Z1020",
+      "Name": "BELFAST CITY HOSPITAL HSS TRUST",
+      "HighLevelHealthGeography": "ZE0",
+      "AddressLine1": "51 LISBURN ROAD",
+      "AddressLine2": "",
+      "AddressLine3": "",
+      "AddressLine4": "BELFAST",
+      "AddressLine5": "COUNTY ANTRIM",
+      "PostCode": "BT9 7AB",
+      "OpenDate": "19930401",
+      "CloseDate": "20070331",
+      "StatusCode": "C",
+      "OrganisationSubtypeCode": "T",
+      "ParentOrganisationCode": "",
+      "ContactTelephoneNumber": "",
+      "AmendedRecordIndicator": "0"
+    }
+  ]
+}

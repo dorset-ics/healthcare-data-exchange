@@ -1,0 +1,78 @@
+site_name: Healthcare Data Exchange
+site_description: An [MkDocs](https://www.mkdocs.org/) site for the Healthcare Data Exchange repository documentation
+
+extra_css:
+  - styles.css
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: nhs
+  logo: assets/nhs-logo.png
+  favicon: assets/favicon.png
+  features:
+    - navigation.instant
+    - content.tabs.link
+    - content.code.copy
+
+exclude_docs: |
+  /pull_request_template.md
+  
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Setup Guide: setup-guide.md
+  - Developer:
+    - Development Guidelines: developer/development-guide.md
+    - Configuration Structure: developer/configuration-structure.md
+    - Integration Guide: developer/integration-guide.md
+    - Cloud Development & Testing: developer/quick-start-cloud-dev.md
+    - Pipelines: developer/pipelines.md
+    - Version Control: developer/version-control.md
+    - Source Integration Setup: developer/source-integration-setup.md
+    - Swagger: developer/swagger-file.md
+  - Design: 
+    - Architecture: design/architecture.md
+    - Security Plan: design/security-plan.md
+    - Facade Application: 
+      - Overview: design/facade/overview.md
+      - Api: design/facade/api.md
+      - Infrastructure: design/facade/infrastructure.md
+  - Infrastructure:
+    - Overview: infrastructure/overview.md
+    - Deployment: infrastructure/deployment.md
+    - Environments: infrastructure/environments.md
+    - Identity: infrastructure/identity.md
+    - Custom Domain and TLS/SSL: infrastructure/custom-domain-and-tls-ssl.md
+  - Ingestion:
+    - Overview: ingestion/overview.md
+    - HL7v2: ingestion/hl7v2-ingestion.md
+    - FHIR: ingestion/fhir-ingestion.md
+    - CSV: ingestion/csv-ingestion.md
+  - Data Mapping:
+    - Overview: data-mapping/overview.md
+    - SNOMED Code System: data-mapping/snomed-code-system.md
+    - Testing and Validation: data-mapping/testing-and-validation.md
+    - Mappings:
+      - PDS MESH: data-mapping/mappings/pds-mesh.md
+      - NDOP MESH: data-mapping/mappings/ndop-mesh.md
+      - NDOP FHIR: data-mapping/mappings/ndop-fhir.md
+  - FHIR Store:
+    - Overview: fhir-store/overview.md
+    - Profiles: fhir-store/profiles.md
+    - IDs and References: fhir-store/ids-and-references.md
+  - National Services:
+    - Personal Demographics Service: national-services/personal-demographics-service.md
+    - National Data Opt-Out: national-services/national-data-opt-out.md
+    - Organisation Data Service: national-services/organisation-data-service.md
+    - MESH: national-services/mesh.md
+
+copyright: "&copy; NHS Dorset"
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/dorset-ics
+    - icon: fontawesome/solid/envelope
+      link: mailto:dex@nhsdorset.nhs.uk

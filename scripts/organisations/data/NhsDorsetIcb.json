@@ -1,0 +1,72 @@
+{
+  "resourceType": "Organization",
+  "id": "948a56e6-d3a9-7a12-ee57-850a1a5d244a",
+  "name": "NHS DORSET ICB",
+  "alias": [
+    "NHS Dorset ICB"
+  ],
+  "identifier": [
+    {
+      "use": "official",
+      "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+      "value": "QVV"
+    }
+  ],
+  "contact": [
+    {
+      "name": {
+        "text": "IG Management"
+      },
+      "telecom": [
+        {
+          "system": "email",
+          "value": "cio@nhsdorset.nhs.uk"
+        },
+        {
+          "system": "email",
+          "value": "vanessa.read@dorsetccg.nhs.uk"
+        }
+      ],
+      "address": {
+        "line": [
+          "Vespasian house",
+          "Bridport road"
+        ],
+        "city": "Dorchester",
+        "district": "Dorset",
+        "postalCode": "DT1 1TG",
+        "country": "UK"
+      }
+    },
+    {
+      "name": {
+        "text": "NHS Dorset"
+      },
+      "telecom": [
+        {
+          "system": "email",
+          "value": "customer.careteam@nhsdorset.nhs.uk"
+        },
+        {
+          "system": "phone",
+          "value": "(+44) 01305-368900"
+        }
+      ],
+      "address": {
+        "line": [
+          "Vespasian house",
+          "Barrack Road"
+        ],
+        "city": "Dorchester",
+        "district": "Dorset",
+        "postalCode": "DT1 1TS",
+        "country": "UK"
+      }
+    }
+  ],
+  "endpoint": [
+    {
+      "reference": "https://nhsdorset.nhs.uk/"
+    }
+  ]
+}

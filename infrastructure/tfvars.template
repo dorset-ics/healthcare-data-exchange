@@ -1,0 +1,13 @@
+env                                 = "<env>"
+location                            = "UK South"
+log_analytics_sku                   = "PerGB2018"
+app_plan_sku                        = "B1"
+vnet_address_space                  = ["192.168.0.0/16"]
+app_gateway_subnet_address_prefixes = ["192.168.0.0/24"]
+services_subnet_address_prefixes    = ["192.168.1.0/24"]
+app_plan_subnet_address_prefixes    = ["192.168.10.0/24"]
+apim_subnet_address_prefixes        = ["192.168.100.0/24"]
+image_tag_suffix                    = "<env>"
+app_registration_owners             = ["<app_registration_owners>"]
+azure_cli_client_id                 = "<azure_cli_client_id>"
+sp_client_id                        = "<sp_client_id>"

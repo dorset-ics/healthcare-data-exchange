@@ -1,0 +1,12 @@
+parameters:
+  - name: env
+
+steps:
+  - script: |
+      az login --service-principal -u $CLIENT_ID -p $CLIENT_SECRET --tenant $TENANT_ID
+      bash $(Build.SourcesDirectory)/.pipelines/scripts/add-agent-ip-for-waf-policy.sh ${{parameters.env}}            
+    env:
+      TENANT_ID: $(AZURE_TENANT_ID)
+      CLIENT_ID: $(sp-dex-deployment-client-id)
+      CLIENT_SECRET: $(sp-dex-deployment-client-secret)
+    displayName: Expose Agent IP in App GTW

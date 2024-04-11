@@ -1,0 +1,139 @@
+parameters:
+  - name: SERVICE_NAME
+  - name: PROJECT_FOLDER
+  - name: COVERAGE_GATE
+    type: string
+    default: 95
+
+steps:
+  - checkout: self
+    persistCredentials: true
+    clean: true
+    fetchDepth: 0
+
+  - task: Bash@3
+    displayName: 'Build documentation'
+    inputs:
+      targetType: 'inline'
+      workingDirectory: src
+      script: |
+        set -eux  # fail on error
+        docker compose -f ../docker/docker-compose-mkdocs.yml run mkdocs build --strict # --strict is used to fail the build if there are any warnings e.g. broken links
+        rm -rf site/ # remove the site folder with the build files
+        
+  - task: Bash@3
+    displayName: 'Build'
+    inputs:
+      targetType: 'inline'
+      workingDirectory: src
+      script: |
+        set -eux  # fail on error
+        cp ../docker/.env.template ../docker/.env
+        docker compose -f ../docker/docker-compose.yml build ${{ parameters.SERVICE_NAME }}
+
+  - task: Bash@3
+    displayName: 'Unit Tests'
+    inputs:
+      targetType: 'inline'
+      workingDirectory: tests/Unit.Tests
+      script: |
+        dotnet test -c Release --logger "trx;LogFileName=testresults.trx" --collect:"XPlat Code Coverage"
+
+  - task: Bash@3
+    displayName: 'Start Docker Compose'
+    inputs:
+      
+      targetType: 'inline'
+      workingDirectory: docker
+      script: |
+        set -eux  # fail on error
+        export TAG=$(Build.BuildId)
+        export DataHubFhirServer__TemplateImage=${ACR_NAME}/dev:${TAG}
+        export Pds__Mesh__RetrieveSchedule="*/10 * * * * ?"
+        bash start.sh
+        docker compose -f docker-compose.yml up --build data-init templates-pusher
+    env:
+      AZURE_CLIENT_ID: '$(AZURE_CLIENT_ID)'
+      AZURE_CLIENT_SECRET: '$(AZURE_CLIENT_SECRET)'
+      MESH_PASSWORD: '$(MESH_PASSWORD)'
+
+  - task: Bash@3
+    displayName: 'Templates Tests'
+    inputs:
+      targetType: 'inline'
+      workingDirectory: tests/Templates.Tests
+      script: |
+        set -eux  # fail on error
+        dotnet test -e DataHubFhirServer:TemplateImage=${ACR_NAME}/dev:$(Build.BuildId)\
+                    -e DataHubFhirServer:BaseUrl=http://localhost:8080 \
+                    -e Mesh:Url=http://localhost:8700 \
+                    -c Release --logger "trx;LogFileName=testresults.trx" --collect:"XPlat Code Coverage"
+    env:
+      ASPNETCORE_ENVIRONMENT: 'Integration'
+
+  - task: DownloadSecureFile@1
+    name: pdsCert
+    displayName: 'Download PDS certificate'
+    inputs:
+      secureFile: 'private-key-x509.pem'
+
+  - script: |
+      set -eux  # fail on error
+      echo $(pdsCert.secureFilePath)
+      export Pds__Fhir__Authentication__Certificate=$(cat $(pdsCert.secureFilePath))
+      eval echo "~$USER"
+
+  - task: Bash@3
+    displayName: 'Integration Tests'
+    inputs:
+      targetType: 'inline'
+      workingDirectory: tests/Integration.Tests
+      script: |
+        dotnet test -e DataHubFhirServer:TemplateImage=${ACR_NAME}/dev:$(Build.BuildId) -c Release --logger "trx;LogFileName=testresults.trx" --collect:"XPlat Code Coverage"
+    env:
+      ASPNETCORE_ENVIRONMENT: 'Integration'
+      Pds__Mesh__MailboxPassword: '$(MESH_PASSWORD)'
+
+  - task: Bash@3
+    displayName: 'E2E Tests'
+    inputs:
+      targetType: 'inline'
+      workingDirectory: tests/E2E.Tests
+      script: |
+        dotnet test --logger "trx;LogFileName=testresults.trx"
+
+  - task: Bash@3
+    displayName: 'Docker logs'
+    condition: always()
+    inputs:
+      targetType: 'inline'
+      workingDirectory: docker
+      script: |
+        docker compose logs    
+      
+  - task: PublishTestResults@2
+    displayName: 'Publish test results'
+    condition: always()
+    inputs:
+      testResultsFormat: 'VSTest'
+      testResultsFiles: $(System.DefaultWorkingDirectory)/tests/*/TestResults/*.trx
+      failTaskOnFailedTests: true
+
+  - script: |
+      dotnet tool install -g dotnet-reportgenerator-globaltool
+      reportgenerator -reports:**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:Cobertura
+    displayName: 'Unify Test Coverage Reports'
+
+  - task: PublishCodeCoverageResults@2
+    displayName: 'Publish code coverage results'
+    inputs:
+      summaryFileLocation: '$(Build.SourcesDirectory)/CodeCoverage/Cobertura.xml'
+
+  - task: BuildQualityChecks@9
+    displayName: 'Check test line coverage gate'
+    inputs:
+      checkCoverage: true
+      coverageFailOption: 'fixed'
+      coverageType: 'lines'
+      coverageThreshold: '${{parameters.COVERAGE_GATE}}'
+      explicitFilter: true

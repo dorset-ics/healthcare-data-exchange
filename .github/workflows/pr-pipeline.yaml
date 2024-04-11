@@ -1,0 +1,19 @@
+name: PR
+
+on:
+    pull_request:
+        branches:
+            - main
+        
+jobs:
+    bvt:
+        name: Build Verification Test
+        uses: ./.github/workflows/bvt.yaml
+        with:
+            service_name: 'api'
+            project_folder: 'Api'
+        secrets: inherit 
+        
+    static_code_analysis:
+        name: Static Code Analysis
+        uses: ./.github/workflows/static-code-analysis.yaml

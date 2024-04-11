@@ -1,0 +1,49 @@
+trigger:
+  batch: true
+  branches:
+    include:
+      - main
+
+pr: none
+
+stages:
+  - stage: StaticCodeAnalysis
+    displayName: Static Code Analysis
+    jobs:
+      - job: RunAnalysis
+        displayName: Run Analysis
+        steps:
+          - template: ./templates/static-code-analysis.yaml
+
+  - stage: ServicesBVT
+    displayName: Services Build Verification Tests
+    dependsOn: [] # Run in parallel to StaticCodeAnalysis
+    jobs:
+      - job: BVT
+        displayName: Build Verification Test
+        strategy:
+          matrix:
+            Api:
+              serviceName: "api"
+              projectFolder: "Api"
+        steps:
+          - template: ./templates/bvt.yaml
+            parameters:
+              SERVICE_NAME: $(serviceName)
+              PROJECT_FOLDER: $(projectFolder)
+              
+          - task: Bash@3
+            inputs:
+              targetType: 'inline'
+              script: |
+                bash $(Build.SourcesDirectory)/.pipelines/scripts/generate-swagger.sh $(Build.ArtifactStagingDirectory)
+            displayName: 'Build and Publish Swagger Docs'
+            env:
+              ASPNETCORE_ENVIRONMENT: 'Local'
+            
+          - task: PublishPipelineArtifact@1
+            inputs:
+              targetPath: '$(Build.ArtifactStagingDirectory)/dex-swagger.json'
+              artifact: 'SwaggerDoc'
+              publishLocation: 'pipeline'
+            displayName: 'Publish Swagger Doc as Pipeline Artifact'

@@ -1,0 +1,61 @@
+{
+  "resourceType": "Bundle",
+  "type": "batch",
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Organization",
+        "id": "7558a5c0-72fd-690e-3239-003c092f9d3c",
+        "meta": {
+          "source": "Organization/cec48f09-f30e-cb9f-adc1-50e79d71796d",
+          "profile": [
+            "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Organization"
+          ]
+        },
+        "identifier": [
+          {
+            "use": "official",
+            "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+            "value": "A101H"
+          }
+        ],
+        "type": [
+          {
+            "coding": [
+              {
+                "system": "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Organization",
+                "code": "prov",
+                "display": "Healthcare Provider"
+              }
+            ],
+            "text": "Healthcare Provider"
+          }
+        ],
+        "name": "Arran War Memorial Hospital",
+        "alias": [
+          "Arran War Memorial Hospital"
+        ],
+        "partOf": {
+          "reference": "Organization/6ac17902-f334-f1f1-877e-1e2f26838a13",
+          "display": "6ac17902-f334-f1f1-877e-1e2f26838a13"
+        },
+        "contact": [
+          {
+            "address": {
+              "line": [
+                "Lamlash",
+                "Isle of Arran"
+              ],
+              "postalCode": "KA278LF",
+              "country": "UK"
+            }
+          }
+        ]
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Organization/7558a5c0-72fd-690e-3239-003c092f9d3c"
+      }
+    }
+  ]
+}

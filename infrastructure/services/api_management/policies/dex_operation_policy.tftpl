@@ -1,0 +1,44 @@
+<policies>
+    <inbound>
+        <base />
+        %{~ if contains(tags, "FhirBackend") ~}
+        <set-backend-service backend-id="fhir-server" />
+        %{~ endif ~}
+        <validate-azure-ad-token
+            tenant-id="{{TenantId}}"
+            header-name="Authorization"
+            failed-validation-httpcode="401"
+            failed-validation-error-message="Authorization failed: Access token is missing.">
+            <client-application-ids>
+                <application-id>{{ApplicationId}}</application-id>
+                <application-id>{{AzureCliId}}</application-id>
+                <application-id>{{SpClientId}}</application-id>
+            </client-application-ids>
+            <audiences>
+                <audience>{{ApplicationIdUri}}</audience>
+                <audience>{{ApplicationId}}</audience>
+                <audience>{{FhirUrl}}</audience>
+            </audiences>
+            %{~ if strcontains((join(";", tags)), "RequiredRole")~}
+            <required-claims>
+                <claim name="roles" match="all">
+                %{~ for tag in tags ~}
+                    %{~ if strcontains(tag, "RequiredRole=") ~}
+                    <value>${substr(tag, 13, length(tag) - 1)}</value>
+                    %{~ endif ~}
+                %{~ endfor ~}
+                </claim>
+            </required-claims>
+            %{~ endif ~}
+        </validate-azure-ad-token>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

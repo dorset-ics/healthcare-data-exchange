@@ -1,0 +1,68 @@
+{% evaluate nhsEnglandOrganisationId using '_base/Common/ID/Organization' OdsCode: 'x26' -%}
+{
+    "resourceType": "Bundle",
+    "type": "batch",
+    "entry" : [
+        {% for org in msg.organisations %}
+        {% evaluate uniqueId using '_base/Common/ID/Organization' OdsCode: org.HospitalCode -%}
+        {
+        "resource": {
+            "resourceType" : "Organization",
+            "id" : "{{ uniqueId }}",
+            "meta": {
+                "profile": [
+                    "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Organization"
+                ],
+                "source": "Organization/{{ nhsEnglandOrganisationId }}"
+            },
+            "name": "{{ org.HospitalName }}",
+            "alias": [
+                "{{ org.HospitalName }}"
+            ],
+            "identifier": [
+                {
+                    "use": "official",
+                    "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+                    "value": "{{ org.HospitalCode }}"
+                }
+            ],
+            "type": [
+                {
+                    "coding": [
+                    {
+                        "system": "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Organization",
+                        "code": "prov",
+                        "display": "Healthcare Provider"
+                    }
+                    ],
+                    "text": "Healthcare Provider"
+                }
+            ],
+            "contact" : [{
+                "address" : { 
+                    "line": [
+                        "{{ org.AddressLine1 }}",
+                        "{{ org.AddressLine2 }}",
+                        "{{ org.AddressLine2qf }}"
+                    ],
+                    "city": "{{ org.AddressLine4 }}",
+                    "district": "{{ org.AddressLine3 }}",
+                    "postalCode": "{{ org.PostCode }}",
+                    "country": "UK"
+                }
+            }],
+            {% evaluate careBoardId using '_base/Common/ID/Organization' OdsCode: org.HealthBoard -%}
+            "partOf": {
+                "reference": "Organization/{{ careBoardId }}",
+                "display": "{{ careBoardId }}"
+            }
+        },
+        "request": {
+            {% evaluate uniqueId using '_base/Common/ID/Organization' OdsCode: org.HospitalCode -%}
+            "method": "PUT",
+            "url": "Organization/{{ uniqueId }}"
+        }
+    }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+    ]
+}

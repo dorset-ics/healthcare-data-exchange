@@ -1,0 +1,87 @@
+{% evaluate nhsEnglandOrganisationId using '_base/Common/ID/Organization' OdsCode: 'x26' -%}
+{
+    "resourceType": "Bundle",
+    "type": "batch",
+    "entry" : [
+        {% for org in msg.organisations %}
+        {% evaluate uniqueId using '_base/Common/ID/Organization' OdsCode: org.OrganisationCode -%}
+        {
+        "resource": {
+            "resourceType" : "Organization",
+            "id" : "{{ uniqueId }}",
+            "meta": {
+                "profile": [
+                    "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Organization"
+                ],
+                "source": "Organization/{{ nhsEnglandOrganisationId }}"
+            },
+            "name": "{{ org.Name }}",
+            "alias": [
+                "{{ org.Name }}"
+            ],
+            "identifier": [
+                {
+                    "use": "official",
+                    "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+                    "value": "{{ org.OrganisationCode }}"
+                }
+            ],
+            "extension": [
+                {%  if org.OpenDate != "" %}
+                {
+                    "url": "http://example.org/fhir/extensions#openDate",
+                    "valueDateTime": "{{ org.OpenDate | slice: 0, 4 }}-{{ org.OpenDate | slice: 4, 2 }}-{{ org.OpenDate | slice: 6, 2 }}"
+                }
+                {% endif %}
+                {%  if org.CloseDate != "" %},
+                {
+                    "url": "http://example.org/fhir/extensions#closeDate",
+                    "valueDateTime": "{{ org.CloseDate | slice: 0, 4 }}-{{ org.CloseDate | slice: 4, 2 }}-{{ org.CloseDate | slice: 6, 2 }}"
+                }
+                {% endif %}
+            ],
+            {% if org.CloseDate == "" %}
+                "active" : true,
+            {% else %}
+                "active" : false,
+            {% endif %}
+            "type": [
+                {
+                    "coding": [
+                    {
+                        "system": "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Organization",
+                        "code": "prov",
+                        "display": "Healthcare Provider"
+                    }
+                    ],
+                    "text": "Healthcare Provider"
+                }
+            ],
+            "contact" : [{
+                "address" : { 
+                    "line": [
+                        "{{ org.Address1 }}",
+                        "{{ org.Address2 }}",
+                        "{{ org.Address3 }}"
+                    ],
+                    "city": "{{ org.Address4 }}",
+                    "district": "{{ org.Address5 }}",
+                    "postalCode": "{{ org.PostCode }}",
+                    "country": "UK"
+                }
+            }],
+            {% evaluate careBoardId using '_base/Common/ID/Organization' OdsCode: org.HighLevelHealthGeography -%}
+            "partOf": {
+                "reference": "Organization/{{ careBoardId }}",
+                "display": "{{ careBoardId }}"
+            }
+        },
+        "request": {
+            {% evaluate uniqueId using '_base/Common/ID/Organization' OdsCode: org.OrganisationCode -%}
+            "method": "PUT",
+            "url": "Organization/{{ uniqueId }}"
+        }
+    }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+    ]
+}

@@ -1,0 +1,102 @@
+{
+  "resourceType": "Bundle",
+  "type": "transaction",
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Consent",
+        "id": "{{ msg.id }}",
+        "status": "{{ msg.status }}",  
+        "scope": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/consentscope",
+              "code": "patient-privacy",
+              "display": "Privacy Consent"
+            }
+          ]
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+                "code": "INFA",
+                "display": "information access"
+              }
+            ]
+          }
+        ],
+        "patient": {
+          {% assign nhsNumber = msg.patient.reference | split: "/" | last -%}
+          {% evaluate patientId using '_base/Common/ID/Patient' NhsNumber: nhsNumber -%}
+          {% assign fullPatientId = patientId | prepend: 'Patient/' -%}
+
+          "reference":"{{ fullPatientId }}",
+        },
+        "dateTime": "{{ msg.dateTime | date: "yyyy-MM-ddTHH:mm:ss.fff%K" }}",
+        "identifier" : [{{msg.identifier | to_json_string | default : '""'}}],
+        "performer" : [
+            {% for item in msg.consentingParty %}
+            {% assign nhsNumber = item.reference | split: "/" | last -%}
+            {% evaluate patientId using '_base/Common/ID/Patient' NhsNumber: nhsNumber -%} 
+            {% assign fullPatientId = patientId | prepend: 'Patient/' -%}
+            { 
+                "reference":"{{ fullPatientId }}"
+            }{% unless forloop.last %},{% endunless %}
+            {% endfor %}
+        ],
+        "organization": {
+          "identifier": [
+            {% for item in msg.organization %}
+            {
+              "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+              "value": "{{ item.reference | split: "/" | last}}"
+            }{% unless forloop.last %},{% endunless %}
+            {% endfor %}
+          ]
+        },
+        "policy" : {{msg.policy | to_json_string | default : '""'}},
+        {%if msg.policyRule -%}
+        "policyRule" : {
+          "coding" : {
+            "system" : "urn:ietf:rfc:3986",
+            "code" : "{{msg.policyRule}}"
+          }
+        }
+        {% endif -%}
+        {% if msg.securityLabel or msg.period or msg.actor or msg.action or msg.purpose or msg.dataPeriod or msg.data or msg.except -%}
+        "provision" : {
+          "period" : {{msg.period | to_json_string | default : '""' }},
+          "actor" : {{msg.actor | to_json_string | default : '""'}},
+          "action" : {{msg.action | to_json_string | default : '""'}},
+          "securityLabel" : {{msg.securityLabel | to_json_string | default : '""'}},
+          "purpose" : {{msg.purpose | to_json_string | default : '""'}},
+          "dataPeriod" : {{msg.dataPeriod | to_json_string | default : '""'}},
+          "data" : {{msg.data | to_json_string | default : '""'}},
+        },
+        {% endif -%}
+        "sourceIdentifier" : "",
+        "except" : "",
+        "data" : "",
+        "dataPeriod" : "",
+        "purpose" : "",
+        "securityLabel" : "",
+        "action" : "",
+        "actor" : "",
+        "consentingParty" : "",
+        "period" : "",
+        "meta": {
+          "profile": [
+              "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Consent"
+          ]
+        }
+      }, 
+      "request" : {
+      "method" : "PUT",
+      "url" : "Consent/{{ msg.id }}"
+      }
+    }
+  ]
+}
+  

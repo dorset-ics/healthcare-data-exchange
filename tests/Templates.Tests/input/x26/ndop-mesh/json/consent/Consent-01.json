@@ -1,0 +1,12 @@
+{
+  "consents": [
+    {
+      "NhsNumber": "1000000001",
+      "IsOptedOut": true
+    },
+    {
+      "NhsNumber": "1000000002",
+      "IsOptedOut": false
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+name: BVT
+
+on:
+  workflow_call:
+    inputs: # service_name and project_folder need to be passed in from the calling workflow
+      service_name:
+        required: true
+        type: string
+      project_folder:
+        required: true
+        type: string
+      acr_name:
+        required: false
+        type: string
+        default: 'acrdexoss.azurecr.io'
+      coverage_gate:
+        required: false
+        type: string
+        default: '95'
+    secrets: # the below need to be added as secrets to the repository
+      AZURE_CLIENT_ID:
+        required: true
+      AZURE_CLIENT_SECRET:
+        required: true
+      MESH_PASSWORD:
+        required: true
+      NVDAPIKEY: # needs to be changed to NVD_API_KEY to match convention later
+        required: true
+
+jobs:
+  bvt:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        clean: true
+    
+    - name: Build documentation
+      run: |
+        set -eux  # fail on error
+        docker compose -f ../docker/docker-compose-mkdocs.yml run mkdocs build --strict # --strict is used to fail the build if there are any warnings e.g. broken links
+        rm -rf site/ # remove the site folder with the build files
+      working-directory: src
+      shell: bash
+    
+    - name: Build
+      run: |
+        set -eux  # fail on error
+        cp ../docker/.env.template ../docker/.env
+        docker compose -f ../docker/docker-compose.yml build ${{ inputs.service_name }}
+      working-directory: src
+      shell: bash
+      env:
+        SERVICE_NAME: ${{ inputs.service_name }}
+    
+    - name: Unit Tests
+      run: dotnet test -c Release --logger "trx;LogFileName=testresults.trx" --collect:"XPlat Code Coverage"
+      shell: bash
+      working-directory: tests/Unit.Tests
+
+    - name: Start Docker Compose
+      run: |
+        set -eux  # fail on error
+        export TAG=${{ github.run_id }}
+        export DataHubFhirServer__TemplateImage=${{ inputs.acr_name }}/dev:${TAG}
+        export Pds__Mesh__RetrieveSchedule="*/10 * * * * ?"
+        bash start.sh
+        docker compose -f docker-compose.yml up --build data-init templates-pusher
+      working-directory: docker
+      shell: bash
+      env:
+        AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        MESH_PASSWORD: ${{ secrets.MESH_PASSWORD }}
+
+    - name: Templates Tests
+      run: |
+        set -eux  # fail on error
+        dotnet test -e DataHubFhirServer:TemplateImage=${{ inputs.acr_name }}/dev:${{ github.run_id }}\
+                    -e DataHubFhirServer:BaseUrl=http://localhost:8080 \
+                    -e Mesh:Url=http://localhost:8700 \
+                    -c Release --logger "trx;LogFileName=testresults.trx" --collect:"XPlat Code Coverage"
+      working-directory: tests/Templates.Tests
+      shell: bash
+      env:
+        ASPNETCORE_ENVIRONMENT: 'Integration'
+    
+    - name: Integration Tests
+      run: |
+        dotnet test -e DataHubFhirServer:TemplateImage=${{ inputs.acr_name }}/dev:${{ github.run_id }} -c Release --logger "trx;LogFileName=testresults.trx" --collect:"XPlat Code Coverage"
+      working-directory: tests/Integration.Tests
+      shell: bash
+      env:
+        ASPNETCORE_ENVIRONMENT: 'Integration'
+        Pds__Mesh__MailboxPassword: ${{ secrets.MESH_PASSWORD }}
+    
+    - name: E2E Tests
+      run: dotnet test --logger "trx;LogFileName=testresults.trx"
+      working-directory: tests/E2E.Tests
+      shell: bash
+
+    - name: Docker logs
+      run: docker compose logs
+      working-directory: docker
+      shell: bash
+      if: always()
+    
+    - name: Publish test results 
+      # GitHub Actions does not have built-in support for publishing test results 
+      # like Azure Pipelines does. This step will upload the test results as a 
+      # workflow artifact, which you can download from the GitHub web interface.
+      uses: actions/upload-artifact@v2
+      if: always()
+      with:
+        name: TestResults
+        path: tests/*/TestResults/*.trx
+    
+    - name: Unify Test Coverage Reports
+      run: |
+        dotnet tool install -g dotnet-reportgenerator-globaltool
+        reportgenerator -reports:**/coverage.cobertura.xml -targetdir:./CodeCoverage -reporttypes:Cobertura
+      working-directory: ${{ github.workspace }}
+
+    - name: Publish code coverage results
+      # GitHub Actions does not have built-in support for publishing code coverage 
+      # results like Azure Pipelines does. This step will upload the test results 
+      # as a workflow artifact, which you can download from the GitHub web interface.
+      uses: actions/upload-artifact@v2
+      with:
+        name: CodeCoverage
+        path: ./CodeCoverage/Cobertura.xml
+
+    - name: Check test line coverage gate
+      # needs to be tested to see if it works when workflow was triggered by PR from fork
+      uses: irongut/CodeCoverageSummary@v1.3.0
+      with:
+        filename: ./CodeCoverage/Cobertura.xml
+        thresholds: ${{ inputs.coverage_gate }}
+        fail_below_min: true 
+      

@@ -1,0 +1,120 @@
+{
+  "resourceType": "Bundle",
+  "type": "transaction",
+  "entry": [
+    {% evaluate orgId using '_base/Common/ID/Organization' OdsCode: 'x26' -%}
+    {% for item in msg.patients %}
+    {% evaluate patientId using '_base/Common/ID/Patient' NhsNumber: item.NhsNumber -%}
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "{{ patientId }}",
+        "meta": {
+          "versionId": "2",
+          "source": "Organization/{{ orgId }}",
+          "security": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-Confidentiality",
+              "code": "U",
+              "display": "unrestricted"
+            }
+          ],
+          "profile": [
+              "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Patient"
+          ]
+        },
+        "identifier": [
+          {
+            "system": "https://fhir.nhs.uk/Id/nhs-number",
+            "value": "{{ item.NhsNumber }}"
+          }
+        ],
+        "name": [
+          {
+            "family": "{{ item.FamilyName }}",
+            "given": ["{{ item.GivenName }}", "{{ item.OtherGivenName }}"]
+          }
+        ],
+        "gender": {% case item.Gender %}
+          {% when '0' %}
+            "unknown"
+          {% when '1' %}
+            "male"
+          {% when '2' %}
+            "female"
+          {% else %}
+            "unknown"
+          {% endcase %},
+          "birthDate": {% case item.DateOfBirth.size %}
+           {% when 12 %}
+            "{{ item.DateOfBirth | slice: 0, 4 }}-{{ item.DateOfBirth | slice: 4, 2 }}-{{ item.DateOfBirth | slice: 6, 2 }} {{ item.DateOfBirth | slice: 8, 2 }}:{{ item.DateOfBirth | slice: 10, 2 }}"
+           {% when 8 %}
+            "{{ item.DateOfBirth | slice: 0, 4 }}-{{ item.DateOfBirth | slice: 4, 2 }}-{{ item.DateOfBirth | slice: 6, 2 }}"
+           {% when 6 %}
+            "{{ item.DateOfBirth | slice: 0, 4 }}-{{ item.DateOfBirth | slice: 4, 2 }}"
+           {% else %}
+            "{{ item.DateOfBirth }}"
+           {% endcase %},
+        "deceasedDateTime": {% case item.DateOfDeath.size %}
+           {% when 12 %}
+            "{{ item.DateOfDeath | slice: 0, 4 }}-{{ item.DateOfDeath | slice: 4, 2 }}-{{ item.DateOfDeath | slice: 6, 2 }} {{ item.DateOfDeath | slice: 8, 2 }}:{{ item.DateOfDeath | slice: 10, 2 }}"
+           {% when 8 %}
+            "{{ item.DateOfDeath | slice: 0, 4 }}-{{ item.DateOfDeath | slice: 4, 2 }}-{{ item.DateOfDeath | slice: 6, 2 }}"
+           {% when 6 %}
+            "{{ item.DateOfDeath | slice: 0, 4 }}-{{ item.DateOfDeath | slice: 4, 2 }}"
+           {% else %}
+            "{{ item.DateOfDeath }}"
+           {% endcase %},
+        "address": [
+          {
+            "line": [
+              "{{ item.AddressLine1 }}",
+              "{{ item.AddressLine2 }}",
+              "{{ item.AddressLine3 }}",
+              "{{ item.AddressLine4 }}",
+              "{{ item.AddressLine5 }}"
+            ],
+            "postalCode": "{{ item.Postcode }}"
+          }
+        ],
+        "telecom": [
+          {% if item.TelephoneNumber != "" %}
+          {
+           "system": "phone",
+           "value": "{{ item.TelephoneNumber }}",
+           "use": "home"
+          },
+          {% endif %}
+          {% if item.MobileNumber != "" %}
+          {
+                "system": "phone",
+                "value": "{{ item.MobileNumber }}",
+                "use": "mobile"
+          },
+          {% endif %}
+          {% if item.EmailAddress != "" %}
+          {
+            "system": "email",
+            "value": "{{ item.EmailAddress }}"
+          }
+          {% endif %}
+        ],
+        "generalPractitioner": [
+            {
+              "type": "Organization",
+              "identifier": {
+                "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+                "value":  "{{ item.GpPracticeCode }}"
+                }
+              }
+          ]
+      },
+      "request" : {
+        "method" : "PUT",
+        "url" : "Patient/{{ patientId }}"
+      }
+    }
+    {% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "resourceType": "Organization",
+  "id": "33bc2722-7b3e-a225-75f8-b5df0f7662e6",
+  "name": "DORSET HEALTHCARE UNIVERSITY NHS FOUNDATION TRUST",
+  "alias": [
+    "Dorset Healthcare"
+  ],
+  "identifier": [
+    {
+      "use": "official",
+      "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+      "value": "RDY"
+    }
+  ],
+  "contact": [
+    {
+      "name": {
+        "text": "IG Management"
+      },
+      "telecom": [
+        {
+          "system": "email",
+          "value": "dawn.dawson4@nhs.net"
+        },
+        {
+          "system": "email",
+          "value": "cara.southgate@nhs.net"
+        }
+      ],
+      "address": {
+        "line": [
+          "SENTINEL HOUSE",
+          "4-6 NUFFIELD ROAD",
+          "NUFFIELD INDUSTRIAL ESTATE"
+        ],
+        "city": "Poole",
+        "district": "Dorset",
+        "postalCode": "BH17 0RB",
+        "country": "UK"
+      }
+    },
+    {
+      "name": {
+        "text": "Headquarters"
+      },
+      "address": {
+        "line": [
+          "Sentinel House",
+          "Nuffield Industrial Estate",
+          "Nuffield Road"
+        ],
+        "city": "Poole",
+        "district": "Dorset",
+        "postalCode": "BH17 0RB",
+        "country": "UK"
+      },
+      "telecom": [
+        {
+          "system": "phone",
+          "value": "(+44) 01202-277000"
+        }
+      ]
+    }
+  ],
+  "endpoint": [
+    {
+      "reference": "https://www.dorsethealthcare.nhs.uk/"
+    }
+  ]
+}

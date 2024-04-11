@@ -1,0 +1,41 @@
+name: CI
+
+on:
+    push:
+        branches:
+            - main
+    workflow_dispatch:
+
+jobs:
+    bvt:
+        name: Build Verification Test
+        uses: ./.github/workflows/bvt.yaml
+        with:
+            service_name: 'api'
+            project_folder: 'Api'
+        secrets: inherit
+    
+    swagger_docs:
+        runs-on: ubuntu-latest
+        name: Generate Swagger Docs
+        needs: bvt
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+
+            - name: Build and Publish Swagger Docs
+              run: bash ${{ github.workspace }}/.pipelines/scripts/generate-swagger.sh ${{ github.workspace }}/artifacts
+              env:
+                  ASPNETCORE_ENVIRONMENT: 'Local'
+
+            - name: Publish Swagger Doc as Pipeline Artifact
+              uses: actions/upload-artifact@v2
+              with:
+                  name: SwaggerDoc
+                  path: ${{ github.workspace }}/artifacts/dex-swagger.json
+            
+    static_code_analysis:
+        name: Static Code Analysis
+        uses: ./.github/workflows/static-code-analysis.yaml
+    
+    

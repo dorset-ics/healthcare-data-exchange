@@ -1,0 +1,82 @@
+﻿{
+  "resourceType": "Consent",
+  "id": "0353e505-f7be-4c20-8f4e-337e79a32c51",
+  "meta": {
+    "versionId": "d837bf2c-dc47-4cb9-9483-03986c21e38c",
+    "lastUpdated": "2017-11-16T11:17:32.511+00:00",
+    "profile": [
+      "https://fhir.nhs.uk/STU3/StructureDefinition/NDOP-Consent-1"
+    ]
+  },
+  "extension": [
+    {
+      "url": "https://fhir.nhs.uk/STU3/StructureDefinition/Extension-NDOP-OptOutSource-1",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "https://fhir.nhs.uk/STU3/CodeSystem/NDOP-OptOutSource-1",
+            "code": "OP",
+            "display": "Online Portal"
+          }
+        ]
+      }
+    }
+  ],
+  "status": "active",
+  "patient": {
+    "reference": "https://demographics.spineservices.nhs.uk/STU3/Patient/6105551234"
+  },
+  "dateTime": "2017-02-01T11:15:33+00:00",
+  "consentingParty": [
+    {
+      "reference": "https://demographics.spineservices.nhs.uk/STU3/Patient/6105551234"
+    }
+  ],
+  "organization": [
+    {
+      "reference": "https://directory.spineservices.nhs.uk/STU3/Organization/X26"
+    }
+  ],
+  "policy": [
+    {
+      "authority": "https://www.gov.uk/",
+      "uri": "https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/535024/data-security-review.PDF"
+    }
+  ],
+  "purpose": [
+    {
+      "system": "http://snomed.info/sct",
+      "code": "370856009",
+      "display": "Limiting access to confidential patient information"
+    }
+  ],
+  "UniqueReference": "02403456-031f-11e7-a926-080027a2de00",
+  "NhsNumber": "9990554412",
+  "FamilyName": "XXTESTPATIENT-THHX",
+  "GivenName": "DONOTUSE",
+  "OtherGivenName": "",
+  "Gender": "1",
+  "DateOfBirth": "19380803",
+  "DateOfDeath": "19380803",
+  "AddressLine1": "C/O NHS DIGITAL TEST DATA MANAGER",
+  "AddressLine2": "SOLUTION ASSURANCE TREVELYAN SQ.",
+  "AddressLine3": "BOAR LANE",
+  "AddressLine4": "LEEDS",
+  "AddressLine5": "WEST YORKSHIRE",
+  "Postcode": "LS1 6AE",
+  "GpPracticeCode": "Y90001",
+  "GpRegistrationDate": "",
+  "NhaisPostingId": "",
+  "AsAtDate": "",
+  "LocalPatientId": "",
+  "InternalId": "",
+  "TelephoneNumber": "0723444447",
+  "MobileNumber": "0723444447",
+  "EmailAddress": "temp.dummy@nhs.net",
+  "SensitivityFlag": "N",
+  "MpsId": "",
+  "ErrorSuccessCode": "00",
+  "MatchedNhsNo": "9990554412",
+  "MatchedAlgorithmIndicator": "1",
+  "MatchedConfidencePercentage": "100"
+}

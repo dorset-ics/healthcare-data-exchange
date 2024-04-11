@@ -1,0 +1,76 @@
+schedules:
+  - cron: '0 0 * * *'
+    displayName: Daily midnight run
+    branches:
+      include:
+        - main
+
+pr: none
+      
+parameters:
+  - name: purge
+    displayName: Purge Database
+    type: boolean
+    default: false
+  - name: verbose
+    displayName: Verbose
+    type: boolean
+    default: false
+  - name: nvdValidForHours
+    displayName: NVD valid for hours
+    type: number
+    default: 23
+  - name: additionalArguments
+    displayName: Additional arguments
+    type: string
+    default: ' '
+
+stages:
+  - stage: update_odc_nvd
+    displayName: nvd.nist.gov
+    pool:
+      name: Azure Pipelines
+      vmImage: ubuntu-latest
+    jobs:
+      - job: build
+        workspace:
+          clean: outputs
+        displayName: Update NIST NVD
+        steps:
+          - checkout: none
+          - task: Cache@2
+            displayName: ODC Cache
+            inputs:
+              key: 'ODC | "$(Agent.OS)"'
+              path: $(Pipeline.Workspace)/odc/app
+          - task: Cache@2
+            displayName: NVD Cache
+            inputs:
+              key: 'NVD | "$(Agent.OS)"'
+              path: $(Pipeline.Workspace)/odc/data
+          - bash: |
+              set -x # echo on
+              VERSION=$(curl -s https://jeremylong.github.io/DependencyCheck/current.txt)
+              
+              if [ ! -d "$(Pipeline.Workspace)/odc/app/$VERSION" ]; then
+                rm -rf $(Pipeline.Workspace)/odc/app/*
+                mkdir -p $(Pipeline.Workspace)/odc/app/$VERSION
+                curl -Ls "https://github.com/jeremylong/DependencyCheck/releases/download/v$VERSION/dependency-check-$VERSION-release.zip" --output dependency-check.zip
+                unzip -uq ./dependency-check.zip -d $(Pipeline.Workspace)/odc/app/$VERSION
+              fi
+              
+              $(Pipeline.Workspace)/odc/app/$VERSION/dependency-check/bin/dependency-check.sh --updateonly --nvdApiKey $(nvdApiKey) --data $(Pipeline.Workspace)/odc/data --nvdValidForHours ${{ parameters.nvdValidForHours }} $PURGE ${{ parameters.additionalArguments }}
+            displayName: Update NVD
+                
+          - task: ArchiveFiles@2
+            displayName: Compress NVD Artifact
+            inputs:
+              rootFolderOrFile: '$(Pipeline.Workspace)/odc/data'
+              includeRootFolder: false
+              archiveFile: '$(Build.ArtifactStagingDirectory)/NVD.zip'
+          - task: PublishPipelineArtifact@1
+            displayName: Publish NVD Artifact
+            inputs:
+              targetPath: '$(Build.ArtifactStagingDirectory)/NVD.zip'
+              artifact: 'NVD'
+              publishLocation: 'pipeline'

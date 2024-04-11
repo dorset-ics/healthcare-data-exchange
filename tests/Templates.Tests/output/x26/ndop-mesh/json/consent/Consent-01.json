@@ -1,0 +1,116 @@
+{
+  "resourceType": "Bundle",
+  "type": "transaction",
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Consent",
+        "id": "7de7f92e-1187-0ec9-44f2-a6a069e1f636",
+        "meta": {
+          "source": "Organization/cec48f09-f30e-cb9f-adc1-50e79d71796d",
+          "profile": [
+            "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Consent"
+          ]
+        },
+        "status": "active",
+        "scope": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/consentscope",
+              "code": "patient-privacy",
+              "display": "Privacy Consent"
+            }
+          ]
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+                "code": "INFA",
+                "display": "information access"
+              }
+            ]
+          }
+        ],
+        "patient": {
+          "reference": "Patient/1000000001"
+        },
+        "policy": [
+          {
+            "authority": "https://www.gov.uk/",
+            "uri": "https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/535024/data-security-review.PDF"
+          }
+        ],
+        "provision": {
+          "purpose": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "370856009",
+              "display": "Limiting access to confidential patient information"
+            }
+          ]
+        }
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Consent/7de7f92e-1187-0ec9-44f2-a6a069e1f636"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Consent",
+        "id": "2c033ca9-e44e-ad0b-b739-b241ba0d3e7a",
+        "meta": {
+          "source": "Organization/cec48f09-f30e-cb9f-adc1-50e79d71796d",
+          "profile": [
+            "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Consent"
+          ]
+        },
+        "status": "inactive",
+        "scope": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/consentscope",
+              "code": "patient-privacy",
+              "display": "Privacy Consent"
+            }
+          ]
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+                "code": "INFA",
+                "display": "information access"
+              }
+            ]
+          }
+        ],
+        "patient": {
+          "reference": "Patient/1000000002"
+        },
+        "policy": [
+          {
+            "authority": "https://www.gov.uk/",
+            "uri": "https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/535024/data-security-review.PDF"
+          }
+        ],
+        "provision": {
+          "purpose": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "370856009",
+              "display": "Limiting access to confidential patient information"
+            }
+          ]
+        }
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Consent/2c033ca9-e44e-ad0b-b739-b241ba0d3e7a"
+      }
+    }
+  ]
+}

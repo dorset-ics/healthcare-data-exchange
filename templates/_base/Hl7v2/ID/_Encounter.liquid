@@ -1,0 +1,4 @@
+{% capture scopedIdentifier %}
+    {{ organizationCode }}_{{ domain }}_{{ identifier }}
+{% endcapture %}
+{{ scopedIdentifier | generate_id_input: 'Encounter', false, baseId | generate_uuid }}

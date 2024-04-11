@@ -1,0 +1,107 @@
+{
+    "fullUrl":"urn:uuid:{{ ID }}",
+    "resource":{
+        "resourceType": "Encounter",
+        "id":"{{ ID }}",
+        "meta":
+        {
+            "profile": [
+                "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Encounter"
+            ],
+            "source": "Organization/{{ orgId }}",
+        },
+        "serviceProvider":
+        {
+            "reference": "Organization/{{ orgId }}",
+        },
+        "class":
+        {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+            "code": "EMER",
+            "display": "emergency"
+        },
+        {% if Root_Template == "ADT_A03" -%}
+            "status":"finished",
+        {% else -%}
+            "status":"in-progress",
+        {% endif -%}
+        "type":
+        [
+            {
+                "coding": [
+                    {
+                        "code": "319981000000104",
+                        "display": "Seen in urgent care centre",
+                        "system": "http://snomed.info/sct"
+                    }
+                ]
+            },
+        ],
+        "identifier":
+        [
+            {
+                "type":
+                {
+                    "coding":
+                    [
+                        {
+                            "code":"VN",
+                            "system":"http://terminology.hl7.org/CodeSystem/v2-0203",
+                        },
+                    ],
+                    "text":"visit number",
+                },
+                "value": "{{ PV1.19.1.Value }}"
+            },
+        ],
+        "period":
+        {
+            "start":"{{ PV1.44.Value | format_as_date_time }}",
+
+            {% if Root_Template == "ADT_A03" -%}
+                "end":"{{ PV1.45.Value | format_as_date_time }}",
+            {% endif -%}
+        },
+        "reasonCode":
+        [
+            {
+                "coding": [
+                    {
+                        "code": "182813001",
+                        "display": "Emergency treatment",
+                        "system": "http://snomed.info/sct"
+                    }
+                ]
+            },
+        ],
+        "diagnosis":
+        [
+            {% if conditionId %}
+            {
+                "condition" : {
+                    "reference":"Condition/{{ conditionId }}",
+                },
+                {% if DG1.1 == "1" -%}
+                "use" : {
+                    "code": "CC",
+                    "display": "Chief complaint",
+                    "system": "http://terminology.hl7.org/CodeSystem/diagnosis-role"
+                },
+                {% endif %}
+            },
+            {% endif %}
+
+            {% if procedureId %}
+            {
+                "condition" : {
+                    "reference":"Procedure/{{ procedureId }}",
+                },
+            },
+            {% endif %}
+        ]
+    },
+    "request":{
+        "method":"PUT",
+        "url":"Encounter/{{ ID }}",
+    },
+},

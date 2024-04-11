@@ -1,0 +1,84 @@
+{
+  "resourceType": "Bundle",
+  "type": "transaction",
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "9990554412",
+        "meta": {
+          "versionId": "2",
+          "source": "Organization/cec48f09-f30e-cb9f-adc1-50e79d71796d",
+          "profile": [
+            "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Patient"
+          ],
+          "security": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-Confidentiality",
+              "code": "U",
+              "display": "unrestricted"
+            }
+          ]
+        },
+        "identifier": [
+          {
+            "system": "https://fhir.nhs.uk/Id/nhs-number",
+            "value": "9990554412"
+          }
+        ],
+        "name": [
+          {
+            "family": "XXTESTPATIENT-THHX",
+            "given": [
+              "DONOTUSE"
+            ]
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "0723444447",
+            "use": "home"
+          },
+          {
+            "system": "phone",
+            "value": "0723444447",
+            "use": "mobile"
+          },
+          {
+            "system": "email",
+            "value": "temp.dummy@nhs.net"
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1938-08-03",
+        "deceasedDateTime": "1938-08-03",
+        "address": [
+          {
+            "line": [
+              "C/O NHS DIGITAL TEST DATA MANAGER",
+              "SOLUTION ASSURANCE TREVELYAN SQ.",
+              "BOAR LANE",
+              "LEEDS",
+              "WEST YORKSHIRE"
+            ],
+            "postalCode": "LS1 6AE"
+          }
+        ],
+        "generalPractitioner": [
+          {
+            "type": "Organization",
+            "identifier": {
+              "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+              "value": "Y90001"
+            }
+          }
+        ]
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Patient/9990554412"
+      }
+    }
+  ]
+}

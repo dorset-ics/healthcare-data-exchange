@@ -1,0 +1,33 @@
+{
+    "fullUrl":"urn:uuid:{{ ID }}",
+    "resource":{
+        "resourceType": "Condition",
+        "id":"{{ ID }}",
+        "meta": 
+        {
+            "profile": [
+                "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Condition"
+            ],
+            "source": "Organization/{{ orgId }}"
+        },
+        "code":
+        {
+            "code": {{ DG1.3.1 }},
+            "display": "",
+            "system": "http://snomed.info/sct"
+        },
+        "onsetDateTime":"{{ DG1.5.Value | format_as_date_time }}",
+        "subject":
+        {
+            "reference":"{{ Condition_Subject_ID }}",
+        },
+        "encounter":
+        {
+            "reference":"{{ Condition_Encounter_ID }}",
+        },
+    },
+    "request":{
+        "method":"PUT",
+        "url":"Condition/{{ ID }}",
+    },
+},

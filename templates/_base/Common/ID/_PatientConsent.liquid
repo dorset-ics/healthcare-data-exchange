@@ -1,0 +1,8 @@
+{% comment -%}
+The following inputs are required by this template.
+
+NhsNumber: The Patient's NHS number.
+{% endcomment -%}
+
+{% assign uniqueId = '' | append: 'X26_' | append: 'NDOP_' | append: NhsNumber -%}
+{{ uniqueId | generate_id_input: 'Consent', false | generate_uuid }}

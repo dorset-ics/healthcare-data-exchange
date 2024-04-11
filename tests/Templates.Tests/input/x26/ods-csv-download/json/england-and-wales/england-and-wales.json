@@ -1,0 +1,36 @@
+{
+  "organisations": [
+    {
+      "OrganisationCode": "A0A3Z",
+      "Name": "LINDEN UNIT - COVID VACCINATION CENTRE",
+      "NationalGrouping": "Y58",
+      "HighLevelHealthGeography": "QVV",
+      "AddressLine1": "RADIPOLE LANE",
+      "AddressLine2": "",
+      "AddressLine3": "",
+      "AddressLine4": "WEYMOUTH",
+      "AddressLine5": "",
+      "PostCode": "DT4 0QE",
+      "OpenDate": "20220401",
+      "CloseDate": "",
+      "AmendedRecordIndicator": "0",
+      "GorCode": "K"
+    },
+    {
+      "OrganisationCode": "A0D4O",
+      "Name": "HOME TREATMENT TEAM - ROCHDALE",
+      "NationalGrouping": "Y62",
+      "HighLevelHealthGeography": "QOP",
+      "AddressLine1": "LAURENCE HOUSE",
+      "AddressLine2": "BIRCH ROAD",
+      "AddressLine3": "",
+      "AddressLine4": "ROCHDALE",
+      "AddressLine5": "",
+      "PostCode": "OL12 9RD",
+      "OpenDate": "20201001",
+      "CloseDate": "",
+      "AmendedRecordIndicator": "0",
+      "GorCode": "B"
+    }
+  ]
+}

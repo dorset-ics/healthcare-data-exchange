@@ -1,0 +1,22 @@
+{
+  "resourceType": "Bundle",
+  "type": "transaction",
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Organization",
+        "id": "cec48f09-f30e-cb9f-adc1-50e79d71796d",
+        "meta": {
+          "profile": [
+            "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Organization"
+          ]
+        },
+        "name": "x26"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Organization/cec48f09-f30e-cb9f-adc1-50e79d71796d"
+      }
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+variable "location" {}
+variable "resource_group_name" {}
+variable "vnet_id" {}
+variable "apim_subnet_id" {}
+variable "apim_instance_count" {
+  type    = number
+  default = 1
+}
+variable "env" {}
+variable "app_insights_id" {}
+variable "app_insights_instrumentation_key" {}
+variable "app_host_name" {}
+variable "fhir_url" {}
+variable "app_registration_id" {}
+variable "app_registration_uri" {}
+variable "tenant_id" {}
+variable "random_id" {}
+variable "log_analytics_workspace_id" {}
+variable "azure_cli_client_id" {}
+variable "sp_client_id" {}

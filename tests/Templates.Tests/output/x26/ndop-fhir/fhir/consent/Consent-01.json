@@ -1,0 +1,74 @@
+{
+  "resourceType": "Bundle",
+  "type": "transaction",
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Consent",
+        "id": "0353e505-f7be-4c20-8f4e-337e79a32c51",
+        "meta": {
+          "profile": [
+            "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Consent"
+          ]
+        },
+        "status": "active",
+        "scope": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/consentscope",
+              "code": "patient-privacy",
+              "display": "Privacy Consent"
+            }
+          ]
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+                "code": "INFA",
+                "display": "information access"
+              }
+            ]
+          }
+        ],
+        "patient": {
+          "reference": "Patient/6105551234"
+        },
+        "dateTime": "2017-02-01T11:15:33.000+00:00",
+        "performer": [
+          {
+            "reference": "Patient/6105551234"
+          }
+        ],
+        "organization": [
+          {
+            "identifier": {
+              "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+              "value": "X26"
+            }
+          }
+        ],
+        "policy": [
+          {
+            "authority": "https://www.gov.uk/",
+            "uri": "https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/535024/data-security-review.PDF"
+          }
+        ],
+        "provision": {
+          "purpose": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "370856009",
+              "display": "Limiting access to confidential patient information"
+            }
+          ]
+        }
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Consent/0353e505-f7be-4c20-8f4e-337e79a32c51"
+      }
+    }
+  ]
+}

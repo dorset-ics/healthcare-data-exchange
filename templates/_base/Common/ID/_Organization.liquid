@@ -1,0 +1,2 @@
+{% assign uniqueId = '' | append: 'X26_' | append: 'ODS_' | append: OdsCode -%}
+{{ uniqueId | generate_id_input: 'Organization', false | generate_uuid }}

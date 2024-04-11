@@ -1,0 +1,104 @@
+{
+  "resourceType": "Organization",
+  "id": "0beebfb2-f693-37c5-54bc-5131b532cc80",
+  "name": "UNIVERSITY HOSPITALS DORSET NHS FOUNDATION TRUST",
+  "alias": [
+    "University Hospitals Dorset"
+  ],
+  "identifier": [
+    {
+      "use": "official",
+      "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+      "value": "R0D"
+    }
+  ],
+  "contact": [
+    {
+      "name": {
+        "text": "IG Management"
+      },
+      "telecom": [
+        {
+          "system": "email",
+          "value": "information.governance@uhd.nhs.uk"
+        }
+      ],
+      "address": {
+        "line": [
+          "MANAGEMENT OFFICES",
+          "POOLE HOSPITAL",
+          "LONGFLEET ROAD"
+        ],
+        "city": "Poole",
+        "district": "Dorset",
+        "postalCode": "BH15 2JB",
+        "country": "UK"
+      }
+    },
+    {
+      "name": {
+        "text": "Royal Bournemouth Hospital"
+      },
+      "telecom": [
+        {
+          "system": "phone",
+          "value": "(+44) 01202-303626"
+        }
+      ],
+      "address": {
+        "line": [
+          "Castle Lane East"
+        ],
+        "city": "Bournemouth",
+        "district": "Dorset",
+        "postalCode": "BH7 7DW",
+        "country": "UK"
+      }
+    },
+    {
+      "name": {
+        "text": "Christchurch Hospital"
+      },
+      "telecom": [
+        {
+          "system": "phone",
+          "value": "(+44) 01202 486361"
+        }
+      ],
+      "address": {
+        "line": [
+          "Fairmile Road"
+        ],
+        "city": "Christchurch",
+        "district": "Dorset",
+        "postalCode": "BH23 2JX",
+        "country": "UK"
+      }
+    },
+    {
+      "name": {
+        "text": "Poole Hospital"
+      },
+      "telecom": [
+        {
+          "system": "phone",
+          "value": "(+44) 01202 486361"
+        }
+      ],
+      "address": {
+        "line": [
+          "Longfleet Road"
+        ],
+        "city": "Poole",
+        "district": "Dorset",
+        "postalCode": "BH23 2JX",
+        "country": "UK"
+      }
+    }
+  ],
+  "endpoint": [
+    {
+      "reference": "https://www.uhd.nhs.uk/"
+    }
+  ]
+}

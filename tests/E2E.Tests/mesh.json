@@ -1,0 +1,22 @@
+﻿{
+  "Providers": {
+    "Pds": {
+      "MailboxId": "X26ABC1",
+      "MailboxPassword": "password",
+      "Key": "TestKey",
+      "WorkflowId": "SPINE_PDS_MESH_V1",
+      "RecipientMailboxId": "X26ABC1"
+    },
+    "Ndop": {
+      "MailboxId": "X26ABC2",
+      "MailboxPassword": "password",
+      "Key": "TestKey",
+      "WorkflowId": "SPINE_NTT_UPHOLDING",
+      "RecipientMailboxId": "X26ABC2"
+    }
+  },
+  "Mesh": {
+    "Url": "http://localhost:8700",
+    "MaxChunkSizeInMegabytes": 100
+  }
+}

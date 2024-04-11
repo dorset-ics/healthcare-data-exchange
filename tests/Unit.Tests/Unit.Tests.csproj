@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+        <PackageReference Include="NSubstitute" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="Shouldly" />
+        <PackageReference Include="xunit" />
+        <PackageReference Include="xunit.runner.visualstudio">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="coverlet.collector">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Api\Api.csproj" />
+        <ProjectReference Include="..\..\src\Core\Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="Infrastructure\TestAppSettings\*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Core\Ods\Converters\Samples\**\*.*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Infrastructure\HealthChecks\HealthCheckTestBase.cs" />
+      <Compile Remove="Infrastructure\HealthChecks\DataHubFhirHealthCheckTests.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Core\Pds\Converters\Samples\MeshResponseMultiplePatients.csv">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Core\Pds\Converters\Samples\MeshResponseNoPatients.csv">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Core\Pds\Converters\Samples\MeshResponseSinglePatient.csv">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+</Project>

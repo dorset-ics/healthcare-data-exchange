@@ -1,0 +1,132 @@
+trigger: none
+
+pr: none
+
+parameters:
+  - name: env
+    displayName: Environment to deploy to
+    type: string
+    default: dev
+    values:
+      - dev
+      - stg
+      - prd
+    
+variables:
+  - group: ${{parameters.env}}-variables
+  - group: ${{parameters.env}}-secrets
+  - name: acr_login_server
+    value: acrdex${{parameters.env}}.azurecr.io
+  - name: api_app_name
+    value: app-dex-${{parameters.env}}
+  - name: health_services_ws_name
+    value: hsdex${{parameters.env}}
+  - name: fhir_service_name
+    value: fhirdex${{parameters.env}}
+    
+resources:
+  pipelines:
+    - pipeline: ci-pipeline
+      source: CI Pipeline
+      trigger: true
+
+stages:
+  - stage: DeployInfrastructure
+    displayName: Deploy Infrastructure
+    jobs:
+      - job: ApplyIaC
+        displayName: Apply Terraform Infrastructure as Code
+        steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              buildType: 'specific'
+              project: $(System.TeamProject)
+              definition: 'CI Pipeline'
+              buildVersionToDownload: 'latest'
+              artifactName: 'SwaggerDoc'
+              targetPath: './infrastructure/services/api_management'
+          - template: ./templates/deploy-infrastructure.yaml
+            parameters:
+              env: ${{parameters.env}}
+
+  - stage: DeployServices
+    displayName: Deploy Services
+    dependsOn: DeployInfrastructure
+    variables:
+      fhir_server_url: https://$(health_services_ws_name)-$(fhir_service_name).fhir.azurehealthcareapis.com/
+      frontend_address: $[stageDependencies.DeployInfrastructure.ApplyIaC.outputs['deployEnv.frontend_address']]
+    jobs:
+      - job: BuildAndPushAPI
+        displayName: Build And Push API
+        steps:
+        - task: Bash@3
+          displayName: Build API Image
+          inputs:
+            targetType: 'inline'
+            script: |
+              acr_name="acrdex${{parameters.env}}.azurecr.io"
+              docker build -t $acr_name/api:latest -t $acr_name/api:$(Build.BuildId) .
+              echo $acr_name/api:$(Build.BuildId) >> $(Build.SourcesDirectory)/image_tags.txt
+              echo $acr_name/api:latest >> $(Build.SourcesDirectory)/image_tags.txt
+            
+        - task: Docker@1
+          displayName: Push to ACR
+          inputs:
+            command: 'push'
+            containerregistrytype: Azure Container Registry
+            azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+            azureContainerRegistry: $(acr_login_server)
+            pushMultipleImages: true
+            imageNamesPath: $(Build.SourcesDirectory)/image_tags.txt
+            
+      - job: DeployAPI
+        dependsOn: BuildAndPushAPI
+        displayName: Deploy API
+        steps:
+        - task: AzureWebAppContainer@1
+          displayName: Deploy Container to Web App
+          inputs:
+            azureSubscription: $(azureSubscriptionEndpoint)
+            appName: $(api_app_name)
+            containers: $(acr_login_server)/api:$(Build.BuildId)
+
+      - job: UpdateInitData
+        dependsOn: [DeployAPI]
+        displayName: Update FHIR init data        
+        steps:
+          - template: ./templates/expose-agent-ip.yaml
+            parameters:
+              env: ${{parameters.env}}
+          - script: |              
+              set -eux  # fail on error and log commands
+              az login --service-principal -u $(sp-dex-deployment-client-id) -p $(sp-dex-deployment-client-secret) --tenant $(AZURE_TENANT_ID)
+              token=$(az account get-access-token --resource=$(fhir_server_url) --query accessToken --output tsv)
+              FHIR_SERVER_URL=$(frontend_address) FHIR_SERVER_AUTH_TOKEN=$token docker compose -f docker/docker-compose.yml up data-init --exit-code-from data-init --no-deps
+
+      - job: PushTemplates
+        dependsOn: DeployAPI
+        displayName: Push Conversion Liquid Template OCI Images
+        steps:
+          - script: |
+              set -eux  # fail on error and log commands
+              TAG=$(Build.BuildId) ACR_NAME=$(acr_login_server) docker compose -f docker/docker-compose.yml up templates-pusher
+              TAG=latest ACR_NAME=$(acr_login_server) docker compose -f docker/docker-compose.yml up templates-pusher --exit-code-from templates-pusher
+            env:
+              AZURE_CLIENT_ID: $(sp-dex-deployment-client-id)
+              AZURE_CLIENT_SECRET: $(sp-dex-deployment-client-secret)
+              
+      - job: SmokeTests
+        dependsOn: [PushTemplates, UpdateInitData]
+        displayName: Smoke Tests        
+        steps:
+          - template: ./templates/expose-agent-ip.yaml
+            parameters:
+              env: ${{parameters.env}}
+          - script: |
+              token=$(az account get-access-token --resource=$(fhir_server_url) --query accessToken --output tsv)
+              API_BASE_URL=$(frontend_address) FHIR_BASE_URL=$(frontend_address) AUTH_TOKEN=$token dotnet test --filter Category=Smoke --logger "trx;LogFileName=testresults.trx"
+            workingDirectory: tests/E2E.Tests
+            continueOnError: true
+            env:
+              AZURE_CLIENT_ID: $(sp-dex-deployment-client-id)
+              AZURE_CLIENT_SECRET: '$(sp-dex-deployment-client-secret)'

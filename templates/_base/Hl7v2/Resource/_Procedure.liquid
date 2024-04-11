@@ -1,0 +1,31 @@
+{
+    "fullUrl":"urn:uuid:{{ ID }}",
+    "resource":{
+        "resourceType": "Procedure",
+        "id":"{{ ID }}",
+        "meta": 
+        {
+            "profile": [
+                "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Procedure"
+            ]
+        },
+        "code":
+        {
+            "code": {{ PR1.3 }},
+            "display": "",
+            "system": "http://snomed.info/sct"
+        },
+        "subject":
+        {
+            "reference":"{{ Procedure_Subject_ID }}",
+        },
+        "encounter":
+        {
+            "reference":"{{ Procedure_Encounter_ID }}",
+        },
+    },
+    "request":{
+        "method":"PUT",
+        "url":"Procedure/{{ ID }}",
+    },
+},

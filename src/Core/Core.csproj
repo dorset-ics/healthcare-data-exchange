@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+      <Compile Remove="Common\Abstractions\Ingestion\**" />
+      <Compile Remove="Services\**" />
+      <EmbeddedResource Remove="Common\Abstractions\Ingestion\**" />
+      <EmbeddedResource Remove="Services\**" />
+      <None Remove="Common\Abstractions\Ingestion\**" />
+      <None Remove="Services\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CsvHelper" />
+        <PackageReference Include="Azure.Data.Tables" />
+        <PackageReference Include="Hl7.Fhir.R4" />
+        <PackageReference Include="FluentValidation" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+        <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+        <PackageReference Include="Microsoft.Extensions.Http" />
+        <PackageReference Include="NEL.MESH" />
+        <PackageReference Include="Azure.Storage.Blobs" />
+        <PackageReference Include="System.Linq.Async" />
+    </ItemGroup>
+
+</Project>

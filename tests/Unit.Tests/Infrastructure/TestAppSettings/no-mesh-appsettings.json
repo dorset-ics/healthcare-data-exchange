@@ -1,0 +1,36 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Debug",
+      "Microsoft.AspNetCore": "Warning",
+      "Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware": "None"
+    }
+  },
+  "Pds": {
+    "Fhir": {
+      "BaseUrl": "https://sandbox.api.service.nhs.uk/personal-demographics/FHIR/R4/",
+      "Authentication": {
+        "IsEnabled": false,
+        "TokenUrl": "https://sandbox.api.service.nhs.uk",
+        "ClientId": "CLIENT_ID",
+        "Kid": "HEALTHCARE_DATA_EXCHANGE"
+      }
+    },
+    "Mesh": {
+      "SendSchedule": "0 0 * * * ?",
+      "RetrieveSchedule": "0 0 * * * ?",
+      "MailboxId": "X26ABC1",
+      "Key": "TestKey",
+      "WorkflowId": "SPINE_PDS_MESH_V1"
+    }
+  },
+  "DataHubFhirServer": {
+    "BaseUrl": "http://host.docker.internal:8080/",
+    "TemplateImage": "acrdexoss.azurecr.io/dev:TAG",
+    "TemplateLibrary": [
+      {
+        "PdsMesh": "<NAME OF PDS MESH TEMPLATE>"
+      }
+    ]
+  }
+}

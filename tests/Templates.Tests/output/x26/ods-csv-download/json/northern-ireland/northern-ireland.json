@@ -1,0 +1,100 @@
+{
+  "resourceType": "Bundle",
+  "type": "batch",
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Organization",
+        "id": "972fa7c7-8a94-3c76-0a24-e5211877f103",
+        "meta": {
+          "source": "Organization/cec48f09-f30e-cb9f-adc1-50e79d71796d",
+          "profile": [
+            "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Organization"
+          ]
+        },
+        "identifier": [
+          {
+            "use": "official",
+            "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+            "value": "Z1010"
+          }
+        ],
+        "type": [
+          {
+            "coding": [
+              {
+                "system": "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Organization",
+                "code": "prov",
+                "display": "Healthcare Provider"
+              }
+            ],
+            "text": "Healthcare Provider"
+          }
+        ],
+        "name": "THE ROYAL GROUP OF HOSPITALS & DENTAL HOSPITAL HSS",
+        "alias": [
+          "THE ROYAL GROUP OF HOSPITALS & DENTAL HOSPITAL HSS"
+        ],
+        "contact": [
+          {
+            "address": {
+              "postalCode": "BT12 6BA",
+              "country": "UK"
+            }
+          }
+        ]
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Organization/972fa7c7-8a94-3c76-0a24-e5211877f103"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Organization",
+        "id": "06b8c512-ed5e-3467-3dfe-b722e370144f",
+        "meta": {
+          "source": "Organization/cec48f09-f30e-cb9f-adc1-50e79d71796d",
+          "profile": [
+            "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Organization"
+          ]
+        },
+        "identifier": [
+          {
+            "use": "official",
+            "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+            "value": "Z1020"
+          }
+        ],
+        "type": [
+          {
+            "coding": [
+              {
+                "system": "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Organization",
+                "code": "prov",
+                "display": "Healthcare Provider"
+              }
+            ],
+            "text": "Healthcare Provider"
+          }
+        ],
+        "name": "BELFAST CITY HOSPITAL HSS TRUST",
+        "alias": [
+          "BELFAST CITY HOSPITAL HSS TRUST"
+        ],
+        "contact": [
+          {
+            "address": {
+              "postalCode": "BT9 7AB",
+              "country": "UK"
+            }
+          }
+        ]
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Organization/06b8c512-ed5e-3467-3dfe-b722e370144f"
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "organisations": [
+    {
+      "HospitalCode": "A101H",
+      "HospitalName": "Arran War Memorial Hospital",
+      "AddressLine1": "Lamlash",
+      "AddressLine2": "Isle of Arran",
+      "AddressLine2qf": "",
+      "AddressLine3": "",
+      "AddressLine3qf": "z",
+      "AddressLine4": "",
+      "AddressLine4qf": "z",
+      "PostCode": "KA278LF",
+      "HealthBoard": "S08000015",
+      "Hscp": "S37000020",
+      "CouncilArea": "S12000021",
+      "IntermediateZone": "S02002097",
+      "DataZone": "S01011176"
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "resourceType": "Organization",
+  "id": "5cb46cc8-4ae7-069b-ab48-7760b77ebf97",
+  "name": "DORSET COUNTY HOSPITAL NHS FOUNDATION TRUST",
+  "alias": [
+    "Dorset County Hospital"
+  ],
+  "identifier": [
+    {
+      "use": "official",
+      "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+      "value": "RBD"
+    }
+  ],
+  "active": true,
+  "contact": [
+    {
+      "name": {
+        "text": "Headquarters"
+      },
+      "telecom": [
+        {
+          "system": "phone",
+          "value": "(+44) 01305-251150"
+        },
+        {
+          "system": "email",
+          "value": "headquarters@dchft.nhs.uk"
+        }
+      ],
+      "address": {
+        "line": [
+          "DORSET COUNTY HOSPITAL",
+          "WILLIAMS AVENUE"
+        ],
+        "city": "Dorset",
+        "state": "DORCHESTER",
+        "postalCode": "DT1 2JY",
+        "country": "UK"
+      }
+    },
+    {
+      "name": {
+        "text": "IG Management"
+      },
+      "telecom": [
+        {
+          "system": "email",
+          "value": "caldicott@dchft.nhs.uk"
+        },
+        {
+          "system": "email",
+          "value": "chris.hearn@dchft.nhs.uk"
+        }
+      ],
+      "address": {
+        "line": [
+          "DORSET COUNTY HOSPITAL",
+          "WILLIAMS AVENUE"
+        ],
+        "city": "Dorchester",
+        "district": "Dorset",
+        "postalCode": "DT1 2JY",
+        "country": "UK"
+      }
+    }
+  ],
+  "endpoint": [
+    {
+      "reference": "https://www.dchft.nhs.uk/"
+    }
+  ]
+}

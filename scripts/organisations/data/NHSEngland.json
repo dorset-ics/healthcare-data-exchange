@@ -1,0 +1,30 @@
+{
+  "resourceType": "Organization",
+  "id": "cec48f09-f30e-cb9f-adc1-50e79d71796d",
+  "name": "NHS ENGLAND",
+  "alias": [
+    "NHS England"
+  ],
+  "identifier": [
+    {
+      "use": "official",
+      "system": "https://fhir.nhs.uk/Id/ods-organization-code",
+      "value": "X26"
+    }
+  ],
+  "active": true,
+  "contact": [
+    {
+      "address": {
+        "line": [
+          "THE LEEDS GOVERNMENT HUB",
+          "7-8 WELLINGTON PLACE"
+        ],
+        "city": "Leeds",
+        "state": "West Yorkshire",
+        "postalCode": "LS1 4AP",
+        "country": "UK"
+      }
+    }
+  ]
+}

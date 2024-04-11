@@ -1,0 +1,19 @@
+{
+    "resource": {
+        "resourceType": "Encounter",
+        "id": "{{ ID }}",
+        "extension": [
+            {
+                "url": "https://fhir.hl7.org.uk/StructureDefinition/Extension-UKCore-EmergencyCareDischargeStatus",
+                "valueCodeableConcept": {
+                    "coding": [
+                        {
+                            "system": "http://snomed.info/sct",
+                            "code": "{{ PV1.36.Value }}"
+                        }
+                    ]
+                }
+            }
+        ],
+    },
+},
