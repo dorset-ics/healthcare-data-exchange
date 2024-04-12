@@ -72,3 +72,12 @@ resource "azuread_application_pre_authorized" "azcli" {
     ]
   ])
 }
+
+resource "azuread_service_principal" "app" {
+  client_id                = azuread_application.app.application_id
+  owners                   = var.app_registration_owners
+  tags = [
+    "AppServiceIntegratedApp",
+    "WindowsAzureActiveDirectoryIntegratedApp",
+  ]
+}
