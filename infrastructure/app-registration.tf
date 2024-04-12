@@ -42,6 +42,24 @@ resource "azuread_application" "app" {
     id                   = "497406e4-012a-4267-bf18-45a1cb148a01"
     value                = "DataConsumer"
   }
+
+  feature_tags {
+    enterprise = true
+  }
+
+  required_resource_access {
+    resource_app_id = "00000003-0000-0000-c000-000000000000" # Microsoft Graph
+
+    resource_access {
+      id   = "df021288-bdef-4463-88db-98f22de89214" # User.Read.All
+      type = "Role"
+    }
+
+    resource_access {
+      id   = "b4e74841-8e56-480b-be8b-910348b18b4c" # User.ReadWrite
+      type = "Scope"
+    }
+  }
 }
 
 resource "azuread_application_pre_authorized" "azcli" {
@@ -53,4 +71,13 @@ resource "azuread_application_pre_authorized" "azcli" {
       for scope in api.oauth2_permission_scope : scope.id
     ]
   ])
+}
+
+resource "azuread_service_principal" "app" {
+  client_id = azuread_application.app.application_id
+  owners    = var.app_registration_owners
+  tags = [
+    "AppServiceIntegratedApp",
+    "WindowsAzureActiveDirectoryIntegratedApp",
+  ]
 }
