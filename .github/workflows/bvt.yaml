@@ -56,7 +56,7 @@ jobs:
         SERVICE_NAME: ${{ inputs.service_name }}
     
     - name: Unit Tests
-      run: dotnet test -c Release --logger "trx;LogFileName=testresults.trx" --collect:"XPlat Code Coverage"
+      run: dotnet test -v diag -c Release --logger "trx;LogFileName=testresults.trx" --collect:"XPlat Code Coverage"
       shell: bash
       working-directory: tests/Unit.Tests
 
