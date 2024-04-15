@@ -55,11 +55,6 @@ public class PatientModule : CarterModule
 
     private static IResult SearchExceptionToResult(Exception exception)
     {
-        return exception switch
-        {
-            PdsSearchPatientNotFoundException => TypedResults.NotFound(exception),
-            PdsSearchFailedException => TypedResults.BadRequest(exception),
-            _ => throw exception
-        };
+        throw exception;
     }
 }
