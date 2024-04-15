@@ -25,6 +25,7 @@ app.UseExceptionHandler();
 app.UseHttpsRedirection();
 app.UseCors("DexCorsPolicy");
 app.MapHealthChecks("/_health", new HealthCheckOptions { ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse });
+app.MapGet("/", () => "Welcome to Healthcare Data Exchange. Please refer to the documentation for detailed usage guidelines.");
 app.MapCarter();
 
 if (app.Environment.IsEnvironment("Local"))
