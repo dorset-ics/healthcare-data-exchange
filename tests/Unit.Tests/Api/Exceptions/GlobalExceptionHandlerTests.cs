@@ -35,8 +35,8 @@ public class GlobalExceptionHandlerTests
         {
             Issue =
                 [
-                    new() 
-                    { 
+                    new()
+                    {
                         Severity = IssueSeverity.Error,
                         Code = expectedIssueType,
                         Diagnostics = environmentName == Environments.Development ? exception.Message : null

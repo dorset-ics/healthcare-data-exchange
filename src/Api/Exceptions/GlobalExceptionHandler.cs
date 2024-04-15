@@ -44,11 +44,11 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger, IHos
     }
 
     private IssueType MapFhirOperationException(FhirOperationException fhirOperationException) => fhirOperationException.Status switch
-        {
-            HttpStatusCode.NotFound => IssueType.NotFound,
-            HttpStatusCode.BadRequest => IssueType.Invalid,
-            _ => IssueType.Exception
-        };
+    {
+        HttpStatusCode.NotFound => IssueType.NotFound,
+        HttpStatusCode.BadRequest => IssueType.Invalid,
+        _ => IssueType.Exception
+    };
 
     private async Task WriteProblemDetails(Exception exception, string traceId, HttpContext httpContext, CancellationToken cancellationToken)
     {
@@ -71,5 +71,5 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger, IHos
     {
         TaskCanceledException _ => (HttpStatusCode.GatewayTimeout, "Request Timeout"),
         _ => (HttpStatusCode.InternalServerError, "Internal Server Error")
-    };    
+    };
 }
