@@ -9,48 +9,36 @@ public class FileTerminologyServiceTests
     [Fact]
     public void GetSnomedDisplay_ShouldReturnSnomedDescription_WhenCodeIsInCache()
     {
-        var memoryCache = Substitute.For<IMemoryCache>();
+        var memoryCache = new MemoryCache(new MemoryCacheOptions());
         var logger = Substitute.For<ILogger<FileTerminologyService>>();
-
-        var anyStringArg = Arg.Any<string>();
-        memoryCache.TryGetValue("123", out anyStringArg).Returns(x =>
-        {
-            x[1] = "Example code display";
-            return true;
-        });
+        memoryCache.Set("22298006", "Myocardial infarction (disorder)");
 
         var terminologyService = new FileTerminologyService(memoryCache, logger);
 
-        var result = terminologyService.GetSnomedDisplay("123");
-        result.ShouldBe("Example code display");
+        var result = terminologyService.GetSnomedDisplay("22298006");
+        result.ShouldBe("Myocardial infarction (disorder)");
     }
 
     [Fact]
     public void GetSnomedDisplay_ShouldReturnEmptyString_WhenCodeIsNotInCache()
     {
-        var memoryCache = Substitute.For<IMemoryCache>();
+        var memoryCache = new MemoryCache(new MemoryCacheOptions());
         var logger = Substitute.For<ILogger<FileTerminologyService>>();
-
-        var anyStringArg = Arg.Any<string>();
-        memoryCache.TryGetValue("123", out anyStringArg).Returns(false);
 
         var terminologyService = new FileTerminologyService(memoryCache, logger);
 
-        var result = terminologyService.GetSnomedDisplay("123");
+        var result = terminologyService.GetSnomedDisplay("12345678");
         result.ShouldBe(string.Empty);
     }
 
     [Fact]
     public void GetSnomedDisplay_ShouldLogWarning_WhenCodeIsNotInCache()
     {
-        var memoryCache = Substitute.For<IMemoryCache>();
+        var memoryCache = new MemoryCache(new MemoryCacheOptions());
         var logger = Substitute.For<ILogger<FileTerminologyService>>();
 
-        var anyStringArg = Arg.Any<string>();
-        memoryCache.TryGetValue("123", out anyStringArg).Returns(false);
-
         var terminologyService = new FileTerminologyService(memoryCache, logger);
-        var result = terminologyService.GetSnomedDisplay("123");
+        var result = terminologyService.GetSnomedDisplay("12345678");
 
         logger.Received(1).AnyLogOfType(LogLevel.Warning);
     }
