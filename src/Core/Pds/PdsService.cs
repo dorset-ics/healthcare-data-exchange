@@ -188,6 +188,18 @@ public class PdsService(
         if (csvToJsonResult.IsFailure)
             return csvToJsonResult;
 
+        if (csvToJsonResult.ErrorSuccessCode == "91" ) {
+            string matchNhsNumber = csvToJsonResult.MatchedNhsNo;
+
+            if (matchNhsNumber == "0000000000") {
+                // delete case
+            }
+            else  {
+                // merge case
+            }
+
+        }
+
         logger.LogInformation("Message {message} converted to JSON", messageId);
 
         var conversionRequest = new ConvertDataRequest(csvToJsonResult.Value, TemplateInfo.ForPdsMeshPatient());
