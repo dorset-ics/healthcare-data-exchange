@@ -1,9 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
-using System.IO.Abstractions;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using Infrastructure.Pds;
-using Infrastructure.Pds.Configuration;
+using System.Security.Cryptography.X509Certificates;
 using Infrastructure.Pds.Fhir.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -34,8 +32,29 @@ public class JwtHandler(PdsAuthConfiguration authConfig)
 
     private SigningCredentials GetSigningCredentials()
     {
+        return authConfig.UseCertificateStore && authConfig.CertificateThumbprint != null
+            ? GetSigningCredentialsFromStore(authConfig.CertificateThumbprint, authConfig.Kid)
+            : GetSigningCredentialsFromConfig(authConfig.Kid);
+    }
+
+    private SigningCredentials GetSigningCredentialsFromStore(string thumbprint, string kid)
+    {
+        var privateCertsPath = Environment.GetEnvironmentVariable("WEBSITE_PRIVATE_CERTS_PATH");
+        var certificatePath = Path.Join(privateCertsPath, $"{thumbprint}.p12");
+
+        var bytes = File.ReadAllBytes(certificatePath);
+        var cert = new X509Certificate2(bytes);
+
+        return new SigningCredentials(
+            new X509SecurityKey(cert, kid),
+            SecurityAlgorithms.RsaSha512
+        );
+    }
+
+    private SigningCredentials GetSigningCredentialsFromConfig(string kid)
+    {
         var rsa = GenerateRsaFromPrivateKey();
-        var rsaSecurityKey = new RsaSecurityKey(rsa) { KeyId = authConfig.Kid };
+        var rsaSecurityKey = new RsaSecurityKey(rsa) { KeyId = kid };
 
         return new SigningCredentials(rsaSecurityKey, SecurityAlgorithms.RsaSha512) { CryptoProviderFactory = new CryptoProviderFactory { CacheSignatureProviders = false } };
     }
