@@ -31,7 +31,7 @@ public class OdsServiceTests : IDisposable
     [Fact]
     public async Task GivenValidOdsDownloadSource_WhenIngestingCsvDownload_ThenResultIsSuccessful()
     {
-        var dateIngestStarted = DateTime.Now;
+        var dateIngestStarted = DateTime.UtcNow;
 
         // The complete CSV ingest currently takes a long time and this test can take 25 mins to complete.
         // So run it in a task, iterate for a maximum amount of time, query the fhir store at intervals, and
@@ -43,7 +43,7 @@ public class OdsServiceTests : IDisposable
 
         Bundle? bundle = null;
 
-        while (DateTime.Now <= dateIngestStarted.AddSeconds(60))
+        while (DateTime.UtcNow <= dateIngestStarted.AddSeconds(60))
         {
             bundle =
                 await _dataHubFhirClientWrapper.SearchResourceByParams<Organization>(
