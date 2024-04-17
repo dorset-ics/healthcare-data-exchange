@@ -32,7 +32,7 @@ public class JwtHandler(PdsAuthConfiguration authConfig)
 
     private SigningCredentials GetSigningCredentials()
     {
-        return authConfig.UseCertificateStore && (authConfig.CertificateThumbprint != null )
+        return authConfig.UseCertificateStore && (authConfig.CertificateThumbprint != null)
             ? GetSigningCredentialsFromStore(authConfig.CertificateThumbprint, authConfig.Kid)
             : GetSigningCredentialsFromConfig(authConfig.Kid);
     }
