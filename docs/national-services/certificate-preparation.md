@@ -6,7 +6,7 @@ NHS Digital provide extensive [documentation](https://digital.nhs.uk/developer/g
 
 An important step in this process is generating and signing a JWT. This happens at runtime. The JWT is then used to authenticate with the PDS.
 
-In the `JwtHandler` we generate an instance of `SigningCredentials` using a `X509Certificate2` object. This certificate is stored in Azure Key Vault and loaded into the application container at runtime. Details of this process can be found [here](https://learn.microsoft.com/en-us/azure/app-service/configure-ssl-certificate-in-code).
+In the `JwtHandler` we generate an instance of `SigningCredentials` using a `X509Certificate2` object. This certificate is stored in Azure Key Vault and loaded into the application container at runtime. Details of this process can be found [at the ssl certificate configuration guide](https://learn.microsoft.com/en-us/azure/app-service/configure-ssl-certificate-in-code).
 
 ## Convert certificate to PKCS12 x509 certificate
 
