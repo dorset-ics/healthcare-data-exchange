@@ -191,7 +191,7 @@ public class PdsService(
 
         // Having a 91 error code means that the patient has been merged or deleted
         // Ref: https://digital.nhs.uk/developer/api-catalogue/personal-demographic-service-mesh/pds-mesh-data-dictionary#response-codes
-        var handleDeleteCase = HandleInvalidResource(ref csvToJsonResult, out var oldNhsNumber);
+        var isPatientToBeDeleted = HandleInvalidResource(ref csvToJsonResult, out var oldNhsNumber);
 
         logger.LogInformation("Message {message} converted to JSON", messageId);
 
@@ -206,7 +206,7 @@ public class PdsService(
         if (transactionResult.IsFailure)
             return transactionResult;
 
-        if (handleDeleteCase) 
+        if (isPatientToBeDeleted) 
         {
             await DeletePatientById(oldNhsNumber);
         }
@@ -217,16 +217,16 @@ public class PdsService(
 
     private static bool HandleInvalidResource(ref Result<string> csvToJsonResult, out string oldNhsNumber)
     {
-        bool handleDeleteCase = false;
+        bool isPatientToBeDeleted = false;
         oldNhsNumber = "";
         var record = JsonSerializer.Deserialize<PdsMeshRecordResponse>(csvToJsonResult.Value);
 
         if (record?.ErrorSuccessCode == "91")
         {
-            handleDeleteCase = true;
+            isPatientToBeDeleted = true;
             // if the patient has been merged, we need to get the new NHS number
             // 0000000000 means the patient has been deleted.
-            oldNhsNumber = record.NhsNumber!;
+            oldNhsNumber = record.NhsNumber!; // storing the older NHS number to be deleted, before we override the resource with merged one.
             if (record.MatchedNhsNo! != "0000000000")
             {
                 record.NhsNumber = record.MatchedNhsNo;
@@ -235,7 +235,7 @@ public class PdsService(
 
         csvToJsonResult = JsonSerializer.Serialize(record);
 
-        return handleDeleteCase;
+        return isPatientToBeDeleted;
     }
 
     public async Task<Result<Bundle>> DeletePatientById(string nhsNumber)
