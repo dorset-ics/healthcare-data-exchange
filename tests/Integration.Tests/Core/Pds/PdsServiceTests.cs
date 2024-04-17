@@ -170,16 +170,7 @@ public class PdsServiceTests : IDisposable
 
             var csv = string.Join(Environment.NewLine, page.Select(p =>
             {
-                return string.Join(",",
-                    new string[]
-                    {
-                        p.Id, p.GetNhsNumber()!, "UPDATED-FAMILY-NAME", "UPDATED-GIVEN-NAME", "UPDATED-OTHER-NAME",
-                        "1", "20010101", string.Empty, "UPDATED-ADDRESS1", "UPDATED-ADDRESS2", "UPDATED-ADDRESS3",
-                        "UPDATED-ADDRESS4", "UPDATED-ADDRESS5", "UPDATED-POSTCODE", "UPDATED-GP", string.Empty,
-                        string.Empty, string.Empty, string.Empty, string.Empty, "UPDATED-HOMETEL",
-                        "UPDATED-MOBILETEL", "UPDATED-EMAIL", string.Empty, string.Empty, string.Empty,
-                        p.GetNhsNumber()!, string.Empty, string.Empty,
-                    });
+                return CreateDummyMeshPatientMessage(p.Id, p.GetNhsNumber()!, p.GetNhsNumber()!, string.Empty);
             }).Prepend(PdsMeshUtilities.GetPdsMeshRecordResponseHeaderLine()));
 
             await meshClient.Mailbox.SendMessageAsync(
@@ -189,6 +180,20 @@ public class PdsServiceTests : IDisposable
                 mexFileName: $"RESP_MPTREQ_{DateTime.Now:yyyyMMddHHmmss}_{DateTime.Now:yyyyMMddHHmmss}.csv",
                 contentType: MediaTypeNames.Text.Csv);
         }
+    }
+
+    private static string CreateDummyMeshPatientMessage(string id, string nhsNumber, string matchedNhsNumber, string successErrorCode)
+    {
+        return string.Join(",",
+            new string[]
+            {
+                        id, nhsNumber, "UPDATED-FAMILY-NAME", "UPDATED-GIVEN-NAME", "UPDATED-OTHER-NAME",
+                        "1", "20010101", string.Empty, "UPDATED-ADDRESS1", "UPDATED-ADDRESS2", "UPDATED-ADDRESS3",
+                        "UPDATED-ADDRESS4", "UPDATED-ADDRESS5", "UPDATED-POSTCODE", "UPDATED-GP", string.Empty,
+                        string.Empty, string.Empty, string.Empty, string.Empty, "UPDATED-HOMETEL",
+                        "UPDATED-MOBILETEL", "UPDATED-EMAIL", string.Empty, string.Empty, successErrorCode,
+                        matchedNhsNumber, string.Empty, string.Empty,
+            });
     }
 
     private async Task<IEnumerable<Message>> RetrieveMeshMessages()
