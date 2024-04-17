@@ -255,33 +255,44 @@ public class PdsServiceTests : IDisposable
         for (var i = 0; i < numberOfPatients; i++)
         {
             var nhsNumber = Guid.NewGuid().ToString();
+            var patient = CreatePatient(nhsNumber);
 
-            var patient = new Patient()
-            {
-                Id = nhsNumber,
-                Meta =
-                    new Meta()
-                    {
-                        Profile = new List<string>()
-                        {
+            await _dataHubFhirClientWrapper.UpdateAsync<Patient>(patient);
+
+            patients.Add(patient);
+        }
+
+        return patients;
+    }
+
+    private static Patient CreatePatient(string nhsNumber)
+    {
+        return new Patient()
+        {
+            Id = nhsNumber,
+            Meta =
+                            new Meta()
+                            {
+                                Profile = new List<string>()
+                                {
                             "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Patient"
-                        }
-                    },
-                Identifier =
-                    new List<Identifier>() { new Identifier("https://fhir.nhs.uk/Id/nhs-number", nhsNumber) },
-                Name =
-                    new List<HumanName>()
-                    {
+                                }
+                            },
+            Identifier =
+                            new List<Identifier>() { new Identifier("https://fhir.nhs.uk/Id/nhs-number", nhsNumber) },
+            Name =
+                            new List<HumanName>()
+                            {
                         new HumanName()
                         {
                             Family = "TO-BE-UPDATED", Given = new List<string>() { "TO-BE-UPDATED" }
                         }
-                    },
-                Gender = AdministrativeGender.Unknown,
-                BirthDate = "1920-01-01",
-                Address =
-                    new List<Address>()
-                    {
+                            },
+            Gender = AdministrativeGender.Unknown,
+            BirthDate = "1920-01-01",
+            Address =
+                            new List<Address>()
+                            {
                         new Address()
                         {
                             Line = new List<string>()
@@ -294,8 +305,8 @@ public class PdsServiceTests : IDisposable
                             },
                             PostalCode = "TO-BE-UPDATED"
                         }
-                    },
-                Telecom = new List<ContactPoint>()
+                            },
+            Telecom = new List<ContactPoint>()
                 {
                     new ContactPoint()
                     {
@@ -314,7 +325,7 @@ public class PdsServiceTests : IDisposable
                         System = ContactPoint.ContactPointSystem.Email, Value = "TO-BE-UPDATED"
                     }
                 },
-                GeneralPractitioner = new List<ResourceReference>()
+            GeneralPractitioner = new List<ResourceReference>()
                 {
                     new ResourceReference()
                     {
@@ -325,13 +336,6 @@ public class PdsServiceTests : IDisposable
                         }
                     }
                 }
-            };
-
-            await _dataHubFhirClientWrapper.UpdateAsync<Patient>(patient);
-
-            patients.Add(patient);
-        }
-
-        return patients;
+        };
     }
 }
