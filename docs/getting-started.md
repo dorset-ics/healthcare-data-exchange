@@ -15,7 +15,7 @@ This project is structured into several parts:
 
 See below for details to get up and running.
 
-Further information for developers wanting to work on the project can be found [here](./developer/development-guide.md).
+Further information for developers wanting to work on the project can be found [in the developer getting started guide](./developer/development-guide.md).
 
 ### Prerequisites
 
