@@ -26,7 +26,7 @@ Further information for developers wanting to work on the project can be found [
 ### Running the API and its dependencies
 
 The docker-compose file located under the 'docker' folder will build and run
-a containerized version of the application, along its dependencies such as the [OSS FHIR server](https://github.com/microsoft/fhir-server) and the SQL Server database for the FHIR server, as well as an [Azurite Azure Storage Emulator](https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio%2Cblob-storage) container for local emulation of Azure Blob Storage. See more information on the [Azure Storage Emulator](#storage-emulation).
+a containerized version of the application, along with its dependencies such as the [OSS FHIR server](https://github.com/microsoft/fhir-server) and the SQL Server database for the FHIR server, as well as an [Azurite Azure Storage Emulator](https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio%2Cblob-storage) container for local emulation of Azure Blob Storage. See more information on the [Azure Storage Emulator](#storage-emulation).
 
 #### Prerequisite: Set environment variables
 
