@@ -12,7 +12,7 @@ In the `JwtHandler` we generate an instance of `SigningCredentials` using a `X50
 
 Before importing the certificate into Azure Key Vault, it must be converted to a PKCS12 x509 certificate.
 
-The guide, provided by NHS Digital, produces a self-signed certificate and a private key in X.509 PEM format. These components can be temporarily stored in `.pem` files and used to create a PKCS12 x509 certificate.
+The NHS Digital guide produces a self-signed certificate and a private key in X.509 PEM format. These components can be temporarily stored in `.pem` files and used to create a PKCS12 x509 certificate.
 
 The following commands can be used to convert the certificate and private key to a PKCS12 x509 certificate:
 
