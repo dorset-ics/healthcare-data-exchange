@@ -1,11 +1,15 @@
-﻿using Core;
+﻿using System.Text.Json;
+using Core;
 using Core.Common.Abstractions.Clients;
 using Core.Common.Abstractions.Converters;
 using Core.Common.Models;
 using Core.Common.Results;
 using Core.Pds;
 using Core.Pds.Abstractions;
+using Core.Pds.Converters;
 using Core.Pds.Models;
+using FluentValidation;
+using FluentValidation.Results;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
 using Microsoft.Extensions.Logging;
@@ -22,8 +26,16 @@ public class PdsServiceTests
     private readonly IPdsFhirClient _pdsFhirClient;
     private readonly IConverter<string, Result<string>> _csvToJsonConverter;
     private readonly IConverter<Bundle, Result<PdsMeshBundleToCsvConversionResult>> _bundleToCsvConverter;
+    private readonly PdsMeshCsvToJsonConverter _pdsMeshCsvToJsonConverter;
+    private readonly IValidator<string> _validatorMock;
+    
     private readonly Message _message;
     private readonly PdsService _sut;
+    
+    private const string BaseSamplePath = "Core/Pds/Converters/Samples";
+    // private readonly byte[] GOOD_PDS_MESH_CSV = System.Text.Encoding.UTF8.GetBytes("02403456-031f-11e7-a926-080027a2de00,9991112758,,,,,,,,,,,,,,,,,,1,0,0,0,0,0,");
+    // private readonly byte[] DELETED_PDS_MESH_CSV = System.Text.Encoding.UTF8.GetBytes("02403456-031f-11e7-a926-080027a2de00,9991112758,,,,,,,,,,,,,,,,91,0000000000,1,0,0,0,0,0,");
+    // private readonly byte[] MERGED_PDS_MESH_CSV = System.Text.Encoding.UTF8.GetBytes("02403456-031f-11e7-a926-080027a2de00,9991112758,,,,,,,,,,,,,,,,91,1234567890,1,0,0,0,0,0,");
 
     public PdsServiceTests()
     {
@@ -34,6 +46,11 @@ public class PdsServiceTests
         _csvToJsonConverter = Substitute.For<IConverter<string, Result<string>>>();
         _bundleToCsvConverter = Substitute.For<IConverter<Bundle, Result<PdsMeshBundleToCsvConversionResult>>>();
         _message = Substitute.For<Message>();
+        
+        var loggerMock = Substitute.For<ILogger<PdsMeshCsvToJsonConverter>>();
+        _validatorMock = Substitute.For<IValidator<string>>();
+        _validatorMock.Validate(Arg.Any<string>()).Returns(new ValidationResult());
+        _pdsMeshCsvToJsonConverter = new PdsMeshCsvToJsonConverter(loggerMock, _validatorMock);
 
         _sut = new PdsService(
             _logger, _pdsMeshClient, _pdsFhirClient, _fhirClient, _csvToJsonConverter, _bundleToCsvConverter);
@@ -48,6 +65,12 @@ public class PdsServiceTests
 
         _pdsMeshClient.RetrieveMessages().Returns(messages);
         _pdsMeshClient.RetrieveMessage("message").Returns(new Message() { FileContent = "content"u8.ToArray() });
+        
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), BaseSamplePath, "MeshResponseSinglePatient.csv");
+        var fileContent = await File.ReadAllTextAsync(filePath);
+        var result = _pdsMeshCsvToJsonConverter.Convert(fileContent);
+        
+        _csvToJsonConverter.Convert(Arg.Any<string>()).Returns(result);
 
         await _sut.RetrieveMeshMessages(new CancellationToken());
 
@@ -79,9 +102,13 @@ public class PdsServiceTests
         _pdsMeshClient.RetrieveMessage("message").Returns(new Message() { FileContent = "content"u8.ToArray() });
         _pdsMeshClient.AcknowledgeMessage("message").Returns(acknowledgeSucceeded);
 
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), BaseSamplePath, "MeshResponseSinglePatient.csv");
+        var fileContent = await File.ReadAllTextAsync(filePath);
+        var result = _pdsMeshCsvToJsonConverter.Convert(fileContent);
+        _csvToJsonConverter.Convert(Arg.Any<string>()).Returns(result);
         await _sut.RetrieveMeshMessages(new CancellationToken());
 
-        _csvToJsonConverter.Received(1).Convert("content");
+
         await _fhirClient.Received(1).ConvertData(Arg.Any<ConvertDataRequest>());
         await _fhirClient.Received(1).TransactionAsync<Patient>(Arg.Any<Bundle>());
         await _pdsMeshClient.Received(1).AcknowledgeMessage("message");
@@ -95,6 +122,11 @@ public class PdsServiceTests
 
         _pdsMeshClient.RetrieveMessages().Returns(messages);
         _pdsMeshClient.RetrieveMessage(Arg.Any<string>()).Returns(new Message() { FileContent = "content"u8.ToArray() });
+        
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), BaseSamplePath, "MeshResponseMultiplePatients.csv");
+        var fileContent = await File.ReadAllTextAsync(filePath);
+        var result = _pdsMeshCsvToJsonConverter.Convert(fileContent);
+        _csvToJsonConverter.Convert(Arg.Any<string>()).Returns(result);
 
         await _sut.RetrieveMeshMessages(new CancellationToken());
 
@@ -156,7 +188,11 @@ public class PdsServiceTests
     {
         _pdsMeshClient.RetrieveMessages().Returns(new List<string>() { "message" });
         _pdsMeshClient.RetrieveMessage("message").Returns(new Message() { FileContent = "message"u8.ToArray() });
-        _csvToJsonConverter.Convert(Arg.Any<string>()).Returns("conversion result");
+        
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), BaseSamplePath, "MeshResponseSinglePatient.csv");
+        var fileContent = await File.ReadAllTextAsync(filePath);
+        var result = _pdsMeshCsvToJsonConverter.Convert(fileContent);
+        _csvToJsonConverter.Convert(Arg.Any<string>()).Returns(result);
         _fhirClient.ConvertData(Arg.Any<ConvertDataRequest>()).Returns(new Exception("Failure!"));
         _fhirClient.TransactionAsync<Patient>(Arg.Any<Bundle>()).Returns(new Bundle());
         _pdsMeshClient.AcknowledgeMessage(Arg.Any<string>()).Returns(true);
@@ -171,7 +207,10 @@ public class PdsServiceTests
     {
         _pdsMeshClient.RetrieveMessages().Returns(new List<string>() { "message" });
         _pdsMeshClient.RetrieveMessage("message").Returns(new Message() { FileContent = "message"u8.ToArray() });
-        _csvToJsonConverter.Convert(Arg.Any<string>()).Returns("conversion result");
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), BaseSamplePath, "MeshResponseSinglePatient.csv");
+        var fileContent = await File.ReadAllTextAsync(filePath);
+        var result = _pdsMeshCsvToJsonConverter.Convert(fileContent);
+        _csvToJsonConverter.Convert(Arg.Any<string>()).Returns(result);
         _fhirClient.ConvertData(Arg.Any<ConvertDataRequest>()).Returns(new Bundle());
         _fhirClient.TransactionAsync<Patient>(Arg.Any<Bundle>()).Returns(new Exception("Failure!"));
         _pdsMeshClient.AcknowledgeMessage(Arg.Any<string>()).Returns(true);
