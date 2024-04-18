@@ -206,7 +206,7 @@ public class PdsService(
         if (transactionResult.IsFailure)
             return transactionResult;
 
-        if (isPatientToBeDeleted) 
+        if (isPatientToBeDeleted)
         {
             await DeletePatientById(oldNhsNumber);
         }
