@@ -419,7 +419,7 @@ public class PdsServiceTests
         await _pdsMeshClient.Received(1).RetrieveMessages();
         await _fhirClient.Received(1).ConvertData(Arg.Any<ConvertDataRequest>());
         await _fhirClient.Received(1).TransactionAsync<Patient>(Arg.Any<Bundle>());
-        
+
     }
 
     #endregion
