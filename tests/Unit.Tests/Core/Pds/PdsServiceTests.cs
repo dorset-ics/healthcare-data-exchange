@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using Core;
+﻿using Core;
 using Core.Common.Abstractions.Clients;
 using Core.Common.Abstractions.Converters;
 using Core.Common.Models;
@@ -10,7 +9,6 @@ using Core.Pds.Converters;
 using Core.Pds.Models;
 using FluentValidation;
 using FluentValidation.Results;
-using Hl7.Fhir.ElementModel.Types;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
 using Microsoft.Extensions.Logging;
