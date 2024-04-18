@@ -37,7 +37,7 @@ resource "azurerm_linux_web_app" "web_app" {
     "AzureStorageConnectionString"               = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.azure_storage_connection_string.id})"
     "AzureTableStorageCache__Endpoint"           = azurerm_storage_account.dex_storage_account.primary_table_endpoint
     "DataHubFhirServer__BaseUrl"                 = var.fhir_url
-    "DataHubFhirServer__TemplateImage"           = "${var.acr_login_server}/api:${var.image_tag_suffix}"
+    "DataHubFhirServer__TemplateImage"           = "${var.acr_login_server}/${var.env}:${var.image_tag_suffix}"
     "Mesh__Authentication__RootCertificate"      = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.nhs_root_certificate.id})"
     "Mesh__Authentication__ClientCertificate"    = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.ndop_mesh_client_certificate_private.id})"
     "Mesh__Authentication__SubCertificate"       = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.nhs_sub_certificate.id})"
