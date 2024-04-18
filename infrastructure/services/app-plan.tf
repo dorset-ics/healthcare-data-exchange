@@ -21,7 +21,7 @@ resource "azurerm_linux_web_app" "web_app" {
     always_on                                     = true
 
     application_stack {
-      docker_image_name   = "${var.acr_login_server}/api:${var.image_tag_suffix}"
+      docker_image_name   = "api:${var.image_tag_suffix}"
       docker_registry_url = "https://${var.acr_login_server}"
     }
   }

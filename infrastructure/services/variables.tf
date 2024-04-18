@@ -22,5 +22,9 @@ variable "storage_zone_id" {}
 variable "azure_cli_client_id" {}
 variable "sp_client_id" {}
 variable "health_services_principal_id" {}
-variable "acr_login_server" {}
-variable "acr_id" {}
+variable "acr_login_server" {
+  type = string
+}
+variable "acr_id" {
+  type = string
+}

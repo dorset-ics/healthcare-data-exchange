@@ -72,7 +72,7 @@ module "services" {
   sp_client_id                     = var.sp_client_id
   health_services_principal_id     = module.health-services.health_services_principal_id
   acr_id                           = azurerm_container_registry.acr.id
-  acr_login_server                 = azurerm_container_registry.acr
+  acr_login_server                 = azurerm_container_registry.acr.login_server
 }
 
 module "health-services" {
