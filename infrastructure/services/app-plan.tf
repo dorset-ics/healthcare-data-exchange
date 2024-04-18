@@ -45,7 +45,7 @@ resource "azurerm_linux_web_app" "web_app" {
     "Ndop__Mesh__MailboxId"                            = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.ndop_mesh_mailbox_id.id})"
     "Ndop__Mesh__MailboxPassword"                      = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.ndop_mesh_mailbox_password.id})"
     "Pds__Mesh__MailboxId"                             = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.pds_mesh_mailbox_id.id})"
-    "Pds__Mesh__MailboxPassword"                       = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.pds_mesh_mailbox_password.id})",
+    "Pds__Mesh__MailboxPassword"                       = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.pds_mesh_mailbox_password.id})"
     "WEBSITE_LOAD_CERTIFICATES"                        = azurerm_key_vault_certificate.pds_fhir_certificate_private.thumbprint
   }
 
