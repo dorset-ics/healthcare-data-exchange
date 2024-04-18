@@ -12,7 +12,8 @@ The `appsettings.json` file contains the default/common configuration for the ap
 The other files are used to override the default configuration based on the environment the application is running in. The `appsettings.Local.json` file is used for local development, and the `appsettings.Integration.json` file is used for integration testing. The `appsettings.Development.json` file is used for development environment, and the `appsettings.Production.json` file is used for production and staging.
 The following setting are being overridden by terraform:
 
-- "Pds__Fhir__Authentication__Certificate"
+- "Pds__Fhir__Authentication__UseCertificateStore"
+- "Pds__Fhir__Authentication__CertificateThumbprint"
 - "DataHubFhirServer__Authentication__Scope"
 - "ApplicationInsightsAgent_EXTENSION_VERSION"
 - "AzureStorageConnectionString"
