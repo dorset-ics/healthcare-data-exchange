@@ -85,7 +85,7 @@ data "azurerm_key_vault" "common_kv" {
   resource_group_name = "rg-dex"
 }
 
-data "azurerm_key_vault_certificate" "pds_fhir_certificate" {
+data "azurerm_key_vault_secret" "pds_fhir_certificate" {
   name         = var.env == "prd" || var.env == "stg" ? "pds-fhir-production-pfx-private" : "pds-fhir-integration-pfx-private"
   key_vault_id = data.azurerm_key_vault.common_kv.id
 }
@@ -129,7 +129,7 @@ resource "azurerm_key_vault_certificate" "pds_fhir_certificate_private" {
   name         = "pds-fhir-certificate-pfx-private"
   key_vault_id = azurerm_key_vault.kv.id
   certificate {
-    contents = data.azurerm_key_vault_certificate.pds_fhir_certificate.certificate_data
+    contents = data.azurerm_key_vault_secret.pds_fhir_certificate.value
   }
 
   depends_on = [
