@@ -17,7 +17,8 @@ The NHS Digital guide produces a self-signed certificate and a private key in X.
 The following commands can be used to convert the certificate and private key to a PKCS12 x509 certificate:
 
 ```bash
-openssl pkcs12 -export -out certificate.p12 -inkey privatekey.pem -in certificate.pem
+openssl x509 -in certificate.pem -out x509certificate.pem -signkey privatekey.pem
+openssl pkcs12 -export -out certificate.pfx -in x509certificate.pem -inkey privatekey.pem
 ```
 
 This command will prompt for a password to secure the PKCS12 x509 certificate. This password will be required when importing the certificate into Azure Key Vault.
