@@ -9,7 +9,6 @@ variable "env" {}
 variable "log_analytics_sku" {}
 variable "app_plan_sku" {}
 variable "runner_ip" {}
-variable "acr_zone_id" {}
 variable "app_zone_id" {}
 variable "app_registration_id" {}
 variable "app_registration_uri" {}
@@ -22,3 +21,6 @@ variable "vault_zone_id" {}
 variable "storage_zone_id" {}
 variable "azure_cli_client_id" {}
 variable "sp_client_id" {}
+variable "health_services_principal_id" {}
+variable "acr_login_server" {}
+variable "acr_id" {}
