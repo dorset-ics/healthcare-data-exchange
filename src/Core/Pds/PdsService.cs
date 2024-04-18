@@ -11,6 +11,8 @@ using Core.Pds.Models;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 using Task = System.Threading.Tasks.Task;
 
 namespace Core.Pds;
@@ -219,7 +221,11 @@ public class PdsService(
     {
         bool isPatientToBeDeleted = false;
         oldNhsNumber = "";
-        var record = JsonSerializer.Deserialize<PdsMeshRecordResponse>(csvToJsonResult.Value);
+        
+        var jsonDocument = JsonDocument.Parse(csvToJsonResult.Value);
+        var patientJson = jsonDocument.RootElement.GetProperty("patients").GetRawText();
+        var record = JsonSerializer.Deserialize<PdsMeshRecordResponse>(patientJson.Replace("[","").Replace("]",""));
+        
 
         if (record?.ErrorSuccessCode == "91")
         {
@@ -233,7 +239,7 @@ public class PdsService(
             }
         }
 
-        csvToJsonResult = JsonSerializer.Serialize(record);
+        csvToJsonResult = JsonSerializer.Serialize(new { patients = record });
 
         return isPatientToBeDeleted;
     }
