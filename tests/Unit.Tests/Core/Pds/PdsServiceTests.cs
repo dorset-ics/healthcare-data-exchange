@@ -32,9 +32,6 @@ public class PdsServiceTests
     private readonly PdsService _sut;
 
     private const string BaseSamplePath = "Core/Pds/Converters/Samples";
-    // private readonly byte[] GOOD_PDS_MESH_CSV = System.Text.Encoding.UTF8.GetBytes("02403456-031f-11e7-a926-080027a2de00,9991112758,,,,,,,,,,,,,,,,,,1,0,0,0,0,0,");
-    // private readonly byte[] DELETED_PDS_MESH_CSV = System.Text.Encoding.UTF8.GetBytes("02403456-031f-11e7-a926-080027a2de00,9991112758,,,,,,,,,,,,,,,,91,0000000000,1,0,0,0,0,0,");
-    // private readonly byte[] MERGED_PDS_MESH_CSV = System.Text.Encoding.UTF8.GetBytes("02403456-031f-11e7-a926-080027a2de00,9991112758,,,,,,,,,,,,,,,,91,1234567890,1,0,0,0,0,0,");
 
     public PdsServiceTests()
     {
