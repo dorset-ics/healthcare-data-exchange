@@ -97,7 +97,8 @@ public static class DependencyInjection
                 {
                     CheckCertificateRevocationList = true
                 };
-                return new HttpClientAuthenticationHandler(tokenFactory, handler, pdsConfiguration.Fhir.Authentication.IsEnabled);
+                var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+                return new HttpClientAuthenticationHandler(tokenFactory, handler, loggerFactory.CreateLogger<HttpClientAuthenticationHandler>(), pdsConfiguration.Fhir.Authentication.IsEnabled);
             })
             .ConfigureHttpClient(client => client.BaseAddress = new Uri(pdsConfiguration.Fhir.BaseUrl));
 
@@ -113,7 +114,8 @@ public static class DependencyInjection
             };
 
             var fhirClient = new FhirClient(pdsConfiguration.Fhir.BaseUrl, httpClient, settings);
-            return new PdsFhirClientWrapper(fhirClient);
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            return new PdsFhirClientWrapper(fhirClient, loggerFactory.CreateLogger<PdsFhirClientWrapper>());
         });
         services.AddTransient<IPdsFhirClient, PdsFhirClient>();
         return services;

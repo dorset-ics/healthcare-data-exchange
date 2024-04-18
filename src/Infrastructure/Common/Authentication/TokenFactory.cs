@@ -1,8 +1,9 @@
 ﻿using System.Text.Json.Nodes;
+using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Common.Authentication;
 
-public class TokenFactory(HttpClient httpClient, JwtHandler jwtHandler) : ITokenFactory, IDisposable
+public class TokenFactory(HttpClient httpClient, JwtHandler jwtHandler, ILogger<TokenFactory> logger) : ITokenFactory, IDisposable
 {
     public async Task<string> GetAccessToken()
     {
@@ -14,6 +15,7 @@ public class TokenFactory(HttpClient httpClient, JwtHandler jwtHandler) : IToken
         var content = new FormUrlEncodedContent(values);
 
         using var response = await httpClient.PostAsync("oauth2/token", content);
+        logger.LogInformation($"Authentication response: {response}");
         response.EnsureSuccessStatusCode();
 
         var responseBody = await response.Content.ReadAsStringAsync();

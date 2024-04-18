@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Common.Authentication;
 using Infrastructure.Common.Handlers;
+using Microsoft.Extensions.Logging;
 using NSubstitute.ExceptionExtensions;
 
 namespace Unit.Tests.Infrastructure.Common.Handlers;
@@ -12,13 +13,14 @@ public class HttpClientAuthenticationHandlersTests
     [Fact]
     public void SendAsync_ShouldAddAuthenticationHeader_WhenIsAuthEnabled()
     {
+        var mockLogger = Substitute.For<ILogger<HttpClientAuthenticationHandler>>();
         var request = new HttpRequestMessage(HttpMethod.Get, Uri);
         var handler = new HttpClientHandler
         {
             CheckCertificateRevocationList = true
         };
 
-        var httpClient = new HttpClient(new HttpClientAuthenticationHandler(_tokenFactoryMock, handler))
+        var httpClient = new HttpClient(new HttpClientAuthenticationHandler(_tokenFactoryMock, handler, mockLogger))
         {
             BaseAddress = new Uri(Uri)
         };
@@ -34,6 +36,7 @@ public class HttpClientAuthenticationHandlersTests
     [Fact]
     public void SendAsync_ShouldNotAddAuthenticationHeader_WhenTokenFactoryThrowsException()
     {
+        var mockLogger = Substitute.For<ILogger<HttpClientAuthenticationHandler>>();
         _tokenFactoryMock.GetAccessToken().Throws(new Exception());
         var request = new HttpRequestMessage(HttpMethod.Get, Uri);
         var handler = new HttpClientHandler
@@ -41,7 +44,7 @@ public class HttpClientAuthenticationHandlersTests
             CheckCertificateRevocationList = true
         };
 
-        var httpClient = new HttpClient(new HttpClientAuthenticationHandler(_tokenFactoryMock, handler))
+        var httpClient = new HttpClient(new HttpClientAuthenticationHandler(_tokenFactoryMock, handler, mockLogger))
         {
             BaseAddress = new Uri(Uri)
         };
@@ -54,13 +57,14 @@ public class HttpClientAuthenticationHandlersTests
     [Fact]
     public void SendAsync_ShouldAddAuthenticationHeader_WhenIsAuthNotEnabled()
     {
+        var mockLogger = Substitute.For<ILogger<HttpClientAuthenticationHandler>>();
         var request = new HttpRequestMessage(HttpMethod.Get, Uri);
         var handler = new HttpClientHandler
         {
             CheckCertificateRevocationList = true
         };
 
-        var httpClient = new HttpClient(new HttpClientAuthenticationHandler(_tokenFactoryMock, handler, false))
+        var httpClient = new HttpClient(new HttpClientAuthenticationHandler(_tokenFactoryMock, handler, mockLogger, false))
         {
             BaseAddress = new Uri(Uri)
         };

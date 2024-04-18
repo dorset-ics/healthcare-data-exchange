@@ -1,11 +1,13 @@
 ﻿using System.Net.Http.Headers;
 using Infrastructure.Common.Authentication;
+using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Common.Handlers;
 
 public class HttpClientAuthenticationHandler(
     ITokenFactory tokenFactory,
     HttpClientHandler handler,
+    ILogger<HttpClientAuthenticationHandler> logger,
     bool isAuthEnabled = true)
     : DelegatingHandler(handler)
 {
@@ -27,8 +29,9 @@ public class HttpClientAuthenticationHandler(
             var authenticationToken = await tokenFactory.GetAccessToken();
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authenticationToken);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            logger.LogError(ex, $"failed to authenticate with backend service {request.Method} {request.RequestUri}");
             throw new HttpRequestException("Unable to authenticate with backend service.");
         }
     }
