@@ -190,65 +190,39 @@ public class PdsService(
         var csvToJsonResult = csvToJsonConverter.Convert(csv);
         if (csvToJsonResult.IsFailure)
             return csvToJsonResult;
-    
-        // Having a 91 error code means that the patient has been merged or deleted
-        // Ref: https://digital.nhs.uk/developer/api-catalogue/personal-demographic-service-mesh/pds-mesh-data-dictionary#response-codes
-        var (isPatientToBeDeleted, oldNhsNumber) = HandleInvalidResource(ref csvToJsonResult, logger);
-    
+        
         logger.LogInformation("Message {message} converted to JSON", messageId);
-    
-        var conversionRequest = new ConvertDataRequest(csvToJsonResult.Value, TemplateInfo.ForPdsMeshPatient());
-        var jsonToBundleResult = await fhirClient.ConvertData(conversionRequest);
-        if (jsonToBundleResult.IsFailure)
-            return jsonToBundleResult;
-    
-        logger.LogInformation("Message {message} converted to FHIR bundle", messageId);
-    
-        if (oldNhsNumber != "0000000000")
-        {
-            var transactionResult = await fhirClient.TransactionAsync<Patient>(jsonToBundleResult.Value);
-            if (transactionResult.IsFailure)
-                return transactionResult;
-        }
-    
-        if (isPatientToBeDeleted)
-        {
-            await DeletePatientById(oldNhsNumber);
-        }
-    
-        logger.LogInformation("Message {message} persisted", messageId);
-        return Result.Success();
-    }
-    private static (bool, string) HandleInvalidResource(ref Result<string> csvToJsonResult, ILogger logger)
-    {
-        bool isPatientToBeDeleted = false;
-        string oldNhsNumber = "";
-    
+        
         var jsonDocument = JsonDocument.Parse(csvToJsonResult.Value);
         var patientJson = jsonDocument.RootElement.GetProperty("patients")[0].GetRawText();
         var record = JsonSerializer.Deserialize<PdsMeshRecordResponse>(patientJson);
     
+        // Having a 91 error code means that the patient has been merged or deleted
+        // Ref: https://digital.nhs.uk/developer/api-catalogue/personal-demographic-service-mesh/pds-mesh-data-dictionary#response-codes
+        // var (isPatientToBeDeleted, oldNhsNumber) = HandleInvalidResource(ref csvToJsonResult, logger);
+
         if (record?.ErrorSuccessCode == "91")
         {
-            isPatientToBeDeleted = true;
             // if the patient has been merged, we need to get the new NHS number
             // 0000000000 means the patient has been deleted.
-            oldNhsNumber = record.NhsNumber!; // storing the older NHS number to be deleted, before we override the resource with merged one.
+            var oldNhsNumber = record.NhsNumber!; // storing the older NHS number to be deleted, before we override the resource with merged one.
             logger.LogInformation($"Patient with NHS number {oldNhsNumber} was marked for deletion.");
             if (record.MatchedNhsNo! != "0000000000")
+            // merged patient has a new NHS number
             {
                 record.NhsNumber = record.MatchedNhsNo;
+                await CallFhirResourceUpdate(); // this is to update nhs number
                 logger.LogInformation($"Patient's NHS number updated to {record.NhsNumber}.");
             }
-            else
-            {
-                logger.LogInformation("Patient has been deleted from PDS, no new NHS number provided.");
-            }
+            await DeletePatientById(oldNhsNumber); // this is to delete the patient
+            logger.LogInformation($"Patient with old NHS number {oldNhsNumber} was deleted.");
+
+        } else {
+            await CallFhirResourceUpdate(); // this is to persist the patient in fhir
+            logger.LogInformation("Message {message} persisted", messageId);
         }
-    
-        csvToJsonResult = JsonSerializer.Serialize(new { patients = record });
-    
-        return (isPatientToBeDeleted, oldNhsNumber);
+
+        return Result.Success();
     }
 
     public async Task<Result<Bundle>> DeletePatientById(string nhsNumber)
@@ -279,5 +253,20 @@ public class PdsService(
         }
         logger.LogInformation("Patient with old NHS number {nhsNumber} was succesfully deleted from DataHub FHIR.", nhsNumber);
         return deletePatientResult;
+    }
+
+    public async Task<Result> CallFhirResourceUpdate()
+    {   
+        csvToJsonResult = JsonSerializer.Serialize(new { patients = record });
+
+        var conversionRequest = new ConvertDataRequest(csvToJsonResult.Value, TemplateInfo.ForPdsMeshPatient());
+        var jsonToBundleResult = await fhirClient.ConvertData(conversionRequest);
+        if (jsonToBundleResult.IsFailure)
+            return jsonToBundleResult;
+    
+        logger.LogInformation("Message {message} converted to FHIR bundle", messageId);
+        var transactionResult = await fhirClient.TransactionAsync<Patient>(jsonToBundleResult.Value);
+        if (transactionResult.IsFailure)
+            return transactionResult;
     }
 }
