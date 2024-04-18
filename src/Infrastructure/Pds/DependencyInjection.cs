@@ -77,8 +77,9 @@ public static class DependencyInjection
     {
         var pdsConfiguration = configuration.GetSection(PdsConfiguration.SectionKey).Get<PdsConfiguration>()
                                ?? throw new Exception("Pds section has not been configured.");
-        if (pdsConfiguration.Fhir.Authentication is { IsEnabled: true, Certificate: null or "" })
-            throw new Exception("Pds FhirCertificate is not set or empty");
+        if (pdsConfiguration.Fhir.Authentication is { IsEnabled: true, UseCertificateStore: true, CertificateThumbprint: null or "" }
+                                                 or { IsEnabled: true, UseCertificateStore: false, Certificate: null or "" })
+            throw new Exception("Pds Fhir Certificate is not set or empty");
 
         services.AddSingleton(pdsConfiguration.Fhir.Authentication);
         services.AddSingleton<IFileSystem, FileSystem>();

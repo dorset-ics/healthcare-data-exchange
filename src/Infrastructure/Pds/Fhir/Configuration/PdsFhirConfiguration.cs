@@ -2,4 +2,4 @@
 
 public record PdsFhirConfiguration(string BaseUrl, PdsAuthConfiguration Authentication);
 
-public record PdsAuthConfiguration(bool IsEnabled = true, string TokenUrl = "", string ClientId = "", string Kid = "", string? Certificate = null);
+public record PdsAuthConfiguration(bool IsEnabled = true, string TokenUrl = "", string ClientId = "", string Kid = "", bool UseCertificateStore = false, string? CertificateThumbprint = null, string? Certificate = null);
