@@ -206,7 +206,7 @@ public class PdsService(
             var tasks = patientsToBeDeleted.Select(patient => DeletePatientById(patient));
             await Task.WhenAll(tasks);
         }
-        
+
         return Result.Success();
     }
 
