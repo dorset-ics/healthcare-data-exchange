@@ -39,10 +39,7 @@ public class JwtHandler(PdsAuthConfiguration authConfig)
 
     private SigningCredentials GetSigningCredentialsFromStore(string thumbprint, string kid)
     {
-        var privateCertsPath = Environment.GetEnvironmentVariable("WEBSITE_PRIVATE_CERTS_PATH");
-        var certificatePath = Path.Join(privateCertsPath, $"{thumbprint}.p12");
-
-        var certificateInBytes = File.ReadAllBytes(certificatePath);
+        var certificateInBytes = File.ReadAllBytes($"/var/ssl/private/{thumbprint}.p12");
         var cert = new X509Certificate2(certificateInBytes);
 
         return new SigningCredentials(
