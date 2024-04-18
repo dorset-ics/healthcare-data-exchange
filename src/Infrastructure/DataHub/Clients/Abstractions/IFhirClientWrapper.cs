@@ -4,7 +4,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace Infrastructure.DataHub.Clients.Abstractions;
 
-public interface IDataHubFhirClientWrapper
+public interface IFhirClientWrapper
 {
     Task<T> ReadAsync<T>(string resourceLocation) where T : Resource;
     Task<T> UpdateAsync<T>(T resource) where T : Resource;

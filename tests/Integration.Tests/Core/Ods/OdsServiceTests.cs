@@ -12,12 +12,12 @@ public class OdsServiceTests : IDisposable
 {
     private readonly ApiWebApplicationFactory _webApplicationFactory;
     private readonly IOdsService _sut;
-    private readonly IDataHubFhirClientWrapper _dataHubFhirClientWrapper;
+    private readonly IFhirClientWrapper _fhirClientWrapper;
 
     public OdsServiceTests()
     {
         _webApplicationFactory = new ApiWebApplicationFactory();
-        _dataHubFhirClientWrapper = _webApplicationFactory.Services.GetService<IDataHubFhirClientWrapper>()!;
+        _fhirClientWrapper = _webApplicationFactory.Services.GetService<IFhirClientWrapper>()!;
         _sut = _webApplicationFactory.Services.GetService<IOdsService>()
                ?? throw new Exception("Failed to resolve IOdsService from the service provider");
     }
@@ -46,7 +46,7 @@ public class OdsServiceTests : IDisposable
         while (DateTime.Now <= dateIngestStarted.AddSeconds(60))
         {
             bundle =
-                await _dataHubFhirClientWrapper.SearchResourceByParams<Organization>(
+                await _fhirClientWrapper.SearchResourceByParams<Organization>(
                     new SearchParams().Where($"_lastUpdated=ge{dateIngestStarted.ToString("yyyy-MM-ddTHH:mm:ss")}"));
 
             if (bundle?.Entry.Count > 0)

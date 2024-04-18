@@ -18,7 +18,7 @@ namespace Infrastructure.DataHub.Clients;
 
 public class DataHubFhirClient(
     ILogger<DataHubFhirClient> logger,
-    IDataHubFhirClientWrapper dataHubFhirClient,
+    IFhirClientWrapper fhirClient,
     IHttpClientFactory clientFactory,
     DataHubFhirServerConfiguration configuration,
     IValidator<OperationOutcome> validator)
@@ -33,7 +33,7 @@ public class DataHubFhirClient(
 
         try
         {
-            var response = await dataHubFhirClient.ReadAsync<T>($"{resourceType}/{resourceId}");
+            var response = await fhirClient.ReadAsync<T>($"{resourceType}/{resourceId}");
             return response;
         }
         catch (FhirOperationException ex) when (ex.Status == HttpStatusCode.NotFound)
@@ -60,7 +60,7 @@ public class DataHubFhirClient(
 
         try
         {
-            var response = await dataHubFhirClient.UpdateAsync(resource);
+            var response = await fhirClient.UpdateAsync(resource);
             return response;
         }
         catch (Exception ex)
@@ -82,7 +82,7 @@ public class DataHubFhirClient(
 
         logger.LogInformation("Transaction bundle with total of {Total}", bundle.Entry.Count);
 
-        return await dataHubFhirClient.TransactionAsync<T>(bundle);
+        return await fhirClient.TransactionAsync<T>(bundle);
     }
 
     public async Task<Result<T>> CreateResource<T>(T resource) where T : Resource
@@ -93,7 +93,7 @@ public class DataHubFhirClient(
 
         try
         {
-            return await dataHubFhirClient.CreateResource(resource);
+            return await fhirClient.CreateResource(resource);
         }
         catch (Exception ex)
         {
@@ -116,7 +116,7 @@ public class DataHubFhirClient(
 
         try
         {
-            var response = await dataHubFhirClient.SearchResourceByIdentifier<T>(identifier);
+            var response = await fhirClient.SearchResourceByIdentifier<T>(identifier);
 
             var isResourceFound = response?.Entry is { Count: > 0 };
             if (isResourceFound)
@@ -142,7 +142,7 @@ public class DataHubFhirClient(
 
         try
         {
-            var resources = await dataHubFhirClient.SearchResourceByParams<T>(searchParams);
+            var resources = await fhirClient.SearchResourceByParams<T>(searchParams);
 
             var isResourceFound = resources?.Entry is { Count: > 0 };
             if (isResourceFound)
@@ -170,7 +170,7 @@ public class DataHubFhirClient(
     public async Task<Result<Bundle>> ContinueAsync(Bundle current)
     {
         logger.LogInformation("Continue search on bundle of type {Type}, with total of {Total}", current.Type, current.Total);
-        return await dataHubFhirClient.ContinueAsync(current);
+        return await fhirClient.ContinueAsync(current);
     }
 
     public async Task<Result<Bundle>> ConvertData(ConvertDataRequest convertDataRequest)

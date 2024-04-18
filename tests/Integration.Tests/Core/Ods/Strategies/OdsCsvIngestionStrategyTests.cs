@@ -15,7 +15,7 @@ public class OdsCsvIngestionStrategyTests : IDisposable
     private const string BaseSamplePath = "Core/Ods/Strategies/Samples";
     private readonly ApiWebApplicationFactory _webApplicationFactory;
     private readonly IOdsCsvIngestionStrategy _sut;
-    private readonly IDataHubFhirClientWrapper _dataHubFhirClientWrapper;
+    private readonly IFhirClientWrapper _fhirClientWrapper;
 
     public void Dispose()
     {
@@ -26,7 +26,7 @@ public class OdsCsvIngestionStrategyTests : IDisposable
     public OdsCsvIngestionStrategyTests()
     {
         _webApplicationFactory = new ApiWebApplicationFactory();
-        _dataHubFhirClientWrapper = _webApplicationFactory.Services.GetService<IDataHubFhirClientWrapper>()!;
+        _fhirClientWrapper = _webApplicationFactory.Services.GetService<IFhirClientWrapper>()!;
         _sut = _webApplicationFactory.Services.GetService<IOdsCsvIngestionStrategy>()
                ?? throw new Exception("Failed to resolve IOdsCsvImportStrategy from the service provider");
     }
@@ -55,7 +55,7 @@ public class OdsCsvIngestionStrategyTests : IDisposable
             if (line.Length > 0)
             {
                 var orgId = line.Split(",")[0].Replace("\"", string.Empty);
-                var orgBundle = await _dataHubFhirClientWrapper.SearchResourceByParams<Organization>(
+                var orgBundle = await _fhirClientWrapper.SearchResourceByParams<Organization>(
                         new SearchParams().Where($"identifier={orgId}"));
 
                 orgBundle.Should().NotBeNull();

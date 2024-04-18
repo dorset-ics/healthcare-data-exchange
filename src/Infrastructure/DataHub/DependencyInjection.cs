@@ -50,12 +50,12 @@ public static class DependencyInjection
             .ConfigureHttpClient(client => client.BaseAddress = new Uri(baseUrl));
 
 
-        services.AddTransient<IDataHubFhirClientWrapper>(ctx =>
+        services.AddTransient<IFhirClientWrapper>(ctx =>
         {
             var httpClient = ctx.GetRequiredService<IHttpClientFactory>()
                 .CreateClient("DataHubFhirClient");
             var fhirClient = new FhirClient(baseUrl, httpClient, settings);
-            return new DataHubFhirClientWrapper(fhirClient);
+            return new FhirClientWrapper(fhirClient);
         });
 
         services.AddTransient<IDataHubFhirClient, DataHubFhirClient>();

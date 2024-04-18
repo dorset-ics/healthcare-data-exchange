@@ -31,7 +31,7 @@ public class DependencyInjectionTests
         services.AddDataHubFhirInfrastructure(configuration);
         var serviceProvider = services.BuildServiceProvider();
         var dataHubFhirClient = serviceProvider.GetService<IDataHubFhirClient>();
-        var dataHubFhirClientWrapper = serviceProvider.GetService<IDataHubFhirClientWrapper>();
+        var dataHubFhirClientWrapper = serviceProvider.GetService<IFhirClientWrapper>();
         var dataHubFhirConfig = serviceProvider.GetService<DataHubFhirServerConfiguration>();
 
         dataHubFhirClient.ShouldNotBeNull();

@@ -7,7 +7,7 @@ namespace Integration.Tests
 {
     internal static class TestHelpers
     {
-        internal static async Task ResetFhirResource<T>(this IDataHubFhirClientWrapper fhirClient) where T : Resource, new()
+        internal static async Task ResetFhirResource<T>(this IFhirClientWrapper fhirClient) where T : Resource, new()
         {
             var existingResources = await fhirClient.SearchResourceByParams<T>(new SearchParams());
 

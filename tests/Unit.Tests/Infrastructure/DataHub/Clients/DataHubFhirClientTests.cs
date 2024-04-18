@@ -19,14 +19,14 @@ namespace Unit.Tests.Infrastructure.DataHub.Clients;
 public class DataHubFhirClientTests
 {
     private readonly DataHubFhirClient _dataHubFhirClient;
-    private readonly IDataHubFhirClientWrapper _fhirClientMock;
+    private readonly IFhirClientWrapper _fhirClientMock;
     private readonly IHttpClientFactory? _clientFactoryMock;
     private readonly ILogger<DataHubFhirClient> _loggerMock;
 
 
     public DataHubFhirClientTests()
     {
-        _fhirClientMock = Substitute.For<IDataHubFhirClientWrapper>();
+        _fhirClientMock = Substitute.For<IFhirClientWrapper>();
         _clientFactoryMock = Substitute.For<IHttpClientFactory>();
         _loggerMock = Substitute.For<ILogger<DataHubFhirClient>>();
 

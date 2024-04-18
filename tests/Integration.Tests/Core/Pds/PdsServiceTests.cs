@@ -22,12 +22,12 @@ public class PdsServiceTests : IDisposable
 {
     private readonly ApiWebApplicationFactory _webApplicationFactory;
     private readonly IPdsService _sut;
-    private readonly IDataHubFhirClientWrapper _dataHubFhirClientWrapper;
+    private readonly IFhirClientWrapper _fhirClientWrapper;
 
     public PdsServiceTests()
     {
         _webApplicationFactory = new ApiWebApplicationFactory();
-        _dataHubFhirClientWrapper = _webApplicationFactory.Services.GetService<IDataHubFhirClientWrapper>()!;
+        _fhirClientWrapper = _webApplicationFactory.Services.GetService<IFhirClientWrapper>()!;
         _sut = _webApplicationFactory.Services.GetService<IPdsService>()
                ?? throw new Exception("Failed to resolve IPdsService from the service provider");
     }
@@ -103,7 +103,7 @@ public class PdsServiceTests : IDisposable
         foreach (var patient in patients)
         {
             var persistedPatient =
-                (Patient)(await _dataHubFhirClientWrapper.SearchResourceByIdentifier<Patient>(patient.Id))
+                (Patient)(await _fhirClientWrapper.SearchResourceByIdentifier<Patient>(patient.Id))
                 .Entry
                 .First()
                 .Resource;
@@ -228,15 +228,15 @@ public class PdsServiceTests : IDisposable
     private async Task CleanFhirStore()
     {
         var searchResult =
-            await _dataHubFhirClientWrapper.SearchResourceByParams<Patient>(
+            await _fhirClientWrapper.SearchResourceByParams<Patient>(
                 new SearchParams().LimitTo(Globals.FhirServerMaxPageSize));
 
         while (searchResult != null)
         {
             foreach (var patient in searchResult.Entry)
-                await _dataHubFhirClientWrapper.DeleteAsync($"{patient.Resource.TypeName}/{patient.Resource.Id}");
+                await _fhirClientWrapper.DeleteAsync($"{patient.Resource.TypeName}/{patient.Resource.Id}");
 
-            searchResult = await _dataHubFhirClientWrapper.ContinueAsync(searchResult!);
+            searchResult = await _fhirClientWrapper.ContinueAsync(searchResult!);
 
             if (searchResult == null)
                 break;
@@ -322,7 +322,7 @@ public class PdsServiceTests : IDisposable
                 }
             };
 
-            await _dataHubFhirClientWrapper.UpdateAsync<Patient>(patient);
+            await _fhirClientWrapper.UpdateAsync<Patient>(patient);
 
             patients.Add(patient);
         }
