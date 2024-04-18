@@ -27,9 +27,9 @@ public class HttpClientAuthenticationHandler(
             var authenticationToken = await tokenFactory.GetAccessToken();
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authenticationToken);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            throw new HttpRequestException("Unable to authenticate with backend service.");
+            throw new HttpRequestException("Unable to authenticate with backend service.", ex);
         }
     }
 
