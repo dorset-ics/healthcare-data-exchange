@@ -22,12 +22,16 @@ public class PdsServiceTests : IDisposable
 {
     private readonly ApiWebApplicationFactory _webApplicationFactory;
     private readonly IPdsService _sut;
+    private readonly HttpClient _fhirHttpClient;
     private readonly IDataHubFhirClientWrapper _dataHubFhirClientWrapper;
 
     public PdsServiceTests()
     {
         _webApplicationFactory = new ApiWebApplicationFactory();
         _dataHubFhirClientWrapper = _webApplicationFactory.Services.GetService<IDataHubFhirClientWrapper>()!;
+        _fhirHttpClient = _webApplicationFactory.Services
+            .GetRequiredService<IHttpClientFactory>()
+            .CreateClient("DataHubFhirClient");
         _sut = _webApplicationFactory.Services.GetService<IPdsService>()
                ?? throw new Exception("Failed to resolve IPdsService from the service provider");
     }
@@ -227,14 +231,15 @@ public class PdsServiceTests : IDisposable
 
     private async Task CleanFhirStore()
     {
-        var searchResult =
-            await _dataHubFhirClientWrapper.SearchResourceByParams<Patient>(
-                new SearchParams().LimitTo(Globals.FhirServerMaxPageSize));
+        var searchParams = new SearchParams().LimitTo(Globals.FhirServerMaxPageSize);
+        var searchResult = await _dataHubFhirClientWrapper.SearchResourceByParams<Patient>(searchParams);
 
         while (searchResult != null)
         {
             foreach (var patient in searchResult.Entry)
-                await _dataHubFhirClientWrapper.DeleteAsync($"{patient.Resource.TypeName}/{patient.Resource.Id}");
+            {
+                await _fhirHttpClient.DeleteAsync($"Patient/{patient.Resource.Id}?hardDelete=true");
+            }
 
             searchResult = await _dataHubFhirClientWrapper.ContinueAsync(searchResult!);
 

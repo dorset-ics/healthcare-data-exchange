@@ -49,3 +49,12 @@ And finally run the container with the following command, which will push the co
 
 > :information_source: You need to rebuild and run the container if any changes are made to the templates.
 
+## Running the application with its dependencies
+
+Alternatively to running each service individually (as described above), you can run all the required services using the script `start-clean.sh`:
+
+```bash
+bash ./docker/start-clean.sh
+```
+
+This process is also described in the [Getting Started](../getting-started.md) guide and it will not only run the data initialization and the templates pusher, but also the FHIR server, the SQL Server database for the FHIR server, and the Azurite Azure Storage Emulator.

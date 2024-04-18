@@ -3,6 +3,7 @@ using System.Text.Json;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
 using Quartz.Logging;
+using static Hl7.Fhir.Model.OperationOutcome;
 using Task = System.Threading.Tasks.Task;
 
 namespace Integration.Tests.Api.Modules;
@@ -41,8 +42,16 @@ public class PatientModuleTests : IDisposable
     public async Task WhenSearch_WithValidParameters_AndPatientNotFound_ThenReturnsNotFound()
     {
         var response = await _client.GetAsync("/patient?family=not-a-person&birthdate=1948-10-12");
-
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+
+        var expectedOperationOutcome = new OperationOutcome
+        {
+            Issue = [new() { Severity = IssueSeverity.Error, Code = IssueType.NotFound }]
+        };
+        var expectedBody = JsonSerializer.Serialize(expectedOperationOutcome, _jsonSerializerOptions);
+
+        var body = await response.Content.ReadAsStringAsync();
+        body.ShouldBe(expectedBody);
     }
 
     [Fact]
@@ -57,10 +66,17 @@ public class PatientModuleTests : IDisposable
     public async Task WhenSearch_WithInvalidParameter_ThenReturnsBadRequest()
     {
         var response = await _client.GetAsync("/patient?family=pooley&birthdate=not-a-date");
-
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
-    }
 
+        var expectedOperationOutcome = new OperationOutcome
+        {
+            Issue = [new() { Severity = IssueSeverity.Error, Code = IssueType.Invalid }]
+        };
+        var expectedBody = JsonSerializer.Serialize(expectedOperationOutcome, _jsonSerializerOptions);
+
+        var body = await response.Content.ReadAsStringAsync();
+        body.ShouldBe(expectedBody);
+    }
 
     [Fact]
     public async Task WhenGetPatient_WithInvalidNhsNumber_ThenReturnsBadRequest()

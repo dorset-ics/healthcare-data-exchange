@@ -81,7 +81,8 @@
         "jsondecode",
         "strcontains",
         "substr",
-        "endfor"
+        "endfor",
+        "signkey"
     ],
     "version": "0.2"
 }
