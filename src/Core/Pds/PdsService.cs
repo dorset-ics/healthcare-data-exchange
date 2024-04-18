@@ -197,6 +197,44 @@ public class PdsService(
 
         List<string> patientsToBeDeleted = new List<string>();
 
+        var modifiedCsvToJsonResult = HandleInvalidPDSPatients(csvToJsonResult, patientsToBeDeleted);
+
+        await CallFHIRConvertAndUpdateResource(messageId, modifiedCsvToJsonResult);
+
+        if (patientsToBeDeleted.Count > 0)
+        {
+            var tasks = patientsToBeDeleted.Select(patient => DeletePatientById(patient));
+            await Task.WhenAll(tasks);
+        }
+        
+        return Result.Success();
+    }
+
+    private async Task<Result> CallFHIRConvertAndUpdateResource(string messageId, string modifiedCsvToJsonResult)
+    {
+        var conversionRequest = new ConvertDataRequest(modifiedCsvToJsonResult, TemplateInfo.ForPdsMeshPatient());
+        var jsonToBundleResult = await fhirClient.ConvertData(conversionRequest);
+        if (jsonToBundleResult.IsFailure)
+        {
+            logger.LogError("Error while converting Message {message} converted to FHIR bundle", messageId);
+            return jsonToBundleResult;
+        }
+
+        logger.LogInformation("Message {message} converted to FHIR bundle", messageId);
+
+        var transactionResult = await fhirClient.TransactionAsync<Patient>(jsonToBundleResult.Value);
+        if (transactionResult.IsFailure)
+        {
+            logger.LogError("Error while calling FHIR for TransactionAsync with Message {message}", messageId);
+            return transactionResult;
+        }
+
+        logger.LogInformation("Message {message} processed successfully", messageId);
+        return Result.Success();
+    }
+
+    private static string HandleInvalidPDSPatients(Result<string> csvToJsonResult, List<string> patientsToBeDeleted)
+    {
         var jsonObject = JObject.Parse(csvToJsonResult.Value);
         var patientsArray = (JArray)jsonObject["patients"]!;
 
@@ -220,30 +258,7 @@ public class PdsService(
 
         // Serialize the entire JSON back to a string
         var modifiedJson = jsonObject.ToString();
-
-        var conversionRequest = new ConvertDataRequest(modifiedJson, TemplateInfo.ForPdsMeshPatient());
-        var jsonToBundleResult = await fhirClient.ConvertData(conversionRequest);
-        if (jsonToBundleResult.IsFailure)
-            return jsonToBundleResult;
-
-        logger.LogInformation("Message {message} converted to FHIR bundle", messageId);
-
-        var transactionResult = await fhirClient.TransactionAsync<Patient>(jsonToBundleResult.Value);
-        if (transactionResult.IsFailure)
-            return transactionResult;
-
-        logger.LogInformation("Message {message} processed successfully", messageId);
-
-        if (patientsToBeDeleted.Count > 0)
-        {
-            foreach (var patient in patientsToBeDeleted)
-            {
-                var deletePatientResult = await DeletePatientById(patient);
-                if (deletePatientResult.IsFailure)
-                    return deletePatientResult;
-            }
-        }
-        return Result.Success();
+        return modifiedJson;
     }
 
     public async Task<Result<Bundle>> DeletePatientById(string nhsNumber)
