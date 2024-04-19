@@ -13,4 +13,5 @@ public interface IDataHubFhirResourceClient
     Task<Result<T>> SearchResourceByIdentifier<T>(string identifier) where T : Resource, new();
     Task<Result<Bundle>> SearchResourceByParams<T>(SearchParams searchParams) where T : Resource, new();
     Task<Result<Bundle>> ContinueAsync(Bundle current);
+    Task<Result<Bundle>> DeleteResource<T>(string resourceId) where T : Resource;
 }

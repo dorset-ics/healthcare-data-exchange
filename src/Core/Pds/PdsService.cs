@@ -261,20 +261,8 @@ public class PdsService(
         if (getResult.Exception is FhirOperationException { Status: HttpStatusCode.NotFound })
             return new ApplicationException($"Error fetching data from fhir server", getResult.Exception);
 
-        var deletePatientResult = await fhirClient.TransactionAsync<Patient>(new Bundle
-        {
-            Type = Bundle.BundleType.Transaction,
-            Entry = new List<Bundle.EntryComponent>
-            {
-                new()
-                {
-                    Request = new Bundle.RequestComponent
-                    {
-                        Method = Bundle.HTTPVerb.DELETE, Url = $"Patient/{nhsNumber}"
-                    }
-                }
-            }
-        });
+        var deletePatientResult = await fhirClient.DeleteResource<Patient>(nhsNumber);
+
         if (deletePatientResult.IsFailure)
         {
             logger.LogError(deletePatientResult.Exception, "Error deleting patient with NHS number {nhsNumber} in DataHub FHIR.", nhsNumber);

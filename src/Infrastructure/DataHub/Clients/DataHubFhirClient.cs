@@ -38,7 +38,7 @@ public class DataHubFhirClient(
         }
         catch (FhirOperationException ex) when (ex.Status == HttpStatusCode.NotFound)
         {
-            logger.LogDebug("Resource {ResourceType}/{ResourceId} not found in FHIR service.", resourceType, resourceId);
+            logger.LogError("Resource {ResourceType}/{ResourceId} not found in FHIR service.", resourceType, resourceId);
             return ex;
         }
         catch (Exception ex)
@@ -282,5 +282,41 @@ public class DataHubFhirClient(
         var payloadJson = fhirSerializer.SerializeToString(resource);
         var request = new HttpRequestMessage(HttpMethod.Post, $"{inputDataType}/$validate") { Content = new StringContent(payloadJson, Encoding.UTF8, "application/json") };
         return request;
+    }
+
+    public async Task<Result<Bundle>> DeleteResource<T>(string resourceId) where T : Resource
+    {
+        var resourceType = ModelInfo.GetFhirTypeNameForType(typeof(T));
+        logger.LogInformation("Fetching resource {ResourceType}/{ResourceId} from FHIR service.", resourceType, resourceId);
+
+        try
+        {
+            var response = await dataHubFhirClient.TransactionAsync<T>(new Bundle
+            {
+                Type = Bundle.BundleType.Transaction,
+                Entry = new List<Bundle.EntryComponent>
+                {
+                    new()
+                    {
+                        Request = new Bundle.RequestComponent
+                        {
+                            Method = Bundle.HTTPVerb.DELETE, Url = $"{resourceType}/{resourceId}"
+                        }
+                    }
+                }
+            });
+
+            return response;
+        }
+        catch (FhirOperationException ex) when (ex.Status == HttpStatusCode.NotFound)
+        {
+            logger.LogError("Resource {ResourceType}/{ResourceId} not found in FHIR service.", resourceType, resourceId);
+            return ex;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("Error deleting resource {ResourceType}/{ResourceId} from FHIR service: {ErrorMessage}", resourceType, resourceId, ex.Message);
+            return ex;
+        }
     }
 }
