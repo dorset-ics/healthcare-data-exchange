@@ -186,7 +186,7 @@ public class PdsServiceTests : IDisposable
         }
     }
 
-    private static string CreateDummyMeshPatientMessage(string id, string nhsNumber, string matchedNhsNumber, string successErrorCode)
+    private string CreateDummyMeshPatientMessage(string id, string nhsNumber, string matchedNhsNumber, string successErrorCode)
     {
         return string.Join(",",
             new string[]
@@ -270,7 +270,7 @@ public class PdsServiceTests : IDisposable
         return patients;
     }
 
-    private static Patient CreatePatient(string nhsNumber)
+    private Patient CreatePatient(string nhsNumber)
     {
         return new Patient()
         {
