@@ -240,12 +240,9 @@ public class PdsService(
             if (record?.ErrorSuccessCode == "91")
             {
                 patientsToBeDeleted.Add(record.NhsNumber!);
-                if (record.MatchedNhsNo != "0000000000")
+                if (record.MatchedNhsNo != "0000000000" && record.NhsNumber != null)
                 {
-                    if (record.NhsNumber != null)
-                    {
-                        record.NhsNumber = record.MatchedNhsNo;
-                    }
+                    record.NhsNumber = record.MatchedNhsNo;
                 }
             }
             // Replace the patient in the array
