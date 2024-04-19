@@ -44,3 +44,4 @@ We are happy to recognize contributors to this repository. If you have made a si
 
 1. Liam Moat
 2. Dor Lugasi-Gal
+3. Martyna Marcinkowska
