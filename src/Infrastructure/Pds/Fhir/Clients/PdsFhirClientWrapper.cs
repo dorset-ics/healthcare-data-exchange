@@ -13,6 +13,6 @@ public class PdsFhirClientWrapper(FhirClient fhirClient) : IPdsFhirClientWrapper
 
     public async Task<Bundle> SearchAsync<T>(SearchParams searchParams) where T : Resource
     {
-            return await fhirClient.SearchAsync<T>(searchParams) ?? new Bundle { Entry = [] };
+         return await fhirClient.SearchAsync<T>(searchParams) ?? new Bundle { Entry = [] };
     }
 }
