@@ -76,14 +76,15 @@ module "services" {
 }
 
 module "health-services" {
-  source                           = "./health-services"
-  location                         = var.location
-  resource_group_name              = azurerm_resource_group.rg.name
-  services_subnet_id               = module.network.services_subnet_id
-  env                              = var.env
-  health_zone_id                   = module.network.health_dns_zone_id
-  tenant_id                        = data.azurerm_client_config.current.tenant_id
-  log_analytics_workspace_id       = module.services.log_analytics_workspace_id
-  web_app_system_assigned_identity = module.services.web_app_system_assigned_identity
-  oci_artifact_login_server        = azurerm_container_registry.acr.login_server
+  source                                  = "./health-services"
+  location                                = var.location
+  resource_group_name                     = azurerm_resource_group.rg.name
+  services_subnet_id                      = module.network.services_subnet_id
+  env                                     = var.env
+  health_zone_id                          = module.network.health_dns_zone_id
+  tenant_id                               = data.azurerm_client_config.current.tenant_id
+  log_analytics_workspace_id              = module.services.log_analytics_workspace_id
+  web_app_system_assigned_identity        = module.services.web_app_system_assigned_identity
+  api_management_system_assigned_identity = module.services.api_management_system_assigned_identity
+  oci_artifact_login_server               = azurerm_container_registry.acr.login_server
 }

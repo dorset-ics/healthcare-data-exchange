@@ -10,9 +10,10 @@ locals {
   operations = flatten([
     for endpoint in local.open_api_specification.paths : [
       for endpointType in endpoint : {
-        operationId = endpointType.operationId
+        operationId = endpointType.operationId,
         policy = templatefile("${path.module}/policies/dex_operation_policy.tftpl", {
-          tags = endpointType.tags
+          tags     = endpointType.tags,
+          fhir_url = var.fhir_url
         })
       }
     ]

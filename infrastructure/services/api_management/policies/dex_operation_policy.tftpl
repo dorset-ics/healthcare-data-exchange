@@ -1,9 +1,6 @@
 <policies>
     <inbound>
         <base />
-        %{~ if contains(tags, "FhirBackend") ~}
-        <set-backend-service backend-id="fhir-server" />
-        %{~ endif ~}
         <validate-azure-ad-token
             tenant-id="{{TenantId}}"
             header-name="Authorization"
@@ -31,6 +28,10 @@
             </required-claims>
             %{~ endif ~}
         </validate-azure-ad-token>
+        %{~ if contains(tags, "FhirBackend") ~}
+        <set-backend-service backend-id="fhir-server" />
+        <authentication-managed-identity resource="${fhir_url}" />
+        %{~ endif ~}
     </inbound>
     <backend>
         <base />
