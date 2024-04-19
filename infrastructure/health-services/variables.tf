@@ -6,3 +6,4 @@ variable "health_zone_id" {}
 variable "tenant_id" {}
 variable "log_analytics_workspace_id" {}
 variable "web_app_system_assigned_identity" {}
+variable "oci_artifact_login_server" {}

@@ -21,8 +21,8 @@ resource "azurerm_linux_web_app" "web_app" {
     always_on                                     = true
 
     application_stack {
-      docker_image_name   = "${azurerm_container_registry.acr.login_server}/api:${var.image_tag_suffix}"
-      docker_registry_url = "https://${azurerm_container_registry.acr.login_server}"
+      docker_image_name   = "api:${var.image_tag_suffix}"
+      docker_registry_url = "https://${var.acr_login_server}"
     }
   }
 
@@ -38,7 +38,7 @@ resource "azurerm_linux_web_app" "web_app" {
     "AzureStorageConnectionString"                     = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.azure_storage_connection_string.id})"
     "AzureTableStorageCache__Endpoint"                 = azurerm_storage_account.dex_storage_account.primary_table_endpoint
     "DataHubFhirServer__BaseUrl"                       = var.fhir_url
-    "DataHubFhirServer__TemplateImage"                 = "${azurerm_container_registry.acr.login_server}/api:${var.image_tag_suffix}"
+    "DataHubFhirServer__TemplateImage"                 = "${azurerm_container_registry.acr.login_server}/${var.env}:${var.image_tag_suffix}"
     "Mesh__Authentication__RootCertificate"            = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.nhs_root_certificate.id})"
     "Mesh__Authentication__ClientCertificate"          = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.ndop_mesh_client_certificate_private.id})"
     "Mesh__Authentication__SubCertificate"             = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.nhs_sub_certificate.id})"

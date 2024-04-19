@@ -21,6 +21,10 @@ resource "azurerm_healthcare_fhir_service" "fhir" {
     type = "SystemAssigned"
   }
 
+  oci_artifact {
+    login_server = var.oci_artifact_login_server
+  }
+
 }
 
 resource "azurerm_private_endpoint" "health_services_private_endpoint" {
