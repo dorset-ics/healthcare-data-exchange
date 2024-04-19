@@ -416,6 +416,33 @@ public class PdsServiceTests
         await _fhirClient.Received(1).TransactionAsync<Patient>(Arg.Any<Bundle>());
 
     }
+    
+    [Fact]
+    public async Task GivenRetrieveMeshMessageHadMergedPatient_WhenDeletePatientIsCalled_ThenDeleteSucceeeds()
+    {
+        var messages = new List<string>() { "message" };
+
+        _pdsMeshClient.RetrieveMessages().Returns(messages);
+        _pdsMeshClient.RetrieveMessage("message").Returns(new Message() { FileContent = "content"u8.ToArray() });
+        _fhirClient.ConvertData(Arg.Any<ConvertDataRequest>()).Returns(new Bundle());
+        _fhirClient.TransactionAsync<Patient>(Arg.Any<Bundle>()).Returns(new Bundle());
+        _fhirClient.GetResource<Patient>(Arg.Any<string>()).Returns(new Result<Patient>());
+
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), BaseSamplePath, "MeshResponseMergedPatient.csv");
+        var fileContent = await File.ReadAllTextAsync(filePath);
+        var result = _pdsMeshCsvToJsonConverter.Convert(fileContent);
+
+        _csvToJsonConverter.Convert(Arg.Any<string>()).Returns(result);
+
+        await _sut.RetrieveMeshMessages(new CancellationToken());
+
+        await _pdsMeshClient.Received(1).RetrieveMessages();
+        await _fhirClient.Received(1).ConvertData(Arg.Any<ConvertDataRequest>());
+        await _fhirClient.Received(1).GetResource<Patient>(Arg.Any<string>());
+        await _fhirClient.Received(2).TransactionAsync<Patient>(Arg.Any<Bundle>());
+
+    }
+
 
     #endregion
 

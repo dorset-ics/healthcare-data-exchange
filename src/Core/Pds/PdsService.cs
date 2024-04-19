@@ -265,7 +265,7 @@ public class PdsService(
     {
         var getResult = await fhirClient.GetResource<Patient>(nhsNumber);
 
-        if (getResult.Exception is not FhirOperationException { Status: HttpStatusCode.NotFound })
+        if (getResult.Exception is FhirOperationException { Status: HttpStatusCode.NotFound })
             return new ApplicationException($"Error fetching data from fhir server", getResult.Exception);
 
         var deletePatientResult = await fhirClient.TransactionAsync<Patient>(new Bundle
