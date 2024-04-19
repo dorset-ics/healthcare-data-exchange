@@ -245,11 +245,9 @@ public class PdsService(
                     record.NhsNumber = record.MatchedNhsNo;
                 }
             }
-            // Replace the patient in the array
             patientsArray[i] = JObject.FromObject(record!);
         }
 
-        // Serialize the entire JSON back to a string
         var modifiedJson = jsonObject.ToString();
         return modifiedJson;
     }
