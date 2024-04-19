@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Nodes;
-using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Common.Authentication;
 
