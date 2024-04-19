@@ -195,18 +195,12 @@ public class PdsService(
 
         var modifiedCsvToJsonResult = HandleInvalidPDSPatients(csvToJsonResult, patientsToBeDeleted);
 
-        await CallFHIRConvertAndUpdateResource(messageId, modifiedCsvToJsonResult);
-
-        if (patientsToBeDeleted.Count > 0)
-        {
-            var tasks = patientsToBeDeleted.Select(patient => DeletePatientById(patient));
-            await Task.WhenAll(tasks);
-        }
+        await CallFHIRConvertAndUpdateResource(messageId, modifiedCsvToJsonResult, patientsToBeDeleted);
 
         return Result.Success();
     }
 
-    private async Task<Result> CallFHIRConvertAndUpdateResource(string messageId, string modifiedCsvToJsonResult)
+    private async Task<Result> CallFHIRConvertAndUpdateResource(string messageId, string modifiedCsvToJsonResult, List<string> patientsToBeDeleted)
     {
         var conversionRequest = new ConvertDataRequest(modifiedCsvToJsonResult, TemplateInfo.ForPdsMeshPatient());
         var jsonToBundleResult = await fhirClient.ConvertData(conversionRequest);
@@ -215,6 +209,9 @@ public class PdsService(
             logger.LogError("Error while converting Message {message} converted to FHIR bundle", messageId);
             return jsonToBundleResult;
         }
+
+        if (patientsToBeDeleted != null && patientsToBeDeleted.Count > 0)
+            EnrichFhirBundleWithPatientsToBeDeleted(patientsToBeDeleted, jsonToBundleResult);
 
         logger.LogInformation("Message {message} converted to FHIR bundle", messageId);
 
@@ -227,6 +224,20 @@ public class PdsService(
 
         logger.LogInformation("Message {message} processed successfully", messageId);
         return Result.Success();
+    }
+
+    private static void EnrichFhirBundleWithPatientsToBeDeleted(List<string> patientsToBeDeleted, Result<Bundle> jsonToBundleResult)
+    {
+        foreach (var patient in patientsToBeDeleted)
+        {
+            jsonToBundleResult.Value.Entry.Add(new()
+            {
+                Request = new Bundle.RequestComponent
+                {
+                    Method = Bundle.HTTPVerb.DELETE, Url = $"Patient/{patient}"
+                }
+            });
+        }
     }
 
     private static string HandleInvalidPDSPatients(Result<string> csvToJsonResult, List<string> patientsToBeDeleted)
@@ -250,24 +261,6 @@ public class PdsService(
 
         var modifiedJson = jsonObject.ToString();
         return modifiedJson;
-    }
-
-    public async Task<Result<Bundle>> DeletePatientById(string nhsNumber)
-    {
-        var getResult = await fhirClient.GetResource<Patient>(nhsNumber);
-
-        if (getResult.Exception is FhirOperationException { Status: HttpStatusCode.NotFound })
-            return new ApplicationException($"Error fetching data from fhir server", getResult.Exception);
-
-        var deletePatientResult = await fhirClient.DeleteResource<Patient>(nhsNumber);
-
-        if (deletePatientResult.IsFailure)
-        {
-            logger.LogError(deletePatientResult.Exception, "Error deleting patient with NHS number {nhsNumber} in DataHub FHIR.", nhsNumber);
-            return new ApplicationException($"Error deleting patient with NHS number {nhsNumber} in DataHub FHIR.", deletePatientResult.Exception);
-        }
-        logger.LogInformation("Patient with old NHS number {nhsNumber} was succesfully deleted from DataHub FHIR.", nhsNumber);
-        return deletePatientResult;
     }
 
 }

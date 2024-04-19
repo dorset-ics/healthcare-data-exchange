@@ -11,5 +11,4 @@ public interface IPdsService
     Task SendMeshMessages(CancellationToken cancellationToken);
     Task<Result<Patient>> Search(PdsSearchParameters searchParameters);
     Task<Result<Patient>> GetPatientById(string nhsNumber);
-    Task<Result<Bundle>> DeletePatientById(string nhsNumber);
 }

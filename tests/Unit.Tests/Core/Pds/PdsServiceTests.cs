@@ -401,8 +401,6 @@ public class PdsServiceTests
         _pdsMeshClient.RetrieveMessage("message").Returns(new Message() { FileContent = "content"u8.ToArray() });
         _fhirClient.ConvertData(Arg.Any<ConvertDataRequest>()).Returns(new Bundle());
         _fhirClient.TransactionAsync<Patient>(Arg.Any<Bundle>()).Returns(new Bundle());
-        _fhirClient.GetResource<Patient>(Arg.Any<string>()).Returns(new Result<Patient>());
-        _fhirClient.DeleteResource<Patient>(Arg.Any<string>()).Returns(Task.FromResult(new Result<Bundle>()));
 
 
         var filePath = Path.Combine(Directory.GetCurrentDirectory(), BaseSamplePath, "MeshResponseDeletedPatient.csv");
@@ -415,9 +413,7 @@ public class PdsServiceTests
 
         await _pdsMeshClient.Received(1).RetrieveMessages();
         await _fhirClient.Received(1).ConvertData(Arg.Any<ConvertDataRequest>());
-        await _fhirClient.Received(1).GetResource<Patient>(Arg.Any<string>());
         await _fhirClient.Received(1).TransactionAsync<Patient>(Arg.Any<Bundle>());
-        await _fhirClient.Received(1).DeleteResource<Patient>(Arg.Any<string>());
     }
 
     [Fact]
@@ -429,8 +425,6 @@ public class PdsServiceTests
         _pdsMeshClient.RetrieveMessage("message").Returns(new Message() { FileContent = "content"u8.ToArray() });
         _fhirClient.ConvertData(Arg.Any<ConvertDataRequest>()).Returns(new Bundle());
         _fhirClient.TransactionAsync<Patient>(Arg.Any<Bundle>()).Returns(new Bundle());
-        _fhirClient.GetResource<Patient>(Arg.Any<string>()).Returns(new Result<Patient>());
-        _fhirClient.DeleteResource<Patient>(Arg.Any<string>()).Returns(Task.FromResult(new Result<Bundle>()));
 
         var filePath = Path.Combine(Directory.GetCurrentDirectory(), BaseSamplePath, "MeshResponseMergedPatient.csv");
         var fileContent = await File.ReadAllTextAsync(filePath);
@@ -442,9 +436,7 @@ public class PdsServiceTests
 
         await _pdsMeshClient.Received(1).RetrieveMessages();
         await _fhirClient.Received(1).ConvertData(Arg.Any<ConvertDataRequest>());
-        await _fhirClient.Received(1).GetResource<Patient>(Arg.Any<string>());
         await _fhirClient.Received(1).TransactionAsync<Patient>(Arg.Any<Bundle>());
-        await _fhirClient.Received(1).DeleteResource<Patient>(Arg.Any<string>());
     }
 
     [Fact]
@@ -456,8 +448,6 @@ public class PdsServiceTests
         _pdsMeshClient.RetrieveMessage("message").Returns(new Message() { FileContent = "content"u8.ToArray() });
         _fhirClient.ConvertData(Arg.Any<ConvertDataRequest>()).Returns(new Bundle());
         _fhirClient.TransactionAsync<Patient>(Arg.Any<Bundle>()).Returns(new Bundle());
-        _fhirClient.GetResource<Patient>(Arg.Any<string>()).Returns(new Result<Patient>());
-        _fhirClient.DeleteResource<Patient>(Arg.Any<string>()).Returns(Task.FromResult(new Result<Bundle>()));
 
         var filePath = Path.Combine(Directory.GetCurrentDirectory(), BaseSamplePath, "MeshResponseDeletedAndMergedPatients.csv");
         var fileContent = await File.ReadAllTextAsync(filePath);
@@ -469,9 +459,7 @@ public class PdsServiceTests
 
         await _pdsMeshClient.Received(1).RetrieveMessages();
         await _fhirClient.Received(1).ConvertData(Arg.Any<ConvertDataRequest>());
-        await _fhirClient.Received(2).GetResource<Patient>(Arg.Any<string>());
         await _fhirClient.Received(1).TransactionAsync<Patient>(Arg.Any<Bundle>());
-        await _fhirClient.Received(2).DeleteResource<Patient>(Arg.Any<string>());
     }
 
     #endregion
