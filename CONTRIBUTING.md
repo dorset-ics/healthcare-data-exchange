@@ -37,3 +37,12 @@ Please make sure you have the pre-commit hook installed and working.
 ## VS Code
 
 For VS Code it is recommended to install the editorconfig plugin, which will allow the code style rules defined in .editorconfig (within the root of the project repository) to be applied during development.
+
+## Recognition for Contributions
+
+We are happy to recognize contributors to this repository. If you have made a significant contribution, please reach out to the maintainers to be added to the list of contributors - or submit a PR to add yourself to the list.
+
+1. Arpit Gaur
+1. Liam Moat
+1. Dor Lugasi-Gal
+1. Martyna Marcinkowska
