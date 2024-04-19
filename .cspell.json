@@ -1,5 +1,7 @@
 {
-    "ignorePaths": [],
+    "ignorePaths": [
+        "**/CONTRIBUTING.md"
+    ],
     "language": "en-GB",
     "noConfigSearch": true,
     "words": [
