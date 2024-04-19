@@ -42,6 +42,7 @@ For VS Code it is recommended to install the editorconfig plugin, which will all
 
 We are happy to recognize contributors to this repository. If you have made a significant contribution, please reach out to the maintainers to be added to the list of contributors - or submit a PR to add yourself to the list.
 
+1. Arpit Gaur
 1. Liam Moat
-2. Dor Lugasi-Gal
-3. Martyna Marcinkowska
+1. Dor Lugasi-Gal
+1. Martyna Marcinkowska
