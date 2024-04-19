@@ -58,7 +58,6 @@ module "services" {
   log_analytics_sku                = var.log_analytics_sku
   app_plan_sku                     = var.app_plan_sku
   runner_ip                        = var.runner_ip == "" ? [chomp(data.external.agent_ip.result.ip)] : [var.runner_ip]
-  acr_zone_id                      = module.network.acr_dns_zone_id
   app_zone_id                      = module.network.app_service_dns_zone_id
   app_registration_id              = azuread_application.app.client_id
   app_registration_uri             = tolist(azuread_application.app.identifier_uris)[0]
@@ -71,6 +70,9 @@ module "services" {
   tenant_id                        = data.azurerm_client_config.current.tenant_id
   azure_cli_client_id              = var.azure_cli_client_id
   sp_client_id                     = var.sp_client_id
+  health_services_principal_id     = module.health-services.health_services_principal_id
+  acr_id                           = azurerm_container_registry.acr.id
+  acr_login_server                 = azurerm_container_registry.acr.login_server
 }
 
 module "health-services" {
@@ -83,4 +85,5 @@ module "health-services" {
   tenant_id                        = data.azurerm_client_config.current.tenant_id
   log_analytics_workspace_id       = module.services.log_analytics_workspace_id
   web_app_system_assigned_identity = module.services.web_app_system_assigned_identity
+  oci_artifact_login_server        = azurerm_container_registry.acr.login_server
 }
