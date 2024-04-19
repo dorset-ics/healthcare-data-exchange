@@ -22,3 +22,7 @@ output "log_analytics_workspace_id" {
 output "web_app_system_assigned_identity" {
   value = azurerm_linux_web_app.web_app.identity[0].principal_id
 }
+
+output "api_management_system_assigned_identity" {
+  value = module.api_management.api_management_system_assigned_identity
+}
