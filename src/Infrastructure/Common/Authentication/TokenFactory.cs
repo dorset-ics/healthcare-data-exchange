@@ -15,7 +15,6 @@ public class TokenFactory(HttpClient httpClient, JwtHandler jwtHandler) : IToken
 
         using var response = await httpClient.PostAsync("oauth2/token", content);
         response.EnsureSuccessStatusCode();
-
         var responseBody = await response.Content.ReadAsStringAsync();
         var responseObject = JsonNode.Parse(responseBody)
                              ?? throw new Exception($"Authentication failed - Unable to parse response:\n{response.Content}");

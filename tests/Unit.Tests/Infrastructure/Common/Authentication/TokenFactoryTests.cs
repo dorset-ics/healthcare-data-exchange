@@ -13,6 +13,7 @@ public class TokenFactoryTests
     private const string TokenUrl = "https://token.url.nhs.uk";
     private static readonly PdsAuthConfiguration MockAuthConfig = GetMockPdsAuthConfiguration();
 
+
     [Fact]
     public void GenerateJwt_WhenGivingPdsAuthConfiguration_MatchingJwtTokenReturned()
     {
@@ -43,20 +44,24 @@ public class TokenFactoryTests
     [InlineData("{\"not_access_token_key\": \"token\"}")]
     public void GetAccessToken_AndReturnedAccessTokenResponseMalformed_ThenExceptionThrown(string response)
     {
-        var httpClientMock = HttpClientMocker.SetupHttpClient(Substitute.For<IHttpClientFactory>(), HttpStatusCode.OK, response);
+        var httpClientMock =
+            HttpClientMocker.SetupHttpClient(Substitute.For<IHttpClientFactory>(), HttpStatusCode.OK, response);
         var jwtHandler = new JwtHandler(MockAuthConfig);
 
-        Should.Throw<Exception>(async () => await new TokenFactory(httpClientMock, jwtHandler).GetAccessToken())
+        Should.Throw<Exception>(async () =>
+                await new TokenFactory(httpClientMock, jwtHandler).GetAccessToken())
             .Message.Should().Contain("Authentication failed - Unable to retrieve access token");
     }
 
     [Fact]
     public void GetAccessToken_AndReturnedAccessTokenResponseNotOk_ThenExceptionThrown()
     {
-        var httpClientMock = HttpClientMocker.SetupHttpClient(Substitute.For<IHttpClientFactory>(), HttpStatusCode.BadRequest, "{}");
+        var httpClientMock =
+            HttpClientMocker.SetupHttpClient(Substitute.For<IHttpClientFactory>(), HttpStatusCode.BadRequest, "{}");
         var jwtHandler = new JwtHandler(MockAuthConfig);
 
-        Should.Throw<Exception>(async () => await new TokenFactory(httpClientMock, jwtHandler).GetAccessToken())
+        Should.Throw<Exception>(async () =>
+                await new TokenFactory(httpClientMock, jwtHandler).GetAccessToken())
             .Message.Should().Contain("Response status code does not indicate success: 400 (Bad Request).");
     }
 
