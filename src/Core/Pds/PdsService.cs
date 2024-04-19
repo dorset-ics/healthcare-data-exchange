@@ -226,7 +226,7 @@ public class PdsService(
         return Result.Success();
     }
 
-    private static void EnrichFhirBundleWithPatientsToBeDeleted(List<string> patientsToBeDeleted, Result<Bundle> jsonToBundleResult)
+    private void EnrichFhirBundleWithPatientsToBeDeleted(List<string> patientsToBeDeleted, Result<Bundle> jsonToBundleResult)
     {
         foreach (var patient in patientsToBeDeleted)
         {
@@ -241,7 +241,7 @@ public class PdsService(
         }
     }
 
-    private static string HandleInvalidPDSPatients(Result<string> csvToJsonResult, List<string> patientsToBeDeleted)
+    private string HandleInvalidPDSPatients(Result<string> csvToJsonResult, List<string> patientsToBeDeleted)
     {
         var jsonObject = JObject.Parse(csvToJsonResult.Value);
         var patientsArray = (JArray)jsonObject["patients"]!;
