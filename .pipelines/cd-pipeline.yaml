@@ -102,6 +102,9 @@ stages:
               az login --service-principal -u $(sp-dex-deployment-client-id) -p $(sp-dex-deployment-client-secret) --tenant $(AZURE_TENANT_ID)
               token=$(az account get-access-token --resource=$(fhir_server_url) --query accessToken --output tsv)
               FHIR_SERVER_URL=$(frontend_address) FHIR_SERVER_AUTH_TOKEN=$token docker compose -f docker/docker-compose.yml up data-init --exit-code-from data-init --no-deps
+            env:
+              PACKAGE_ID: 'fhir.r4.ukcore.stu3.currentbuild'
+              PACKAGE_VERSION: '0.0.8-pre-release'
 
       - job: PushTemplates
         dependsOn: DeployAPI

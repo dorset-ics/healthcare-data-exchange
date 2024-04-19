@@ -27,24 +27,26 @@ resource "azurerm_linux_web_app" "web_app" {
   }
 
   app_settings = {
-    "APPINSIGHTS_INSTRUMENTATIONKEY"             = azurerm_application_insights.app_insights.instrumentation_key
-    "APPLICATIONINSIGHTS_CONNECTION_STRING"      = azurerm_application_insights.app_insights.connection_string
-    "ASPNETCORE_ENVIRONMENT"                     = lookup(local.env_mapping, var.env, "Development")
-    "Pds__Fhir__Authentication__Certificate"     = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.pds_fhir_certificate_private.id})"
-    "DataHubFhirServer__Authentication__Scope"   = "${var.fhir_url}/.default"
-    "ASPNETCORE_URLS"                            = "http://+:80"
-    "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
-    "AzureStorageConnectionString"               = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.azure_storage_connection_string.id})"
-    "AzureTableStorageCache__Endpoint"           = azurerm_storage_account.dex_storage_account.primary_table_endpoint
-    "DataHubFhirServer__BaseUrl"                 = var.fhir_url
-    "DataHubFhirServer__TemplateImage"           = "${var.acr_login_server}/${var.env}:${var.image_tag_suffix}"
-    "Mesh__Authentication__RootCertificate"      = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.nhs_root_certificate.id})"
-    "Mesh__Authentication__ClientCertificate"    = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.ndop_mesh_client_certificate_private.id})"
-    "Mesh__Authentication__SubCertificate"       = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.nhs_sub_certificate.id})"
-    "Ndop__Mesh__MailboxId"                      = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.ndop_mesh_mailbox_id.id})"
-    "Ndop__Mesh__MailboxPassword"                = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.ndop_mesh_mailbox_password.id})"
-    "Pds__Mesh__MailboxId"                       = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.pds_mesh_mailbox_id.id})"
-    "Pds__Mesh__MailboxPassword"                 = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.pds_mesh_mailbox_password.id})"
+    "APPINSIGHTS_INSTRUMENTATIONKEY"                   = azurerm_application_insights.app_insights.instrumentation_key
+    "APPLICATIONINSIGHTS_CONNECTION_STRING"            = azurerm_application_insights.app_insights.connection_string
+    "ASPNETCORE_ENVIRONMENT"                           = lookup(local.env_mapping, var.env, "Development")
+    "Pds__Fhir__Authentication__UseCertificateStore"   = true
+    "Pds__Fhir__Authentication__CertificateThumbprint" = azurerm_key_vault_certificate.pds_fhir_certificate_private.thumbprint
+    "DataHubFhirServer__Authentication__Scope"         = "${var.fhir_url}/.default"
+    "ASPNETCORE_URLS"                                  = "http://+:80"
+    "ApplicationInsightsAgent_EXTENSION_VERSION"       = "~3"
+    "AzureStorageConnectionString"                     = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.azure_storage_connection_string.id})"
+    "AzureTableStorageCache__Endpoint"                 = azurerm_storage_account.dex_storage_account.primary_table_endpoint
+    "DataHubFhirServer__BaseUrl"                       = var.fhir_url
+    "DataHubFhirServer__TemplateImage"                 = "${azurerm_container_registry.acr.login_server}/${var.env}:${var.image_tag_suffix}"
+    "Mesh__Authentication__RootCertificate"            = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.nhs_root_certificate.id})"
+    "Mesh__Authentication__ClientCertificate"          = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.ndop_mesh_client_certificate_private.id})"
+    "Mesh__Authentication__SubCertificate"             = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.nhs_sub_certificate.id})"
+    "Ndop__Mesh__MailboxId"                            = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.ndop_mesh_mailbox_id.id})"
+    "Ndop__Mesh__MailboxPassword"                      = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.ndop_mesh_mailbox_password.id})"
+    "Pds__Mesh__MailboxId"                             = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.pds_mesh_mailbox_id.id})"
+    "Pds__Mesh__MailboxPassword"                       = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.pds_mesh_mailbox_password.id})"
+    "WEBSITE_LOAD_CERTIFICATES"                        = azurerm_key_vault_certificate.pds_fhir_certificate_private.thumbprint
   }
 
   key_vault_reference_identity_id = azurerm_user_assigned_identity.identity.id
@@ -71,6 +73,15 @@ resource "azurerm_linux_web_app" "web_app" {
   depends_on = [
     azurerm_key_vault.kv
   ]
+}
+
+resource "azurerm_app_service_certificate" "pds_fhir_certificate_private" {
+  name                = "pds-cert-dex-${var.env}"
+  app_service_plan_id = azurerm_service_plan.app_service_plan.id
+
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  key_vault_secret_id = azurerm_key_vault_certificate.pds_fhir_certificate_private.secret_id
 }
 
 # Setup private-link for web app

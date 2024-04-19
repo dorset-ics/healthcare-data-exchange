@@ -86,7 +86,7 @@ data "azurerm_key_vault" "common_kv" {
 }
 
 data "azurerm_key_vault_secret" "pds_fhir_certificate" {
-  name         = var.env == "prd" || var.env == "stg" ? "pds-fhir-production-certificate-private" : "pds-fhir-integration-certificate-private"
+  name         = var.env == "prd" || var.env == "stg" ? "pds-fhir-production-pfx-private" : "pds-fhir-integration-pfx-private"
   key_vault_id = data.azurerm_key_vault.common_kv.id
 }
 
@@ -125,10 +125,12 @@ data "azurerm_key_vault_secret" "pds_mesh_mailbox_password" {
   key_vault_id = data.azurerm_key_vault.common_kv.id
 }
 
-resource "azurerm_key_vault_secret" "pds_fhir_certificate_private" {
-  name         = "pds-fhir-certificate-private"
+resource "azurerm_key_vault_certificate" "pds_fhir_certificate_private" {
+  name         = "pds-fhir-certificate-pfx-private"
   key_vault_id = azurerm_key_vault.kv.id
-  value        = data.azurerm_key_vault_secret.pds_fhir_certificate.value
+  certificate {
+    contents = data.azurerm_key_vault_secret.pds_fhir_certificate.value
+  }
 
   depends_on = [
     azurerm_key_vault_access_policy.terraform_user_access
