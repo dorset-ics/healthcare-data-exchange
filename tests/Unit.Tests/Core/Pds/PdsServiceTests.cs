@@ -392,7 +392,6 @@ public class PdsServiceTests
 
     #region Merged and Deleted patients tests
 
-
     [Fact]
     public async Task GivenRetrieveMeshMessageHadDeletedPatient_WhenDeletePatientIsCalled_ThenDeleteSucceeeds()
     {
@@ -416,7 +415,6 @@ public class PdsServiceTests
         await _pdsMeshClient.Received(1).RetrieveMessages();
         await _fhirClient.Received(1).ConvertData(Arg.Any<ConvertDataRequest>());
         await _fhirClient.Received(2).TransactionAsync<Patient>(Arg.Any<Bundle>());
-
     }
 
     [Fact]
@@ -442,7 +440,6 @@ public class PdsServiceTests
         await _fhirClient.Received(1).ConvertData(Arg.Any<ConvertDataRequest>());
         await _fhirClient.Received(1).GetResource<Patient>(Arg.Any<string>());
         await _fhirClient.Received(2).TransactionAsync<Patient>(Arg.Any<Bundle>());
-
     }
 
     [Fact]
@@ -468,11 +465,8 @@ public class PdsServiceTests
         await _fhirClient.Received(1).ConvertData(Arg.Any<ConvertDataRequest>());
         await _fhirClient.Received(2).GetResource<Patient>(Arg.Any<string>());
         await _fhirClient.Received(3).TransactionAsync<Patient>(Arg.Any<Bundle>());
-
     }
 
-
     #endregion
-
 
 }

@@ -2,7 +2,7 @@
 
 namespace Core.Pds.Models;
 
-public class PdsMeshRecordResponse
+public record PdsMeshRecordResponse
 {
     [Index(0)][Name("UNIQUE REFERENCE")] public string? UniqueReference { get; set; }
 
