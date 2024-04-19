@@ -115,8 +115,7 @@ public static class DependencyInjection
             };
 
             var fhirClient = new FhirClient(pdsConfiguration.Fhir.BaseUrl, httpClient, settings);
-            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
-            return new PdsFhirClientWrapper(fhirClient, loggerFactory.CreateLogger<PdsFhirClientWrapper>());
+            return new PdsFhirClientWrapper(fhirClient);
         });
         services.AddTransient<IPdsFhirClient, PdsFhirClient>();
         return services;
