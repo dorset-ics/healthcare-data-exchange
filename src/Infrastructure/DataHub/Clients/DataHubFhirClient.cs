@@ -38,7 +38,7 @@ public class DataHubFhirClient(
         }
         catch (FhirOperationException ex) when (ex.Status == HttpStatusCode.NotFound)
         {
-            logger.LogDebug("Resource {ResourceType}/{ResourceId} not found in FHIR service.", resourceType, resourceId);
+            logger.LogError("Resource {ResourceType}/{ResourceId} not found in FHIR service.", resourceType, resourceId);
             return ex;
         }
         catch (Exception ex)

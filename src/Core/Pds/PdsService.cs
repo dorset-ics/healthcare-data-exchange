@@ -10,6 +10,7 @@ using Core.Pds.Models;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using Task = System.Threading.Tasks.Task;
 
 namespace Core.Pds;
@@ -190,18 +191,76 @@ public class PdsService(
 
         logger.LogInformation("Message {message} converted to JSON", messageId);
 
-        var conversionRequest = new ConvertDataRequest(csvToJsonResult.Value, TemplateInfo.ForPdsMeshPatient());
+        List<string> patientsToBeDeleted = new List<string>();
+
+        var modifiedCsvToJsonResult = HandleInvalidPDSPatients(csvToJsonResult, patientsToBeDeleted);
+
+        await CallFHIRConvertAndUpdateResource(messageId, modifiedCsvToJsonResult, patientsToBeDeleted);
+
+        return Result.Success();
+    }
+
+    private async Task<Result> CallFHIRConvertAndUpdateResource(string messageId, string modifiedCsvToJsonResult, List<string> patientsToBeDeleted)
+    {
+        var conversionRequest = new ConvertDataRequest(modifiedCsvToJsonResult, TemplateInfo.ForPdsMeshPatient());
         var jsonToBundleResult = await fhirClient.ConvertData(conversionRequest);
         if (jsonToBundleResult.IsFailure)
+        {
+            logger.LogError("Error while converting Message {message} converted to FHIR bundle", messageId);
             return jsonToBundleResult;
+        }
+
+        if (patientsToBeDeleted != null && patientsToBeDeleted.Count > 0)
+            EnrichFhirBundleWithPatientsToBeDeleted(patientsToBeDeleted, jsonToBundleResult);
 
         logger.LogInformation("Message {message} converted to FHIR bundle", messageId);
 
         var transactionResult = await fhirClient.TransactionAsync<Patient>(jsonToBundleResult.Value);
         if (transactionResult.IsFailure)
+        {
+            logger.LogError("Error while calling FHIR for TransactionAsync with Message {message}", messageId);
             return transactionResult;
+        }
 
-        logger.LogInformation("Message {message} persisted", messageId);
+        logger.LogInformation("Message {message} processed successfully", messageId);
         return Result.Success();
     }
+
+    private static void EnrichFhirBundleWithPatientsToBeDeleted(List<string> patientsToBeDeleted, Result<Bundle> jsonToBundleResult)
+    {
+        foreach (var patient in patientsToBeDeleted)
+        {
+            jsonToBundleResult.Value.Entry.Add(new()
+            {
+                Request = new Bundle.RequestComponent
+                {
+                    Method = Bundle.HTTPVerb.DELETE, Url = $"Patient/{patient}"
+                }
+            });
+        }
+    }
+
+    private static string HandleInvalidPDSPatients(Result<string> csvToJsonResult, List<string> patientsToBeDeleted)
+    {
+        var jsonObject = JObject.Parse(csvToJsonResult.Value);
+        var patientsArray = (JArray)jsonObject["patients"]!;
+
+        for (int i = 0; i < patientsArray.Count; i++)
+        {
+            var record = patientsArray[i].ToObject<PdsMeshRecordResponse>();
+            if (record?.ErrorSuccessCode == "91")
+            {
+                patientsToBeDeleted.Add(record.NhsNumber!);
+                if (record.MatchedNhsNo != "0000000000" && record.NhsNumber != null)
+                {
+                    record.NhsNumber = record.MatchedNhsNo;
+                }
+            }
+            patientsArray[i] = JObject.FromObject(record!);
+        }
+
+        var modifiedJson = jsonObject.ToString();
+        return modifiedJson;
+    }
+
 }

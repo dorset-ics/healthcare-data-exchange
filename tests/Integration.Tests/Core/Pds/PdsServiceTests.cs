@@ -174,16 +174,7 @@ public class PdsServiceTests : IDisposable
 
             var csv = string.Join(Environment.NewLine, page.Select(p =>
             {
-                return string.Join(",",
-                    new string[]
-                    {
-                        p.Id, p.GetNhsNumber()!, "UPDATED-FAMILY-NAME", "UPDATED-GIVEN-NAME", "UPDATED-OTHER-NAME",
-                        "1", "20010101", string.Empty, "UPDATED-ADDRESS1", "UPDATED-ADDRESS2", "UPDATED-ADDRESS3",
-                        "UPDATED-ADDRESS4", "UPDATED-ADDRESS5", "UPDATED-POSTCODE", "UPDATED-GP", string.Empty,
-                        string.Empty, string.Empty, string.Empty, string.Empty, "UPDATED-HOMETEL",
-                        "UPDATED-MOBILETEL", "UPDATED-EMAIL", string.Empty, string.Empty, string.Empty,
-                        p.GetNhsNumber()!, string.Empty, string.Empty,
-                    });
+                return CreateDummyMeshPatientMessage(p.Id, p.GetNhsNumber()!, p.GetNhsNumber()!, string.Empty);
             }).Prepend(PdsMeshUtilities.GetPdsMeshRecordResponseHeaderLine()));
 
             await meshClient.Mailbox.SendMessageAsync(
@@ -193,6 +184,20 @@ public class PdsServiceTests : IDisposable
                 mexFileName: $"RESP_MPTREQ_{DateTime.Now:yyyyMMddHHmmss}_{DateTime.Now:yyyyMMddHHmmss}.csv",
                 contentType: MediaTypeNames.Text.Csv);
         }
+    }
+
+    private static string CreateDummyMeshPatientMessage(string id, string nhsNumber, string matchedNhsNumber, string successErrorCode)
+    {
+        return string.Join(",",
+            new string[]
+            {
+                        id, nhsNumber, "UPDATED-FAMILY-NAME", "UPDATED-GIVEN-NAME", "UPDATED-OTHER-NAME",
+                        "1", "20010101", string.Empty, "UPDATED-ADDRESS1", "UPDATED-ADDRESS2", "UPDATED-ADDRESS3",
+                        "UPDATED-ADDRESS4", "UPDATED-ADDRESS5", "UPDATED-POSTCODE", "UPDATED-GP", string.Empty,
+                        string.Empty, string.Empty, string.Empty, string.Empty, "UPDATED-HOMETEL",
+                        "UPDATED-MOBILETEL", "UPDATED-EMAIL", string.Empty, string.Empty, successErrorCode,
+                        matchedNhsNumber, string.Empty, string.Empty,
+            });
     }
 
     private async Task<IEnumerable<Message>> RetrieveMeshMessages()
@@ -255,33 +260,44 @@ public class PdsServiceTests : IDisposable
         for (var i = 0; i < numberOfPatients; i++)
         {
             var nhsNumber = Guid.NewGuid().ToString();
+            var patient = CreatePatient(nhsNumber);
 
-            var patient = new Patient()
-            {
-                Id = nhsNumber,
-                Meta =
-                    new Meta()
-                    {
-                        Profile = new List<string>()
-                        {
+            await _dataHubFhirClientWrapper.UpdateAsync<Patient>(patient);
+
+            patients.Add(patient);
+        }
+
+        return patients;
+    }
+
+    private static Patient CreatePatient(string nhsNumber)
+    {
+        return new Patient()
+        {
+            Id = nhsNumber,
+            Meta =
+                            new Meta()
+                            {
+                                Profile = new List<string>()
+                                {
                             "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Patient"
-                        }
-                    },
-                Identifier =
-                    new List<Identifier>() { new Identifier("https://fhir.nhs.uk/Id/nhs-number", nhsNumber) },
-                Name =
-                    new List<HumanName>()
-                    {
+                                }
+                            },
+            Identifier =
+                            new List<Identifier>() { new Identifier("https://fhir.nhs.uk/Id/nhs-number", nhsNumber) },
+            Name =
+                            new List<HumanName>()
+                            {
                         new HumanName()
                         {
                             Family = "TO-BE-UPDATED", Given = new List<string>() { "TO-BE-UPDATED" }
                         }
-                    },
-                Gender = AdministrativeGender.Unknown,
-                BirthDate = "1920-01-01",
-                Address =
-                    new List<Address>()
-                    {
+                            },
+            Gender = AdministrativeGender.Unknown,
+            BirthDate = "1920-01-01",
+            Address =
+                            new List<Address>()
+                            {
                         new Address()
                         {
                             Line = new List<string>()
@@ -294,8 +310,8 @@ public class PdsServiceTests : IDisposable
                             },
                             PostalCode = "TO-BE-UPDATED"
                         }
-                    },
-                Telecom = new List<ContactPoint>()
+                            },
+            Telecom = new List<ContactPoint>()
                 {
                     new ContactPoint()
                     {
@@ -314,7 +330,7 @@ public class PdsServiceTests : IDisposable
                         System = ContactPoint.ContactPointSystem.Email, Value = "TO-BE-UPDATED"
                     }
                 },
-                GeneralPractitioner = new List<ResourceReference>()
+            GeneralPractitioner = new List<ResourceReference>()
                 {
                     new ResourceReference()
                     {
@@ -325,13 +341,6 @@ public class PdsServiceTests : IDisposable
                         }
                     }
                 }
-            };
-
-            await _dataHubFhirClientWrapper.UpdateAsync<Patient>(patient);
-
-            patients.Add(patient);
-        }
-
-        return patients;
+        };
     }
 }
