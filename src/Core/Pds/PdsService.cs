@@ -234,7 +234,7 @@ public class PdsService(
             {
                 Request = new Bundle.RequestComponent
                 {
-                    Method = Bundle.HTTPVerb.DELETE, 
+                    Method = Bundle.HTTPVerb.DELETE,
                     Url = $"Patient/{patient}"
                 }
             });
