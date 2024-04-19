@@ -99,7 +99,8 @@ public static class DependencyInjection
                     CheckCertificateRevocationList = true
                 };
                 var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
-                return new HttpClientAuthenticationHandler(tokenFactory, handler, loggerFactory.CreateLogger<HttpClientAuthenticationHandler>(), pdsConfiguration.Fhir.Authentication.IsEnabled);
+                var logger = loggerFactory.CreateLogger<HttpClientAuthenticationHandler>();
+                return new HttpClientAuthenticationHandler(tokenFactory, handler, logger, pdsConfiguration.Fhir.Authentication.IsEnabled);
             })
             .ConfigureHttpClient(client => client.BaseAddress = new Uri(pdsConfiguration.Fhir.BaseUrl));
 
