@@ -49,6 +49,9 @@
       <None Update="Core\Pds\Converters\Samples\MeshResponseDeletedPatient.csv">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+      <None Update="Core\Pds\Converters\Samples\MeshResponseDeletedAndMergedPatients.csv">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
