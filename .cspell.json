@@ -1,6 +1,6 @@
 {
     "ignorePaths": [
-        ".\\CONTRIBUTING.md"
+        "**/CONTRIBUTING.md"
     ],
     "language": "en-GB",
     "noConfigSearch": true,
