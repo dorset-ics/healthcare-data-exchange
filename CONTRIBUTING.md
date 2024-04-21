@@ -49,4 +49,5 @@ We are happy to recognize contributors to this repository. If you have made a si
 1. Dor Lugasi-Gal
 1. Frances Tibble
 1. Martyna Marcinkowska
-1. Nava Vaisman evy
+1. Nava Vaisman Levy
+1. Anat Balzam
