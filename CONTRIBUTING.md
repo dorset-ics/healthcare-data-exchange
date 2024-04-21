@@ -44,6 +44,7 @@ We are happy to recognize contributors to this repository. If you have made a si
 
 1. John Collinson
 1. Arpit Gaur
+1. Sharon Hart
 1. Liam Moat
 1. Dor Lugasi-Gal
 1. Frances Tibble
