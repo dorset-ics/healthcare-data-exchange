@@ -47,6 +47,7 @@ We are happy to recognize contributors to this repository. If you have made a si
 1. Arpit Gaur
 1. Dor Lugasi-Gal
 1. Frances Tibble
+1. Jack Jessel
 1. Liam Moat
 1. Martyna Marcinkowska
 1. Nava Vaisman Levy
