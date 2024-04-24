@@ -40,7 +40,7 @@ services:
       SqlServer__SchemaOptions__AutomaticUpdatesEnabled: "true"
       DataStore: "SqlServer"
       FhirServer__Operations__ConvertData__Enabled: "true"
-      FhirServer__Operations__ConvertData__ContainerRegistryServers__0: ${ACR_NAME}
+      FhirServer__Operations__ConvertData__ContainerRegistryServers__0: "${ACR_NAME:-acrdexoss.azurecr.io}"
       DOTNET_EnableWriteXorExecute: 0
     ports:
       - "8080:8080"
