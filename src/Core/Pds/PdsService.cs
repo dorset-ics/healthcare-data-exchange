@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text;
+using System.Text.Json;
 using Core.Common.Abstractions.Clients;
 using Core.Common.Abstractions.Converters;
 using Core.Common.Models;
@@ -10,7 +11,6 @@ using Core.Pds.Models;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
 using Task = System.Threading.Tasks.Task;
 
 namespace Core.Pds;
@@ -192,8 +192,7 @@ public class PdsService(
         logger.LogInformation("Message {message} converted to JSON", messageId);
 
         List<string> patientsToBeDeleted = new List<string>();
-
-        var modifiedCsvToJsonResult = HandleInvalidPDSPatients(csvToJsonResult, patientsToBeDeleted);
+        var modifiedCsvToJsonResult = HandleInvalidPDSPatients(csvToJsonResult.Value, patientsToBeDeleted);
 
         await CallFHIRConvertAndUpdateResource(messageId, modifiedCsvToJsonResult, patientsToBeDeleted);
 
@@ -241,27 +240,29 @@ public class PdsService(
         }
     }
 
-    private string HandleInvalidPDSPatients(Result<string> csvToJsonResult, List<string> patientsToBeDeleted)
+    private string HandleInvalidPDSPatients(string csvToJsonResult, List<string> patientsToBeDeleted)
     {
-        var jsonObject = JObject.Parse(csvToJsonResult.Value);
-        var patientsArray = (JArray)jsonObject["patients"]!;
+        var response = JsonSerializer.Deserialize<Dictionary<string, List<PdsMeshRecordResponse>>>(csvToJsonResult);
+        var records = response?["patients"]!;
 
-        for (int i = 0; i < patientsArray.Count; i++)
+        for (int i = records.Count - 1; i >= 0; i--)
         {
-            var record = patientsArray[i].ToObject<PdsMeshRecordResponse>();
-            if (record?.ErrorSuccessCode == "91")
+            var record = records[i];
+            if (record.ErrorSuccessCode != "91") continue;
+
+            patientsToBeDeleted.Add(record.NhsNumber!);
+
+            if (record.MatchedNhsNo != "0000000000" && record.NhsNumber != null)
             {
-                patientsToBeDeleted.Add(record.NhsNumber!);
-                if (record.MatchedNhsNo != "0000000000" && record.NhsNumber != null)
-                {
-                    record.NhsNumber = record.MatchedNhsNo;
-                }
+                record.NhsNumber = record.MatchedNhsNo;
             }
-            patientsArray[i] = JObject.FromObject(record!);
+            else
+            {
+                records.RemoveAt(i);
+            }
         }
 
-        var modifiedJson = jsonObject.ToString();
-        return modifiedJson;
+        return JsonSerializer.Serialize(response);
     }
 
 }
