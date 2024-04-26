@@ -32,7 +32,9 @@ public class PdsMeshTests(ITestOutputHelper outputHelper) : BaseApiTest(outputHe
 
         await SendPdsMeshMessage(messageContent);
 
-        await AssertPdsMeshResponseMessageHandledCorrectly(messageContent, dateMeshMessageSent);
+        InvokePdsRetrieveMessages();
+
+        AssertPdsMeshResponseMessageHandledCorrectly(messageContent, dateMeshMessageSent);
     }
 
     [Fact]
@@ -48,7 +50,9 @@ public class PdsMeshTests(ITestOutputHelper outputHelper) : BaseApiTest(outputHe
 
         await SendPdsMeshMessage(messageContent);
 
-        await AssertPdsMeshResponseMessageHandledCorrectly(messageContent, dateMeshMessageSent);
+        InvokePdsRetrieveMessages();
+
+        AssertPdsMeshResponseMessageHandledCorrectly(messageContent, dateMeshMessageSent);
     }
 
     [Fact]
@@ -66,7 +70,9 @@ public class PdsMeshTests(ITestOutputHelper outputHelper) : BaseApiTest(outputHe
 
         await SendPdsMeshMessage(messageContent);
 
-        await AssertPdsMeshResponseMessageHandledCorrectly(messageContent, dateMeshMessageSent);
+        InvokePdsRetrieveMessages();
+
+        AssertPdsMeshResponseMessageHandledCorrectly(messageContent, dateMeshMessageSent);
     }
 
     [Fact]
@@ -84,19 +90,30 @@ public class PdsMeshTests(ITestOutputHelper outputHelper) : BaseApiTest(outputHe
 
         await SendPdsMeshMessage(messageContent);
 
-        await AssertPdsMeshResponseMessageHandledCorrectly(messageContent, dateMeshMessageSent);
+        InvokePdsRetrieveMessages();
+
+        AssertPdsMeshResponseMessageHandledCorrectly(messageContent, dateMeshMessageSent);
+    }
+
+    private void InvokePdsRetrieveMessages()
+    {
+        var pdsRequest = Post("/internal/run/pds", null, null);
+        var runPdsRequest = ApiClient.Execute(pdsRequest);
+        runPdsRequest.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
     private async Task SendPdsMeshMessage(string messageContent)
     {
         var meshClient = GetMeshClient(MeshClientName.Pds);
         var meshSettings = MeshSettings[MeshClientName.Pds];
-        await meshClient.Mailbox.SendMessageAsync(
+        var resp = await meshClient.Mailbox.SendMessageAsync(
             meshSettings.MailboxId,
             meshSettings.WorkflowId,
             messageContent,
             mexFileName: $"RESP_MPTREQ_{DateTime.Now:yyyyMMddHHmmss}_{DateTime.Now:yyyyMMddHHmmss}.csv",
             contentType: MediaTypeNames.Text.Csv);
+        resp.MessageId.ShouldNotBeEmpty();
+        return;
     }
 
     private void EnsurePatientDoesNotExist(string nhsNumber)
@@ -104,7 +121,7 @@ public class PdsMeshTests(ITestOutputHelper outputHelper) : BaseApiTest(outputHe
         FhirClient.Delete(new RestRequest($"/Patient/{nhsNumber}"));
     }
 
-    private async Task AssertPdsMeshResponseMessageHandledCorrectly(string messageContent, DateTime dateMeshMessageSent)
+    private void AssertPdsMeshResponseMessageHandledCorrectly(string messageContent, DateTime dateMeshMessageSent)
     {
         var csvLines = messageContent
             .SplitLines()
@@ -118,52 +135,64 @@ public class PdsMeshTests(ITestOutputHelper outputHelper) : BaseApiTest(outputHe
         var pdsMeshRecords = csvReader.GetRecords<PdsMeshRecordResponse>();
 
         foreach (var pdsMeshRecord in pdsMeshRecords)
-            await AssertPdsMeshRecordImported(pdsMeshRecord, dateMeshMessageSent);
+            AssertPdsMeshRecordImported(pdsMeshRecord, dateMeshMessageSent);
     }
 
-    private async Task AssertPdsMeshRecordImported(PdsMeshRecordResponse pdsMeshRecord, DateTime dateMeshMessageSent)
+    private void AssertPdsMeshRecordImported(PdsMeshRecordResponse pdsMeshRecord, DateTime dateMeshMessageSent)
     {
-        var patientResponse = await RetryUntilSuccessful(
-            () =>
-            {
-                var response = FhirClient.Execute(Get($"/Patient?identifier={pdsMeshRecord.NhsNumber}&_lastUpdated=ge{dateMeshMessageSent.ToString("yyyy-MM-ddTHH:mm:ss.fff")}"));
+        var patientResponse =
+            FhirClient.Execute(Get(
+                $"/Patient?identifier={pdsMeshRecord.NhsNumber}&_lastUpdated=ge{dateMeshMessageSent.ToString("yyyy-MM-ddTHH:mm:ss.fff")}"));
 
-                if (!response.Content!.Contains("entry"))
-                    response.IsSuccessStatusCode = false;
-
-                return response;
-            },
-            maxRetryAttempts: 6,
-            secondsBetweenFailures: 10);
+        if (!patientResponse.Content!.Contains("entry"))
+            patientResponse.IsSuccessStatusCode = false;
 
         patientResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
         patientResponse.Content.ShouldNotBeEmpty();
 
         var patientJson = JToken.Parse(patientResponse.Content!)?.SelectToken("entry[*].resource")!;
 
-        patientJson.SelectTokens("identifier[*].system").Any(s => s.Value<string>() == "https://fhir.nhs.uk/Id/nhs-number").ShouldBeTrue();
-        patientJson.SelectTokens("identifier[*].value").Any(s => s.Value<string>() == pdsMeshRecord.NhsNumber).ShouldBeTrue();
-        patientJson.SelectTokens("name[*].family").Any(s => s.Value<string>() == pdsMeshRecord.FamilyName).ShouldBeTrue();
-        patientJson.SelectTokens("name[*].given[*]").Any(s => s.Value<string>() == pdsMeshRecord.GivenName).ShouldBeTrue();
-        patientJson.SelectTokens("name[*].given[*]").Any(s => s.Value<string>() == pdsMeshRecord.OtherGivenName).ShouldBeTrue();
+        patientJson.SelectTokens("identifier[*].system")
+            .Any(s => s.Value<string>() == "https://fhir.nhs.uk/Id/nhs-number").ShouldBeTrue();
+        patientJson.SelectTokens("identifier[*].value").Any(s => s.Value<string>() == pdsMeshRecord.NhsNumber)
+            .ShouldBeTrue();
+        patientJson.SelectTokens("name[*].family").Any(s => s.Value<string>() == pdsMeshRecord.FamilyName)
+            .ShouldBeTrue();
+        patientJson.SelectTokens("name[*].given[*]").Any(s => s.Value<string>() == pdsMeshRecord.GivenName)
+            .ShouldBeTrue();
+        patientJson.SelectTokens("name[*].given[*]").Any(s => s.Value<string>() == pdsMeshRecord.OtherGivenName)
+            .ShouldBeTrue();
         patientJson.SelectTokens("gender").First().Value<string>().ShouldBe(MapGenderCodeToValue(pdsMeshRecord.Gender));
-        patientJson.SelectTokens("birthDate").First().Value<string>().ShouldBe($"{pdsMeshRecord.DateOfBirth!.Substring(0, 4)}-{pdsMeshRecord.DateOfBirth.Substring(4, 2)}-{pdsMeshRecord.DateOfBirth.Substring(6, 2)}");
-        patientJson.SelectTokens("deceasedDateTime").First().Value<string>().ShouldBe($"{pdsMeshRecord.DateOfDeath!.Substring(0, 4)}-{pdsMeshRecord.DateOfDeath.Substring(4, 2)}-{pdsMeshRecord.DateOfDeath.Substring(6, 2)}");
-        patientJson.SelectTokens("address[*].line[*]").Any(s => s.Value<string>() == pdsMeshRecord.AddressLine1).ShouldBeTrue();
-        patientJson.SelectTokens("address[*].line[*]").Any(s => s.Value<string>() == pdsMeshRecord.AddressLine2).ShouldBeTrue();
-        patientJson.SelectTokens("address[*].line[*]").Any(s => s.Value<string>() == pdsMeshRecord.AddressLine3).ShouldBeTrue();
-        patientJson.SelectTokens("address[*].line[*]").Any(s => s.Value<string>() == pdsMeshRecord.AddressLine4).ShouldBeTrue();
-        patientJson.SelectTokens("address[*].line[*]").Any(s => s.Value<string>() == pdsMeshRecord.AddressLine5).ShouldBeTrue();
-        patientJson.SelectTokens("address[*].postalCode").Any(s => s.Value<string>() == pdsMeshRecord.Postcode).ShouldBeTrue();
+        patientJson.SelectTokens("birthDate").First().Value<string>().ShouldBe(
+            $"{pdsMeshRecord.DateOfBirth!.Substring(0, 4)}-{pdsMeshRecord.DateOfBirth.Substring(4, 2)}-{pdsMeshRecord.DateOfBirth.Substring(6, 2)}");
+        patientJson.SelectTokens("deceasedDateTime").First().Value<string>().ShouldBe(
+            $"{pdsMeshRecord.DateOfDeath!.Substring(0, 4)}-{pdsMeshRecord.DateOfDeath.Substring(4, 2)}-{pdsMeshRecord.DateOfDeath.Substring(6, 2)}");
+        patientJson.SelectTokens("address[*].line[*]").Any(s => s.Value<string>() == pdsMeshRecord.AddressLine1)
+            .ShouldBeTrue();
+        patientJson.SelectTokens("address[*].line[*]").Any(s => s.Value<string>() == pdsMeshRecord.AddressLine2)
+            .ShouldBeTrue();
+        patientJson.SelectTokens("address[*].line[*]").Any(s => s.Value<string>() == pdsMeshRecord.AddressLine3)
+            .ShouldBeTrue();
+        patientJson.SelectTokens("address[*].line[*]").Any(s => s.Value<string>() == pdsMeshRecord.AddressLine4)
+            .ShouldBeTrue();
+        patientJson.SelectTokens("address[*].line[*]").Any(s => s.Value<string>() == pdsMeshRecord.AddressLine5)
+            .ShouldBeTrue();
+        patientJson.SelectTokens("address[*].postalCode").Any(s => s.Value<string>() == pdsMeshRecord.Postcode)
+            .ShouldBeTrue();
         patientJson.SelectTokens("telecom[*].system").Count(s => s.Value<string>() == "phone").ShouldBe(2);
         patientJson.SelectTokens("telecom[*].use").Any(s => s.Value<string>() == "home").ShouldBeTrue();
-        patientJson.SelectTokens("telecom[*].value").Any(s => s.Value<string>() == pdsMeshRecord.TelephoneNumber).ShouldBeTrue();
+        patientJson.SelectTokens("telecom[*].value").Any(s => s.Value<string>() == pdsMeshRecord.TelephoneNumber)
+            .ShouldBeTrue();
         patientJson.SelectTokens("telecom[*].use").Any(s => s.Value<string>() == "mobile").ShouldBeTrue();
-        patientJson.SelectTokens("telecom[*].value").Any(s => s.Value<string>() == pdsMeshRecord.MobileNumber).ShouldBeTrue();
+        patientJson.SelectTokens("telecom[*].value").Any(s => s.Value<string>() == pdsMeshRecord.MobileNumber)
+            .ShouldBeTrue();
         patientJson.SelectTokens("telecom[*].system").Count(s => s.Value<string>() == "email").ShouldBe(1);
-        patientJson.SelectTokens("telecom[*].value").Any(s => s.Value<string>() == pdsMeshRecord.EmailAddress).ShouldBeTrue();
-        patientJson.SelectTokens("generalPractitioner[*].identifier.system").Any(s => s.Value<string>() == "https://fhir.nhs.uk/Id/ods-organization-code").ShouldBeTrue();
-        patientJson.SelectTokens("generalPractitioner[*].identifier.value").Any(s => s.Value<string>() == pdsMeshRecord.GpPracticeCode).ShouldBeTrue();
+        patientJson.SelectTokens("telecom[*].value").Any(s => s.Value<string>() == pdsMeshRecord.EmailAddress)
+            .ShouldBeTrue();
+        patientJson.SelectTokens("generalPractitioner[*].identifier.system")
+            .Any(s => s.Value<string>() == "https://fhir.nhs.uk/Id/ods-organization-code").ShouldBeTrue();
+        patientJson.SelectTokens("generalPractitioner[*].identifier.value")
+            .Any(s => s.Value<string>() == pdsMeshRecord.GpPracticeCode).ShouldBeTrue();
     }
 
     private static string? MapGenderCodeToValue(string? gender)
@@ -253,9 +282,7 @@ public class PdsMeshTests(ITestOutputHelper outputHelper) : BaseApiTest(outputHe
 
         var request = new RestRequest()
         {
-            Resource = $"/Patient/{nhsNumber}",
-            Method = Method.Put,
-            RequestFormat = DataFormat.Json
+            Resource = $"/Patient/{nhsNumber}", Method = Method.Put, RequestFormat = DataFormat.Json
         };
 
         request.AddBody(patientJson);
