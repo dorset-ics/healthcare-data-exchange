@@ -203,7 +203,7 @@ public class PdsService(
         var jsonToBundleResult = await fhirClient.ConvertData(conversionRequest);
         if (jsonToBundleResult.IsFailure)
         {
-            logger.LogError("Error while converting Message {message} converted to FHIR bundle", messageId);
+            logger.LogDebug("Error while converting Message {message} converted to FHIR bundle", messageId);
             return jsonToBundleResult;
         }
 
@@ -215,7 +215,7 @@ public class PdsService(
         var transactionResult = await fhirClient.TransactionAsync<Patient>(jsonToBundleResult.Value);
         if (transactionResult.IsFailure)
         {
-            logger.LogError("Error while calling FHIR for TransactionAsync with Message {message}", messageId);
+            logger.LogDebug("Error while calling FHIR for TransactionAsync with Message {message}", messageId);
             return transactionResult;
         }
 
