@@ -22,6 +22,8 @@ on:
         required: true
       AZURE_CLIENT_SECRET:
         required: true
+      AZURE_TENANT_ID:
+        required: true
       MESH_PASSWORD:
         required: true
       NVD_API_KEY:
@@ -73,6 +75,7 @@ jobs:
       env:
         AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
         AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         MESH_PASSWORD: ${{ secrets.MESH_PASSWORD }}
 
     - name: Templates Tests
