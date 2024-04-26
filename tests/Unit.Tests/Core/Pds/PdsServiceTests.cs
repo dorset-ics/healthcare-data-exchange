@@ -13,6 +13,7 @@ using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
 using Microsoft.Extensions.Logging;
 using NEL.MESH.Models.Foundations.Mesh;
+using static Hl7.Fhir.Model.Bundle;
 using Task = System.Threading.Tasks.Task;
 
 namespace Unit.Tests.Core.Pds;
@@ -399,21 +400,20 @@ public class PdsServiceTests
 
         _pdsMeshClient.RetrieveMessages().Returns(messages);
         _pdsMeshClient.RetrieveMessage("message").Returns(new Message() { FileContent = "content"u8.ToArray() });
-        _fhirClient.ConvertData(Arg.Any<ConvertDataRequest>()).Returns(new Bundle());
-        _fhirClient.TransactionAsync<Patient>(Arg.Any<Bundle>()).Returns(new Bundle());
-
 
         var filePath = Path.Combine(Directory.GetCurrentDirectory(), BaseSamplePath, "MeshResponseDeletedPatient.csv");
         var fileContent = await File.ReadAllTextAsync(filePath);
         var result = _pdsMeshCsvToJsonConverter.Convert(fileContent);
-
         _csvToJsonConverter.Convert(Arg.Any<string>()).Returns(result);
+        _fhirClient.ConvertData(Arg.Any<ConvertDataRequest>()).Returns(new Bundle { Entry = [] });
 
         await _sut.RetrieveMeshMessages(new CancellationToken());
 
         await _pdsMeshClient.Received(1).RetrieveMessages();
-        await _fhirClient.Received(1).ConvertData(Arg.Any<ConvertDataRequest>());
-        await _fhirClient.Received(1).TransactionAsync<Patient>(Arg.Any<Bundle>());
+        await _fhirClient.Received(1).ConvertData(Arg.Is<ConvertDataRequest>(request => request.Input == "{\"patients\":[]}"));
+        await _fhirClient.Received(1).TransactionAsync<Patient>(Arg.Is<Bundle>(bundle => bundle.Entry.Count == 1
+            && bundle.Entry[0].Request.Url == "Patient/9990554412"
+            && bundle.Entry[0].Request.Method == Bundle.HTTPVerb.DELETE));
     }
 
     [Fact]
@@ -423,20 +423,33 @@ public class PdsServiceTests
 
         _pdsMeshClient.RetrieveMessages().Returns(messages);
         _pdsMeshClient.RetrieveMessage("message").Returns(new Message() { FileContent = "content"u8.ToArray() });
-        _fhirClient.ConvertData(Arg.Any<ConvertDataRequest>()).Returns(new Bundle());
-        _fhirClient.TransactionAsync<Patient>(Arg.Any<Bundle>()).Returns(new Bundle());
 
         var filePath = Path.Combine(Directory.GetCurrentDirectory(), BaseSamplePath, "MeshResponseMergedPatient.csv");
         var fileContent = await File.ReadAllTextAsync(filePath);
         var result = _pdsMeshCsvToJsonConverter.Convert(fileContent);
-
         _csvToJsonConverter.Convert(Arg.Any<string>()).Returns(result);
+
+        _fhirClient.ConvertData(Arg.Any<ConvertDataRequest>()).Returns(new Bundle
+        {
+            Entry =
+            [
+                new()
+                {
+                    Resource = new Patient { Id = "1234567890" },
+                    Request = new RequestComponent { Method = Bundle.HTTPVerb.PUT, Url = "Patient/1234567890" }
+                }
+            ]
+        });
 
         await _sut.RetrieveMeshMessages(new CancellationToken());
 
         await _pdsMeshClient.Received(1).RetrieveMessages();
         await _fhirClient.Received(1).ConvertData(Arg.Any<ConvertDataRequest>());
-        await _fhirClient.Received(1).TransactionAsync<Patient>(Arg.Any<Bundle>());
+        await _fhirClient.Received(1).TransactionAsync<Patient>(Arg.Is<Bundle>(bundle => bundle.Entry.Count == 2
+            && bundle.Entry[0].Request.Url == "Patient/1234567890"
+            && bundle.Entry[0].Request.Method == Bundle.HTTPVerb.PUT
+            && bundle.Entry[1].Request.Url == "Patient/9990554412"
+            && bundle.Entry[1].Request.Method == Bundle.HTTPVerb.DELETE));
     }
 
     [Fact]
@@ -446,20 +459,35 @@ public class PdsServiceTests
 
         _pdsMeshClient.RetrieveMessages().Returns(messages);
         _pdsMeshClient.RetrieveMessage("message").Returns(new Message() { FileContent = "content"u8.ToArray() });
-        _fhirClient.ConvertData(Arg.Any<ConvertDataRequest>()).Returns(new Bundle());
-        _fhirClient.TransactionAsync<Patient>(Arg.Any<Bundle>()).Returns(new Bundle());
 
         var filePath = Path.Combine(Directory.GetCurrentDirectory(), BaseSamplePath, "MeshResponseDeletedAndMergedPatients.csv");
         var fileContent = await File.ReadAllTextAsync(filePath);
         var result = _pdsMeshCsvToJsonConverter.Convert(fileContent);
-
         _csvToJsonConverter.Convert(Arg.Any<string>()).Returns(result);
+
+        _fhirClient.ConvertData(Arg.Any<ConvertDataRequest>()).Returns(new Bundle
+        {
+            Entry =
+            [
+                new()
+                {
+                    Resource = new Patient { Id = "1234567890" },
+                    Request = new RequestComponent { Method = Bundle.HTTPVerb.PUT, Url = "Patient/1234567890" }
+                }
+            ]
+        });
 
         await _sut.RetrieveMeshMessages(new CancellationToken());
 
         await _pdsMeshClient.Received(1).RetrieveMessages();
         await _fhirClient.Received(1).ConvertData(Arg.Any<ConvertDataRequest>());
-        await _fhirClient.Received(1).TransactionAsync<Patient>(Arg.Any<Bundle>());
+        await _fhirClient.Received(1).TransactionAsync<Patient>(Arg.Is<Bundle>(bundle => bundle.Entry.Count == 3
+            && bundle.Entry[0].Request.Url == "Patient/1234567890"
+            && bundle.Entry[0].Request.Method == Bundle.HTTPVerb.PUT
+            && bundle.Entry[1].Request.Url == "Patient/9990554414"
+            && bundle.Entry[1].Request.Method == Bundle.HTTPVerb.DELETE
+            && bundle.Entry[2].Request.Url == "Patient/9990554412"
+            && bundle.Entry[2].Request.Method == Bundle.HTTPVerb.DELETE));
     }
 
     #endregion

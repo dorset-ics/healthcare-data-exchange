@@ -248,17 +248,18 @@ public class PdsService(
         for (int i = records.Count - 1; i >= 0; i--)
         {
             var record = records[i];
-            if (record.ErrorSuccessCode != "91") continue;
-
-            patientsToBeDeleted.Add(record.NhsNumber!);
-
-            if (record.MatchedNhsNo != "0000000000" && record.NhsNumber != null)
+            if (record.ErrorSuccessCode == "91")
             {
-                record.NhsNumber = record.MatchedNhsNo;
-            }
-            else
-            {
-                records.RemoveAt(i);
+                patientsToBeDeleted.Add(record.NhsNumber!);
+
+                if (record.MatchedNhsNo != "0000000000" && record.NhsNumber != null)
+                {
+                    record.NhsNumber = record.MatchedNhsNo;
+                }
+                else
+                {
+                    records.RemoveAt(i);
+                }
             }
         }
 
