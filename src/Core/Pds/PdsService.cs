@@ -194,9 +194,7 @@ public class PdsService(
         List<string> patientsToBeDeleted = new List<string>();
         var modifiedCsvToJsonResult = HandleInvalidPdsPatients(csvToJsonResult.Value, patientsToBeDeleted);
 
-        await CallFHIRConvertAndUpdateResource(messageId, modifiedCsvToJsonResult, patientsToBeDeleted);
-
-        return Result.Success();
+        return await CallFHIRConvertAndUpdateResource(messageId, modifiedCsvToJsonResult, patientsToBeDeleted);
     }
 
     private async Task<Result> CallFHIRConvertAndUpdateResource(string messageId, string modifiedCsvToJsonResult, List<string> patientsToBeDeleted)
