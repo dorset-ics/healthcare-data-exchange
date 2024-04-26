@@ -192,7 +192,7 @@ public class PdsService(
         logger.LogInformation("Message {message} converted to JSON", messageId);
 
         List<string> patientsToBeDeleted = new List<string>();
-        var modifiedCsvToJsonResult = HandleInvalidPDSPatients(csvToJsonResult.Value, patientsToBeDeleted);
+        var modifiedCsvToJsonResult = HandleInvalidPdsPatients(csvToJsonResult.Value, patientsToBeDeleted);
 
         await CallFHIRConvertAndUpdateResource(messageId, modifiedCsvToJsonResult, patientsToBeDeleted);
 
@@ -240,7 +240,7 @@ public class PdsService(
         }
     }
 
-    private string HandleInvalidPDSPatients(string csvToJsonResult, List<string> patientsToBeDeleted)
+    private string HandleInvalidPdsPatients(string csvToJsonResult, List<string> patientsToBeDeleted)
     {
         var response = JsonSerializer.Deserialize<Dictionary<string, List<PdsMeshRecordResponse>>>(csvToJsonResult);
         var records = response?["patients"]!;
