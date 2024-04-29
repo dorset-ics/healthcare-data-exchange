@@ -282,8 +282,8 @@ public class PdsMeshTests(ITestOutputHelper outputHelper) : BaseApiTest(outputHe
 
         var request = new RestRequest()
         {
-            Resource = $"/Patient/{nhsNumber}", 
-            Method = Method.Put, 
+            Resource = $"/Patient/{nhsNumber}",
+            Method = Method.Put,
             RequestFormat = DataFormat.Json
         };
 
