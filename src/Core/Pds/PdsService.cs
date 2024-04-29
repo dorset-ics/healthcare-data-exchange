@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text;
+using System.Text.Json;
 using Core.Common.Abstractions.Clients;
 using Core.Common.Abstractions.Converters;
 using Core.Common.Models;
@@ -10,7 +11,6 @@ using Core.Pds.Models;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
 using Task = System.Threading.Tasks.Task;
 
 namespace Core.Pds;
@@ -192,12 +192,9 @@ public class PdsService(
         logger.LogInformation("Message {message} converted to JSON", messageId);
 
         List<string> patientsToBeDeleted = new List<string>();
+        var modifiedCsvToJsonResult = HandleInvalidPdsPatients(csvToJsonResult.Value, patientsToBeDeleted);
 
-        var modifiedCsvToJsonResult = HandleInvalidPDSPatients(csvToJsonResult, patientsToBeDeleted);
-
-        await CallFHIRConvertAndUpdateResource(messageId, modifiedCsvToJsonResult, patientsToBeDeleted);
-
-        return Result.Success();
+        return await CallFHIRConvertAndUpdateResource(messageId, modifiedCsvToJsonResult, patientsToBeDeleted);
     }
 
     private async Task<Result> CallFHIRConvertAndUpdateResource(string messageId, string modifiedCsvToJsonResult, List<string> patientsToBeDeleted)
@@ -206,7 +203,7 @@ public class PdsService(
         var jsonToBundleResult = await fhirClient.ConvertData(conversionRequest);
         if (jsonToBundleResult.IsFailure)
         {
-            logger.LogError("Error while converting Message {message} converted to FHIR bundle", messageId);
+            logger.LogDebug("Error while converting Message {message} converted to FHIR bundle", messageId);
             return jsonToBundleResult;
         }
 
@@ -218,7 +215,7 @@ public class PdsService(
         var transactionResult = await fhirClient.TransactionAsync<Patient>(jsonToBundleResult.Value);
         if (transactionResult.IsFailure)
         {
-            logger.LogError("Error while calling FHIR for TransactionAsync with Message {message}", messageId);
+            logger.LogDebug("Error while calling FHIR for TransactionAsync with Message {message}", messageId);
             return transactionResult;
         }
 
@@ -241,27 +238,30 @@ public class PdsService(
         }
     }
 
-    private string HandleInvalidPDSPatients(Result<string> csvToJsonResult, List<string> patientsToBeDeleted)
+    private string HandleInvalidPdsPatients(string csvToJsonResult, List<string> patientsToBeDeleted)
     {
-        var jsonObject = JObject.Parse(csvToJsonResult.Value);
-        var patientsArray = (JArray)jsonObject["patients"]!;
+        var response = JsonSerializer.Deserialize<Dictionary<string, List<PdsMeshRecordResponse>>>(csvToJsonResult);
+        var records = response?["patients"]!;
 
-        for (int i = 0; i < patientsArray.Count; i++)
+        for (int i = records.Count - 1; i >= 0; i--)
         {
-            var record = patientsArray[i].ToObject<PdsMeshRecordResponse>();
-            if (record?.ErrorSuccessCode == "91")
+            var record = records[i];
+            if (record.ErrorSuccessCode == "91")
             {
                 patientsToBeDeleted.Add(record.NhsNumber!);
+
                 if (record.MatchedNhsNo != "0000000000" && record.NhsNumber != null)
                 {
                     record.NhsNumber = record.MatchedNhsNo;
                 }
+                else
+                {
+                    records.RemoveAt(i);
+                }
             }
-            patientsArray[i] = JObject.FromObject(record!);
         }
 
-        var modifiedJson = jsonObject.ToString();
-        return modifiedJson;
+        return JsonSerializer.Serialize(response);
     }
 
 }
