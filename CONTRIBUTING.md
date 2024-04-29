@@ -45,6 +45,7 @@ We are happy to recognize contributors to this repository. If you have made a si
 1. John Collinson
 1. Anat Balzam
 1. Arpit Gaur
+1. David Finson
 1. Dor Lugasi-Gal
 1. Frances Tibble
 1. Jack Jessel
@@ -52,4 +53,4 @@ We are happy to recognize contributors to this repository. If you have made a si
 1. Martyna Marcinkowska
 1. Nava Vaisman Levy
 1. Sharon Hart
-1. David Finson
+1. Shiran Rubin Manaev 
