@@ -1,8 +1,8 @@
 set -o xtrace
 #!/bin/bash
 
-# Create default .env file for docker-compose
-cp .env.template .env
+# !!! ENSURE YOU HAVE CONFIGURED YOUR .env !!! 
+# e.g. cp .env.template .env
 
 docker compose -f docker-compose.yml up -d --build --force-recreate
 
