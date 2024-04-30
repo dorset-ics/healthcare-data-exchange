@@ -86,7 +86,8 @@ public class DataHubFhirClient(
         {
             var result = await dataHubFhirClient.TransactionAsync<T>(bundle);
             return result;
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             logger.LogError(ex, "Error creating transaction bundle: {ErrorMessage}", ex.Message);
             return ex;
