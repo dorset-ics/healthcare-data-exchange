@@ -82,7 +82,16 @@ public class DataHubFhirClient(
 
         logger.LogInformation("Transaction bundle with total of {Total}", bundle.Entry.Count);
 
-        return await dataHubFhirClient.TransactionAsync<T>(bundle);
+        try
+        {
+            var result = await dataHubFhirClient.TransactionAsync<T>(bundle);
+            return result;
+        } catch (Exception ex)
+        {
+            logger.LogError(ex, "Error creating transaction bundle: {ErrorMessage}", ex.Message);
+            return ex;
+        }
+        
     }
 
     public async Task<Result<T>> CreateResource<T>(T resource) where T : Resource

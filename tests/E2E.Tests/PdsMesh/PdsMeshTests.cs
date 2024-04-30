@@ -28,7 +28,7 @@ public class PdsMeshTests(ITestOutputHelper outputHelper) : BaseApiTest(outputHe
 
         var messageContent = await File.ReadAllTextAsync("PdsMesh/Samples/MeshResponseSinglePatient.csv");
 
-        var dateMeshMessageSent = DateTime.Now;
+        var dateMeshMessageSent = DateTime.UtcNow;
 
         await SendPdsMeshMessage(messageContent);
 
@@ -46,7 +46,7 @@ public class PdsMeshTests(ITestOutputHelper outputHelper) : BaseApiTest(outputHe
 
         var messageContent = await File.ReadAllTextAsync("PdsMesh/Samples/MeshResponseMultiplePatients.csv");
 
-        var dateMeshMessageSent = DateTime.Now;
+        var dateMeshMessageSent = DateTime.UtcNow;
 
         await SendPdsMeshMessage(messageContent);
 
@@ -66,7 +66,7 @@ public class PdsMeshTests(ITestOutputHelper outputHelper) : BaseApiTest(outputHe
 
         var messageContent = await File.ReadAllTextAsync("PdsMesh/Samples/MeshResponseSinglePatient.csv");
 
-        var dateMeshMessageSent = DateTime.Now;
+        var dateMeshMessageSent = DateTime.UtcNow;
 
         await SendPdsMeshMessage(messageContent);
 
@@ -86,7 +86,7 @@ public class PdsMeshTests(ITestOutputHelper outputHelper) : BaseApiTest(outputHe
 
         var messageContent = await File.ReadAllTextAsync("PdsMesh/Samples/MeshResponseMultiplePatients.csv");
 
-        var dateMeshMessageSent = DateTime.Now;
+        var dateMeshMessageSent = DateTime.UtcNow;
 
         await SendPdsMeshMessage(messageContent);
 
