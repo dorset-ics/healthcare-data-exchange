@@ -92,7 +92,7 @@ public class DataHubFhirClient(
             logger.LogError(ex, "Error creating transaction bundle: {ErrorMessage}", ex.Message);
             return ex;
         }
-        
+
     }
 
     public async Task<Result<T>> CreateResource<T>(T resource) where T : Resource
@@ -110,7 +110,7 @@ public class DataHubFhirClient(
             logger.LogError("Error creating resource {ResourceType} to FHIR service: {ErrorMessage}", resource.TypeName, ex.Message);
             return ex;
         }
-        
+
     }
 
     public async Task<Result<T>> SearchResourceByIdentifier<T>(string identifier) where T : Resource, new()
