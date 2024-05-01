@@ -84,8 +84,7 @@ public class DataHubFhirClient(
 
         try
         {
-            var result = await dataHubFhirClient.TransactionAsync<T>(bundle);
-            return result;
+            return await dataHubFhirClient.TransactionAsync<T>(bundle);
         }
         catch (Exception ex)
         {
