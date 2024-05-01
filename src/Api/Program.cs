@@ -28,8 +28,6 @@ app.UseHttpsRedirection();
 app.UseCors("DexCorsPolicy");
 app.MapHealthChecks("/_health", new HealthCheckOptions { ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse });
 app.MapGet("/", () => "Welcome to Healthcare Data Exchange. Please refer to the documentation for detailed usage guidelines.").WithName("GetIndex");
-app.MapPost("/internal/run/ods", app.Services.GetRequiredService<IOdsService>().IngestCsvDownloads).WithName("IngestCsvDownloads").WithTags("RequiredRole=DataAdministrator");
-app.MapPost("/internal/run/pds", app.Services.GetRequiredService<IPdsService>().RetrieveMeshMessages).WithName("RetrievePdsMeshMessages").WithTags("RequiredRole=DataAdministrator");
 app.MapCarter();
 
 if (app.Environment.IsEnvironment("Local"))
