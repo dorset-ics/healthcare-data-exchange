@@ -32,7 +32,7 @@ public class PdsMeshTests(ITestOutputHelper outputHelper) : BaseApiTest(outputHe
 
         await SendPdsMeshMessage(messageContent);
 
-        InvokePdsRetrieveMessages();
+        await InvokePdsRetrieveMessages();
 
         AssertPdsMeshResponseMessageHandledCorrectly(messageContent, dateMeshMessageSent);
     }
@@ -50,7 +50,7 @@ public class PdsMeshTests(ITestOutputHelper outputHelper) : BaseApiTest(outputHe
 
         await SendPdsMeshMessage(messageContent);
 
-        InvokePdsRetrieveMessages();
+        await InvokePdsRetrieveMessages();
 
         AssertPdsMeshResponseMessageHandledCorrectly(messageContent, dateMeshMessageSent);
     }
@@ -70,7 +70,7 @@ public class PdsMeshTests(ITestOutputHelper outputHelper) : BaseApiTest(outputHe
 
         await SendPdsMeshMessage(messageContent);
 
-        InvokePdsRetrieveMessages();
+        await InvokePdsRetrieveMessages();
 
         AssertPdsMeshResponseMessageHandledCorrectly(messageContent, dateMeshMessageSent);
     }
@@ -90,15 +90,15 @@ public class PdsMeshTests(ITestOutputHelper outputHelper) : BaseApiTest(outputHe
 
         await SendPdsMeshMessage(messageContent);
 
-        InvokePdsRetrieveMessages();
+        await InvokePdsRetrieveMessages();
 
         AssertPdsMeshResponseMessageHandledCorrectly(messageContent, dateMeshMessageSent);
     }
 
-    private void InvokePdsRetrieveMessages()
+    private async Task InvokePdsRetrieveMessages()
     {
         var pdsRequest = Post("/internal/run/pds", null, null);
-        var runPdsRequest = ApiClient.Execute(pdsRequest);
+        var runPdsRequest = await ApiClient.ExecuteAsync(pdsRequest);
         runPdsRequest.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
