@@ -110,10 +110,9 @@ public class PdsMeshTests(ITestOutputHelper outputHelper) : BaseApiTest(outputHe
             meshSettings.MailboxId,
             meshSettings.WorkflowId,
             messageContent,
-            mexFileName: $"RESP_MPTREQ_{DateTime.Now:yyyyMMddHHmmss}_{DateTime.Now:yyyyMMddHHmmss}.csv",
+            mexFileName: $"RESP_MPTREQ_{DateTime.UtcNow:yyyyMMddHHmmss}_{DateTime.UtcNow:yyyyMMddHHmmss}.csv",
             contentType: MediaTypeNames.Text.Csv);
         resp.MessageId.ShouldNotBeEmpty();
-        return;
     }
 
     private void EnsurePatientDoesNotExist(string nhsNumber)
