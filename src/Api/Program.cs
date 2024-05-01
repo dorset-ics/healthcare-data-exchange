@@ -1,8 +1,6 @@
 using Api;
 using Carter;
 using Core;
-using Core.Ods.Abstractions;
-using Core.Pds.Abstractions;
 using HealthChecks.UI.Client;
 using Infrastructure;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
