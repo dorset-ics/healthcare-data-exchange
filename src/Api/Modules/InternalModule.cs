@@ -15,7 +15,7 @@ public class InternalModule : CarterModule
             .WithName("RetrievePdsMeshMessages").WithTags("RequiredRole=DataAdministrator");
     }
 
-    private static async Task<IResult> RunOds(HttpContext context, IOdsService odsService,
+    public static async Task<IResult> RunOds(HttpContext context, IOdsService odsService,
         ILogger<InternalModule> logger)
     {
         logger.LogInformation("Starting ODS CSV download ingestion job");
@@ -23,7 +23,7 @@ public class InternalModule : CarterModule
         return Results.Ok();
     }
 
-    private static async Task<IResult> RunPds(HttpContext context, IPdsService pdsService,
+    public static async Task<IResult> RunPds(HttpContext context, IPdsService pdsService,
         ILogger<InternalModule> logger)
     {
         logger.LogInformation("Starting PDS mesh message retrieval job");
