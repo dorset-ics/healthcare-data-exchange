@@ -14,14 +14,14 @@ public class InternalModuleTests : IDisposable
         _webApplicationFactory = new ApiWebApplicationFactory();
         _client = _webApplicationFactory.CreateClient();
     }
-    
+
     public void Dispose()
     {
         _webApplicationFactory.Dispose();
         _client.Dispose();
         GC.SuppressFinalize(this);
     }
-    
+
     [Fact]
     public async Task GivenValidPayload_WhenInternalRunOdsIsCalled_ThenRunSuccessfully()
     {
