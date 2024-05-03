@@ -53,4 +53,4 @@ We are happy to recognize contributors to this repository. If you have made a si
 1. Martyna Marcinkowska
 1. Nava Vaisman Levy
 1. Sharon Hart
-1. Shiran Rubin Manaev 
+1. Shiran Rubin Manaev
