@@ -1,5 +1,6 @@
 using Api.BackgroundServices;
 using Carter;
+using Core.Ndop.Abstractions;
 using Core.Ods.Abstractions;
 using Core.Pds.Abstractions;
 
@@ -13,6 +14,8 @@ public class InternalModule : CarterModule
             .WithName("IngestCsvDownloads").WithTags("RequiredRole=DataAdministrator");
         app.MapPost("/internal/run/pds", RunPds)
             .WithName("RetrievePdsMeshMessages").WithTags("RequiredRole=DataAdministrator");
+        app.MapPost("/internal/run/ndop", RunNdop)
+            .WithName("RetrieveNdopMeshMessages").WithTags("RequiredRole=DataAdministrator");
     }
 
     public static async Task<IResult> RunOds(HttpContext context, IOdsService odsService,
@@ -28,6 +31,14 @@ public class InternalModule : CarterModule
     {
         logger.LogInformation("Starting PDS mesh message retrieval job");
         await pdsService.RetrieveMeshMessages(context.RequestAborted);
+        return Results.Ok();
+    }
+    
+    public static async Task<IResult> RunNdop(HttpContext context, INdopService ndopService,
+        ILogger<InternalModule> logger)
+    {
+        logger.LogInformation("Starting NDOP messages retrieval job");
+        await ndopService.RetrieveMeshMessages(context.RequestAborted);
         return Results.Ok();
     }
 }
