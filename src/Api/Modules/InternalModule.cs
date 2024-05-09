@@ -1,4 +1,3 @@
-using Api.BackgroundServices;
 using Carter;
 using Core.Ndop.Abstractions;
 using Core.Ods.Abstractions;
@@ -33,7 +32,7 @@ public class InternalModule : CarterModule
         await pdsService.RetrieveMeshMessages(context.RequestAborted);
         return Results.Ok();
     }
-    
+
     public static async Task<IResult> RunNdop(HttpContext context, INdopService ndopService,
         ILogger<InternalModule> logger)
     {
