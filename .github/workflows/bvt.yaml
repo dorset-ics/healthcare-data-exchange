@@ -35,7 +35,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # v4.1.5
       with:
         clean: true
     
@@ -114,7 +114,7 @@ jobs:
       # GitHub Actions does not have built-in support for publishing test results 
       # like Azure Pipelines does. This step will upload the test results as a 
       # workflow artifact, which you can download from the GitHub web interface.
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
       if: always()
       with:
         name: TestResults
@@ -130,14 +130,14 @@ jobs:
       # GitHub Actions does not have built-in support for publishing code coverage 
       # results like Azure Pipelines does. This step will upload the test results 
       # as a workflow artifact, which you can download from the GitHub web interface.
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
       with:
         name: CodeCoverage
         path: ./CodeCoverage/Cobertura.xml
 
     - name: Check test line coverage gate
       # needs to be tested to see if it works when workflow was triggered by PR from fork
-      uses: irongut/CodeCoverageSummary@v1.3.0
+      uses: irongut/CodeCoverageSummary@51cc3a756ddcd398d447c044c02cb6aa83fdae95 # v1.3.0
       with:
         filename: ./CodeCoverage/Cobertura.xml
         thresholds: ${{ inputs.coverage_gate }}
