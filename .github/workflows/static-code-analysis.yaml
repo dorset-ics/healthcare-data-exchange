@@ -37,7 +37,7 @@ jobs:
             - name: Create pre-commit requirements file
               run: |
                 echo "pre-commit == 3.7.1 --hash=sha256:fae36fd1d7ad7d6a5a1c0b0d5adb2ed1a3bda5a21bf6c3e5372073d7a11cd4c5" > requirements.txt  
-                echo "cfgv == 3.4.0 --hash=sha256:b5b1d8719685a8621ac064030de39a2151ee5d37cc1a30cf2e86383bb8bb86b8" >> requirements.txt  
+                echo "cfgv == 3.4.0 --hash=sha256:b7265b1f29fd3316bfcd2b330d63d024f2bfd8bcb8b0272f8e19a504856c48f9" >> requirements.txt  
 
             - name: Install pre-commit
               run: python -m pip install -r ./requirements.txt --no-deps
