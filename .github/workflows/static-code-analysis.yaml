@@ -3,14 +3,12 @@ name: Static Code Analysis
 on:
   workflow_call:
 
-permissions: read-all
+permissions:
+  contents: read
 
 jobs:
   static-code-analysis:
     runs-on: ubuntu-latest
-    permissions:
-      statuses: write
-      pull-requests: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

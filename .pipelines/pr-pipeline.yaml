@@ -3,8 +3,6 @@ trigger: none
 pr:
 - main
 
-permissions: read-all
-
 stages:
   - stage: StaticCodeAnalysis
     displayName: Static Code Analysis

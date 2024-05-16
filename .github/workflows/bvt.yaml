@@ -29,15 +29,12 @@ on:
       NVD_API_KEY:
         required: true
 
-# permissions:
-#   contents: read
+permissions:
+  contents: read
 
 jobs:
   bvt:
     runs-on: ubuntu-latest
-    # permissions:
-    #   statuses: write
-    #   pull-requests: write
     steps:
     - name: Checkout
       uses: actions/checkout@v4
