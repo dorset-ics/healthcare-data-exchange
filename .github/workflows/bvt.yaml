@@ -29,7 +29,8 @@ on:
       NVD_API_KEY:
         required: true
 
-permissions: read-all
+permissions:
+  contents: read
 
 jobs:
   bvt:
