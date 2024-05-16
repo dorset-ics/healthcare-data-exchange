@@ -1,4 +1,5 @@
-FROM mcr.microsoft.com/dotnet/sdk@sha256:64db914029faa026ff41d9284fa3badf039f94292ff1e5ba91e4b4b76e090968 # v7.0
+# v7.0
+FROM mcr.microsoft.com/dotnet/sdk@sha256:64db914029faa026ff41d9284fa3badf039f94292ff1e5ba91e4b4b76e090968
 
 RUN apt update && apt-get install jq curl bash
 
