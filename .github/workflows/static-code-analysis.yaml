@@ -3,6 +3,8 @@ name: Static Code Analysis
 on:
   workflow_call:
 
+permissions: read-all
+
 jobs:
     static-code-analysis:
         runs-on: ubuntu-latest

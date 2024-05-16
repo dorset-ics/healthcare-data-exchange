@@ -29,6 +29,8 @@ on:
       NVD_API_KEY:
         required: true
 
+permissions: read-all
+
 jobs:
   bvt:
     runs-on: ubuntu-latest

@@ -2,6 +2,8 @@ trigger: none
 
 pr: none
 
+permissions: read-all
+
 parameters:
   - name: env
     displayName: Environment to deploy to

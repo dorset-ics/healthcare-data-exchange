@@ -5,12 +5,13 @@ on:
     branches:
       - main
 
-permissions:
-  contents: write
+permissions: read-all
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - name: Configure Git Credentials
