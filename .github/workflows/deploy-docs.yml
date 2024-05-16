@@ -29,5 +29,5 @@ jobs:
             mkdocs-material-
       - name: Create mkdocs-material requirements file
         run: echo "mkdocs-material == 9.5.23 --hash=sha256:bb6c698c20134e2954e1b64bfbfb3d331e8db1df" > requirements.txt
-      - run: pip install --no-deps
+      - run: pip install -r ./requirements.txt --no-deps
       - run: mkdocs gh-deploy --force
