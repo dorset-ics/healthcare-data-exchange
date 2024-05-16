@@ -38,7 +38,7 @@ jobs:
               run: echo "pre-commit == 3.7.1 --hash=sha256:9ee076835365c0b3aa700de8f574def623826385" > requirements.txt
 
             - name: Install pre-commit
-              run: python -m pip install --no-deps
+              run: python -m pip install -r ./requirements.txt --no-deps
 
             - name: Run pre-commit checks
               run: pre-commit run --all-files --show-diff-on-failure
