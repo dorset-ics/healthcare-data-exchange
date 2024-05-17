@@ -1,0 +1,2016 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="An [MkDocs](https://www.mkdocs.org/) site for the Healthcare Data Exchange repository documentation">
+      
+      
+      
+      
+        <link rel="prev" href="../../design/facade/infrastructure/">
+      
+      
+        <link rel="next" href="../deployment/">
+      
+      
+      <link rel="icon" href="../../assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.23">
+    
+    
+      
+        <title>Overview - Healthcare Data Exchange</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../styles.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="nhs" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#overview" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Healthcare Data Exchange" class="md-header__button md-logo" aria-label="Healthcare Data Exchange" data-md-component="logo">
+      
+  <img src="../../assets/nhs-logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Healthcare Data Exchange
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Overview
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="nhs" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Healthcare Data Exchange" class="md-nav__button md-logo" aria-label="Healthcare Data Exchange" data-md-component="logo">
+      
+  <img src="../../assets/nhs-logo.png" alt="logo">
+
+    </a>
+    Healthcare Data Exchange
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../setup-guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Setup Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Developer
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Developer
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/development-guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Development Guidelines
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/configuration-structure/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configuration Structure
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/integration-guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Integration Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/quick-start-cloud-dev/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cloud Development & Testing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/pipelines/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pipelines
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/version-control/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Version Control
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/source-integration-setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Source Integration Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/swagger-file/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Swagger
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Design
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Design
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/security-plan/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Security Plan
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Facade Application
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            Facade Application
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/facade/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/facade/api/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Api
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/facade/infrastructure/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Infrastructure
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Infrastructure
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Infrastructure
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#maintf" class="md-nav__link">
+    <span class="md-ellipsis">
+      main.tf
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#variablestf" class="md-nav__link">
+    <span class="md-ellipsis">
+      variables.tf
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tfvars" class="md-nav__link">
+    <span class="md-ellipsis">
+      .tfvars
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#app-registrationtf" class="md-nav__link">
+    <span class="md-ellipsis">
+      app-registration.tf
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#working-with-variables-and-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      Working with variables and values
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-passing-the-app-reg-uri-between-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example: Passing the App Reg URI between modules
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dynamic-creation-of-apim-policies-using-terraform" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dynamic creation of APIM policies using Terraform
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-are-tags-used-in-the-apim-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      How are tags used in the APIM policy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-tags-to-an-endpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding tags to an endpoint
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#putting-it-all-together" class="md-nav__link">
+    <span class="md-ellipsis">
+      Putting it all together
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Deployment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../environments/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Environments
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../identity/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Identity
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../custom-domain-and-tls-ssl/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Domain and TLS/SSL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Ingestion
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Ingestion
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ingestion/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ingestion/hl7v2-ingestion/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    HL7v2
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ingestion/fhir-ingestion/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FHIR
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ingestion/csv-ingestion/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CSV
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Data Mapping
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Data Mapping
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-mapping/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-mapping/snomed-code-system/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SNOMED Code System
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-mapping/testing-and-validation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Testing and Validation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_4" id="__nav_8_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Mappings
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_4">
+            <span class="md-nav__icon md-icon"></span>
+            Mappings
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-mapping/mappings/pds-mesh/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PDS MESH
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-mapping/mappings/ndop-mesh/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    NDOP MESH
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-mapping/mappings/ndop-fhir/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    NDOP FHIR
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    FHIR Store
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            FHIR Store
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fhir-store/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fhir-store/profiles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Profiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fhir-store/ids-and-references/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    IDs and References
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    National Services
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            National Services
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../national-services/personal-demographics-service/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Personal Demographics Service
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../national-services/national-data-opt-out/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    National Data Opt-Out
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../national-services/organisation-data-service/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Organisation Data Service
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../national-services/mesh/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MESH
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../national-services/certificate-preparation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Certificate Preparation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#maintf" class="md-nav__link">
+    <span class="md-ellipsis">
+      main.tf
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#variablestf" class="md-nav__link">
+    <span class="md-ellipsis">
+      variables.tf
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tfvars" class="md-nav__link">
+    <span class="md-ellipsis">
+      .tfvars
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#app-registrationtf" class="md-nav__link">
+    <span class="md-ellipsis">
+      app-registration.tf
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#working-with-variables-and-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      Working with variables and values
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-passing-the-app-reg-uri-between-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example: Passing the App Reg URI between modules
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dynamic-creation-of-apim-policies-using-terraform" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dynamic creation of APIM policies using Terraform
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-are-tags-used-in-the-apim-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      How are tags used in the APIM policy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-tags-to-an-endpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding tags to an endpoint
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#putting-it-all-together" class="md-nav__link">
+    <span class="md-ellipsis">
+      Putting it all together
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="overview">Overview</h1>
+<p>Our resources for DEX are described using <a href="https://developer.hashicorp.com/terraform/docs">Terraform</a>, which is an infrastructure-as-code tool. This means that we can specify what the desired state of our system is, and Terraform will figure out how to create that state.</p>
+<p>This overview goes over some of the key concepts and files for understanding how the infrastructure is deployed. In particular, the following contents will provide an in-depth explanation of how the end-to-end process for our deployment works.</p>
+<p>We'll cover:</p>
+<ol>
+<li>How our API uses <code>tags</code> to add metadata to endpoints and routes.</li>
+<li>How our CI pipeline generates a Swagger file, which contains our Open-API specifications.</li>
+<li>How that same Swagger file is referenced to deploy our Azure API Management service.</li>
+<li>How the <code>tags</code> we defined are used to create policies in Azure API Management.</li>
+</ol>
+<h2 id="contents">Contents</h2>
+<ol>
+<li><a href="#maintf">The entry point - main.tf</a></li>
+<li><a href="#variablestf">Where variables are declared - variables.tf</a></li>
+<li><a href="#tfvars">Where variable values are provided - .tfvars</a></li>
+<li><a href="#app-registrationtf">A top-level resource - app-registration.tf</a></li>
+<li><a href="#working-with-variables-and-values">Working with variables and values</a></li>
+<li><a href="#dynamic-creation-of-apim-policies-using-terraform">Dynamic creation of APIM policies using Terraform</a></li>
+<li><a href="#putting-it-all-together">Putting it all together</a></li>
+</ol>
+<h2 id="maintf">main.tf</h2>
+<p>This is the primary entry point for our Terraform configuration. It is where we define the providers we use and Terraform modules we want to include in our deployment. For example, since we're creating our infrastructure on Azure, we use the <code>azurerm</code> provider. See docs <a href="https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs">Azure Provider</a>.</p>
+<p>In addition, we also define different modules, these are self-contained packages of Terraform configurations that are managed as a group. This is done to improve modularity and maintainability by breaking configurations into smaller modular constructs.</p>
+<p>In our <code>main.tf</code> file, we reference a module for setting up a network, one for setting up our health services, and another for more general services we use. These are referenced from a subfolder for each. Note that, these modules can also have their own respective <code>main.tf</code> file, which differs to <code>main.tf</code> in the root.</p>
+<p>Each module consists of the variables that it needs. It is from the <code>main.tf</code> file that we specify a value for each of those variables. Consider this code snippet, and the different ways of assigning a variable a value:</p>
+<pre><code class="language-tf">resource &quot;azurerm_resource_group&quot; &quot;rg&quot; {
+  location = var.location
+  name     = &quot;rg-dex-${var.env}&quot;
+}
+
+module &quot;network&quot; {
+  source                              = &quot;./network&quot;
+  location                            = var.location
+  resource_group_name                 = azurerm_resource_group.rg.name
+}
+</code></pre>
+<ul>
+<li>The <code>source</code> argument is defined using a string.</li>
+<li>The <code>resource_group_name</code> variable is defined by referencing a resource we have already defined in the same module. That particular resource is the type "azurerm_resource_group" (see Terraform <a href="https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group">docs</a>), which we have given the name "rg". That resource has <code>location</code> and <code>name</code> variables, so we can access the desired variable by referencing the resource type, resource name, and resource variable as <code>azurerm_resource_group.rg.name</code>.</li>
+</ul>
+<h2 id="variablestf">variables.tf</h2>
+<p>The variables declared in this file can be used across multiple Terraform files within the same module. They are typically used to customize aspects of the resources being created, such as their names, locations, sizes, and so on.</p>
+<p>Here's an example of what a variable declaration looks like in the <code>variables.tf</code> file:</p>
+<pre><code class="language-tf">variable &quot;location&quot; {
+  type = string
+}
+</code></pre>
+<p>In this example, a variable named <code>location</code> is declared and it's of type <code>string</code>.</p>
+<h2 id="tfvars"><code>.tfvars</code></h2>
+<ul>
+<li>A <code>.tfvars</code> file (or Terraform Variables file) is used to set the values of the variables declared in our <code>variables.tf</code> file. The <code>.tfvars</code> file is a simple key-value store where the keys correspond to our variable names.</li>
+</ul>
+<p>For example in <code>tfvars.template</code>, we have the line:</p>
+<pre><code class="language-tf">location = &quot;UK South&quot;
+</code></pre>
+<p>For full instructions on how to use the <code>tfvars.template</code> see the <code>infrastructure/README.md</code>, which will give you instructions on how to use the <code>tfvars</code> for local development.</p>
+<p>A continuous integration (CI) and continuous deployment (CD) pipeline runs on each PR merge.</p>
+<p>More specifically, the CD pipeline is responsible for deployment, and the definition of the pipeline can be found in <code>.pipelines/cd-pipeline.yaml</code>. The stage "DeployInfrastructure" in the yaml file references the <code>.pipelines/templates/deploy-infrastructure.yaml</code> file.</p>
+<p>It is in this file where the values for the terraform variables are configured. Firstly, we login using the service principal, and add the build agent IP to keyvault so that the pipeline is able to access the necessary secrets.</p>
+<p>Next, a script is run which writes the values for each variable to a <code>tfvars</code> file for the given environment. This pulls values from the associated variables group in Azure DevOps. This means that values for variables can be kept in a single place and securely accessed.</p>
+<h2 id="app-registrationtf">app-registration.tf</h2>
+<p>Also in the top-level is the Terraform file for deploying the Application Registration which can be managed via <a href="https://learn.microsoft.com/en-us/entra/fundamentals/whatis">Microsoft Entra ID</a>. The documentation for the <code>azuread_application</code> resource can be found <a href="https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application">here</a>.</p>
+<p>Some important things to note are:</p>
+<ul>
+<li>The application is deployed and we specify its identifier uri.</li>
+<li>The identifier uri must be globally unique, so we append a random string onto the URI.</li>
+<li>The random string is generated using a function at the top of the file.</li>
+</ul>
+<p>When creating it, ensure that a group of owners is assigned. This step is crucial because adding more owners (and consequently granting permissions) becomes challenging unless at least one owner is initially assigned. The <code>app_registration_owners</code> is set in the pipeline variables group, and should include the IDs of the users who should be assigned ownership.</p>
+<p>The resource includes the scope "API.Call" which can be granted to a user or application that has permissions to call the API.</p>
+<p>It also includes the App Roles that the application is created with, such as <code>DataProvider</code> and <code>DataConsumer</code>, which can be assigned to users or applications. This allows us to control which endpoints they can call, given their role.</p>
+<p>To add a new App Role, define which members can be assigned the role (User or Application), description and name, and a unique id, as shown below:</p>
+<pre><code class="language-tf">  app_role {
+    allowed_member_types = [&quot;User&quot;, &quot;Application&quot;]
+    description          = &quot;DataAdministrator has full admin permissions&quot;
+    display_name         = &quot;DataAdministrator&quot;
+    enabled              = true
+    id                   = &quot;386395d3-901z-3156-ae07-34z0ba037z90&quot;
+    value                = &quot;DataAdministrator&quot;
+  }
+</code></pre>
+<p>Finally there is a pre-authorised application resource, the Azure CLI, which means that developers can use the Azure CLI to request an access token for the application registration.</p>
+<pre><code class="language-tf">resource &quot;azuread_application_pre_authorized&quot; &quot;azcli&quot; {
+  application_id       = azuread_application.app.id
+  authorized_client_id = var.azure_cli_client_id
+
+  permission_ids = flatten([
+    for api in azuread_application.app.api : [
+      for scope in api.oauth2_permission_scope : scope.id
+    ]
+  ])
+}
+</code></pre>
+<p>The app registration terraform file is in the top-level because we need to use the output in some of the follow-on modules. For example, in order to be able to create the policies in Azure API Management, we need to know the value of the application registration URI. We can only know the application registration URI <em>after</em> the application registration resource has been created, because of the requirement for a globally unique URI with a random guid.</p>
+<h2 id="working-with-variables-and-values">Working with variables and values</h2>
+<p>In Terraform, it's common to have multiple <code>variables.tf</code> files when you're working with modules. Each module in Terraform is a self-contained package of Terraform configurations that manages a collection of related resources, and each of these modules can have its own <code>variables.tf</code> file.</p>
+<p>The <code>variables.tf</code> file in each module is used to define the variables that are used in the module. This allows the module to accept inputs from the parent configuration or other modules.</p>
+<p>Here's an example of a directory structure with multiple modules, each having its own <code>variables.tf</code>:</p>
+<pre><code class="language-md">main.tf
+variables.tf
+network/
+  - main.tf
+  - variables.tf
+services/
+  - main.tf
+  - variables.tf
+  - api_management/
+    - main.tf
+    - variables.tf
+    - api_management_dex.tf
+</code></pre>
+<h2 id="example-passing-the-app-reg-uri-between-modules">Example: Passing the App Reg URI between modules</h2>
+<p>Using the example of the Application Registration resource, which is created at the top-most level, we'll see how the URI of that resource can be passed to other modules.</p>
+<p>First, if you open <code>main.tf</code>, you'll see that here the "services" module is declared, and values for the required variables are assigned. Here is a snippet, but the <code>app_registration_uri</code> is assigned the value of the app reg's <code>identifier_uri</code> (note: it's possible to assign multiple URIs, hence we take the first in the list):</p>
+<pre><code class="language-tf">module &quot;services&quot; {
+  app_registration_id              = azuread_application.app.client_id
+  app_registration_uri             = tolist(azuread_application.app.identifier_uris)[0]
+}
+</code></pre>
+<p>Next, the "services" module has a <code>main.tf</code> file, which in it includes the declaration for the Azure API Management module called "api_management". Here, in the same way, the app_registration_uri (which is now part of <code>variables.tf</code> within "services") can be accessed and assigned to the "api_management" module.</p>
+<pre><code class="language-tf">module &quot;api_management&quot; {
+  source                           = &quot;./api_management&quot;
+  app_registration_id              = var.app_registration_id
+  app_registration_uri             = var.app_registration_uri
+}
+</code></pre>
+<p>Then, within the "api_management" module, there is the file <code>api_management_dex.tf</code>, which defines the different APIM resources required for DEX. It is in this resource, which uses the <code>app_registration_uri</code> variable (which has been passed to it from the parent, "services"):</p>
+<pre><code class="language-tf">resource &quot;azurerm_api_management_named_value&quot; &quot;dex_app_id_uri&quot; {
+  name                = &quot;ApplicationIdUri&quot;
+  api_management_name = azurerm_api_management.apim.name
+  resource_group_name = var.resource_group_name
+  display_name        = &quot;ApplicationIdUri&quot;
+  value               = var.app_registration_uri
+}
+</code></pre>
+<p>Finally, that named value gets used in <code>policies/dex_operation_policy.tftpl</code>, e.g. we are able to inject the <code>ApplicationIdUri</code> like so:</p>
+<pre><code class="language-xml">&lt;audience&gt;{{ApplicationIdUri}}&lt;/audience&gt;
+</code></pre>
+<h2 id="dynamic-creation-of-apim-policies-using-terraform">Dynamic creation of APIM policies using Terraform</h2>
+<p>Azure API Management (APIM) policies are a powerful capability of the APIM service that allow the behaviour of the API operation to be modified without changing the code of the API itself. Policies are a series of statements that are executed sequentially on the request and/or response, and in DEX we use it for authentication and authorization - to check whether the user or application sending that request has permissions to access the endpoint. APIM policies are written in XML format.</p>
+<p>One downside of XML is that it is difficult to maintain and debug. This is relevant to our project as we have several endpoints, each with different policy requirements. Whilst some portions of the policy are similar, it would be difficult to maintain multiple XML files.</p>
+<p>Instead, we can use a <a href="https://developer.hashicorp.com/terraform/language/functions/templatefile">Terraform Template file</a> which has the extension <code>.tftpl</code>. A <code>.tftpl</code> file allows you to use interpolation syntax to embed variables or expressions that will be evaluated when the template is used in a Terraform configuration.</p>
+<p>In the "api_management" module, in the <code>locals.tf</code> file, you can see where the <code>dex_operation_policy</code> gets populated. What happens here is the <code>templatefile</code> function is used to render a template file with the provided variables (in this case, tags relating to the endpoint). This is done for each endpoint, so each endpoint has its own (custom) policy, which is determined by the tags.</p>
+<pre><code class="language-tf">locals {
+  apim_name      = &quot;apim-dex-${var.env}-${var.random_id}&quot;
+  apim_sku       = var.env == &quot;prd&quot; || var.env == &quot;stg&quot; ? &quot;Premium&quot; : &quot;Developer&quot;
+  apim_sku_name  = &quot;${local.apim_sku}_${var.apim_instance_count}&quot;
+  apim_dns_label = lower(replace(local.apim_name, &quot;-&quot;, &quot;&quot;))
+  public_ip_name = &quot;apim-ip-dex-${var.env}-${var.random_id}&quot;
+
+  open_api_specification = jsondecode(file(&quot;${path.module}/dex-swagger.json&quot;))
+
+  operations = flatten([
+    for endpoint in local.open_api_specification.paths : [
+      for endpointType in endpoint : {
+        operationId = endpointType.operationId
+        policy = templatefile(&quot;${path.module}/policies/dex_operation_policy.tftpl&quot;, {
+          tags = endpointType.tags
+        })
+      }
+    ]
+  ])
+}
+</code></pre>
+<h2 id="how-are-tags-used-in-the-apim-policy">How are tags used in the APIM policy</h2>
+<p>Let's see how the tags are used, and then return to where they come from.</p>
+<p>In the <code>dex_operation_policy.tftpl</code> file observe these two key areas.</p>
+<p>The first, we can see that if the provided "tags" variable contains the tag "FhirBackend", then it will inject a specific piece of XML.</p>
+<pre><code class="language-xml">        %{~ if contains(tags, &quot;FhirBackend&quot;) ~}
+        &lt;set-backend-service backend-id=&quot;fhir-server&quot; /&gt;
+        %{~ endif ~}
+</code></pre>
+<p>Secondly, if a particular endpoint has a <code>RequiredRole=DexProvider</code> tag for example, then this snippet of code will read the tags, check if any of the tags contains the string "RequiredRole". If so, then for each of the tags, it will check if it is a "RequiredRole" tag, and then extract the role using the substring function:</p>
+<pre><code class="language-xml">            %{~ if strcontains((join(&quot;;&quot;, tags)), &quot;RequiredRole&quot;)~}
+            &lt;required-claims&gt;
+                &lt;claim name=&quot;roles&quot; match=&quot;all&quot;&gt;
+                %{~ for tag in tags ~}
+                    %{~ if strcontains(tag, &quot;RequiredRole=&quot;) ~}
+                    &lt;value&gt;${substr(tag, 13, length(tag) - 1)}&lt;/value&gt;
+                    %{~ endif ~}
+                %{~ endfor ~}
+                &lt;/claim&gt;
+            &lt;/required-claims&gt;
+            %{~ endif ~}
+</code></pre>
+<p>E.g. when applied to <code>RequiredRole=DexProvider</code>, the following code would extract <code>DexProvider</code>.</p>
+<pre><code class="language-xml">{substr(tag, 13, length(tag) - 1)}
+</code></pre>
+<p>After the template is used, the XML would be for example:</p>
+<pre><code class="language-xml">            &lt;required-claims&gt;
+                &lt;claim name=&quot;roles&quot; match=&quot;all&quot;&gt;
+                    &lt;value&gt;DexProvider&lt;/value&gt;
+                &lt;/claim&gt;
+            &lt;/required-claims&gt;
+</code></pre>
+<h2 id="adding-tags-to-an-endpoint">Adding tags to an endpoint</h2>
+<p>When we define an API endpoint, we can assign it tags.
+In <code>src/Api/Modules/IngestModule.cs</code> we define a route for handling HTTP POST requests to the <code>$ingest</code> endpoint.</p>
+<ul>
+<li>The first argument to the "MapPost" method is "$ingest", which represents the URL path for the route. In this case, the route will be triggered when a POST request is made to the "/$ingest" endpoint.</li>
+<li>The second argument is a method called "Ingest", which is the handler for the route. This method will be executed when the route is triggered.</li>
+<li>When you use the "WithName" method to assign a name to an operation, that name becomes the operation ID (here, "PostIngest"). The OperationId ensures that the right policies are applied to the right API operations during deployment.</li>
+<li>The "WithTag" method assigns tags, which in our case is where we specify the required role a user or application would need in order to make a POST request to this endpoint.</li>
+</ul>
+<pre><code class="language-cs">    public override void AddRoutes(IEndpointRouteBuilder app)
+    {
+        app.MapPost(&quot;$ingest&quot;, Ingest).WithName(&quot;PostIngest&quot;).WithTags(&quot;RequiredRole=DataProvider&quot;);
+    }
+</code></pre>
+<p>Another example of this might be, if adding additional roles:</p>
+<pre><code class="language-cs">    public override void AddRoutes(IEndpointRouteBuilder app)
+    {
+        app.MapPost(&quot;$ingest&quot;, Ingest).WithName(&quot;PostIngest&quot;).WithTags(&quot;RequiredRole=DataProvider&quot;,&quot;RequiredRole=DataAdministrator&quot;);
+    }
+</code></pre>
+<p>As explained in <a href="../../developer/swagger-file/">swagger-file.md</a>, as part of API Management we have a Swagger file which describes the API. The file is not stored in the repository and is instead generated when the CI pipeline is built.</p>
+<p>If you have access, you can view the latest swagger file:</p>
+<ol>
+<li>Go to Pipelines</li>
+<li>Click <strong>CI Pipeline</strong></li>
+<li>Select the latest job run (or whichever you're interested in)</li>
+<li>Here you will find a "Stages" section, which contains a <strong>Services Build Verification</strong> stage, which should have 2 artifacts, click on "2 artifacts":</li>
+</ol>
+<p><img alt="An image showing 2 build artifacts" src="../images/artifacts.png" /></p>
+<ol>
+<li>This will list the published artifacts and you should see <strong>SwaggerDoc</strong>. Clicking on this will download the swagger.json file that was generated as part of the CI build.</li>
+</ol>
+<p>An example is shown below, specifically, we show the part which relates to the <code>$ingest</code> endpoint:</p>
+<pre><code class="language-json">&quot;/$ingest&quot;: {
+      &quot;post&quot;: {
+        &quot;tags&quot;: [
+          &quot;RequiredRole=DataProvider&quot;
+        ],
+        &quot;operationId&quot;: &quot;PostIngest&quot;,
+</code></pre>
+<p>Our route has been created to support "POST" requests to the <code>$ingest</code> endpoint, and has the tags we added.</p>
+<h2 id="putting-it-all-together">Putting it all together</h2>
+<p>To summarise:</p>
+<ol>
+<li>In our API, we added the "RequiredRole=DataProvider" tag to a particular endpoint and route.</li>
+<li>When the CI pipeline is run, this generates a <code>swagger.json</code> file which contains our Open-API specifications.</li>
+<li>When the API Management service is created via terraform, it references the Open-API specifications from <code>swagger.json</code> to create the API routes.</li>
+<li>Also via terraform, the API Management policies are created, which are policies applied to each endpoint. These use the "tags" in the Swagger file to generate the correct policy definition, using the `dex_policy_operation.tftpl" Terraform template.</li>
+<li>If we go to the Azure Portal, and look at our deployed Azure API Management service, by selecting "APIs" &gt; "FHIR API" &gt; "PostIngest" &gt; "Policies", we can see how the Terraform template has been populated with values for the tags from the Swagger file:</li>
+</ol>
+<p><img alt="View of the Azure Portal" src="../images/portal.png" /></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      &copy; NHS Dorset
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/dorset-ics" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="mailto:dex@nhsdorset.nhs.uk" target="_blank" rel="noopener" title="" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4l217.6 163.2c11.4 8.5 27 8.5 38.4 0l217.6-163.2c12.1-9.1 19.2-23.3 19.2-38.4 0-26.5-21.5-48-48-48H48zM0 176v208c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64V176L294.4 339.2a63.9 63.9 0 0 1-76.8 0L0 176z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "content.tabs.link", "content.code.copy"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.ebd0bdb7.min.js"></script>
+      
+    
+  </body>
+</html>
