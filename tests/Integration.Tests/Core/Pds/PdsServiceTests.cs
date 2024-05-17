@@ -181,7 +181,7 @@ public class PdsServiceTests : IDisposable
                 "X26ABC1",
                 "SPINE_PDS_MESH_V1",
                 csv,
-                mexFileName: $"RESP_MPTREQ_{DateTime.Now:yyyyMMddHHmmss}_{DateTime.Now:yyyyMMddHHmmss}.csv",
+                mexFileName: $"RESP_MPTREQ_{DateTime.UtcNow:yyyyMMddHHmmss}_{DateTime.UtcNow:yyyyMMddHHmmss}.csv",
                 contentType: MediaTypeNames.Text.Csv);
         }
     }

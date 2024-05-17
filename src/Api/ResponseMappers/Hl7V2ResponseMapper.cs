@@ -43,7 +43,7 @@ public class HL7v2ResponseMapper(IngestionRequest ingestionRequest) : IResponseM
     {
         return
             $"""
-             MSH|^~\&|{Globals.DataPlatformName}|{Globals.SendingFacility}|{ingestionRequest.SourceDomain}|{ingestionRequest.OrganisationCode}|{DateTime.Now:yyyyMMddHHmmss}||ACK|{Guid.NewGuid().ToString()}|P|{Globals.HL7v2Version}
+             MSH|^~\&|{Globals.DataPlatformName}|{Globals.SendingFacility}|{ingestionRequest.SourceDomain}|{ingestionRequest.OrganisationCode}|{DateTime.UtcNow:yyyyMMddHHmmss}||ACK|{Guid.NewGuid().ToString()}|P|{Globals.HL7v2Version}
              MSA|{ackCode}|{requestMessageControlId}|{textMessage}
              """;
     }
