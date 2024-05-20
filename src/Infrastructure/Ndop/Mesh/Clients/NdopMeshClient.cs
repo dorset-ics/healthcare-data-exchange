@@ -59,7 +59,7 @@ public class NdopMeshClient(ILogger<NdopMeshClient> logger, [FromKeyedServices("
     {
         try
         {
-            var fileName = DateTime.Now.ToNdopMeshMessageFileName();
+            var fileName = DateTime.UtcNow.ToNdopMeshMessageFileName();
 
             var controlId = $"{ndopConfiguration.Mesh.MailboxId}_{Guid.NewGuid()}";
 
