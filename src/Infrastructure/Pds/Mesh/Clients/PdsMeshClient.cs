@@ -58,7 +58,7 @@ public class PdsMeshClient(ILogger<PdsMeshClient> logger, [FromKeyedServices("Pd
     {
         try
         {
-            var fileName = DateTime.Now.ToPdsMeshMessageFileName();
+            var fileName = DateTime.UtcNow.ToPdsMeshMessageFileName();
 
             var message = await meshClient.Mailbox.SendMessageAsync(
                 pdsConfiguration.Mesh.MailboxId,
