@@ -4,7 +4,10 @@ on:
     pull_request:
         branches:
             - main
-        
+
+permissions:
+  contents: read
+
 jobs:
     bvt:
         name: Build Verification Test

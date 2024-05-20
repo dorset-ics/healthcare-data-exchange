@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/azure-cli
+﻿FROM mcr.microsoft.com/azure-cli@sha256:f3c99192053c8993cfeeec073ce37ec09147bfce38acb41c8ab4183c5418132d
 
 ARG ACR_NAME
 ARG AZURE_CLIENT_ID
