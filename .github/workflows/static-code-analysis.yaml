@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # v4.1.5
 
       - name: DevSkim Security Analysis
         run: |
@@ -19,7 +19,7 @@ jobs:
           devskim analyze --source-code ${{ github.workspace }}/src --output-file ${{ github.workspace }}/devskim-results.sarif -f sarif
 
       - name: Publish DevSkim Security Analysis Results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         if: always()
         with:
           name: CodeAnalysisLogs
@@ -33,12 +33,12 @@ jobs:
           fi
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
         with:
-          python-version: "3.x"
+            python-version: '3.x'
 
       - name: Install pre-commit
-        run: python -m pip install --upgrade pre-commit
+        run: python -m pip install -r ./pre-commit-requirements.txt --no-deps
 
       - name: Run pre-commit checks
         run: pre-commit run --all-files --show-diff-on-failure
