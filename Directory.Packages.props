@@ -26,7 +26,7 @@
     <PackageVersion Include="Carter" Version="8.0.0" />
     <PackageVersion Include="Hl7.Fhir.R4" Version="5.4.0" />
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="8.0.1" />
-    <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.6.1" />
     <PackageVersion Include="Quartz" Version="3.8.0" />
     <PackageVersion Include="Quartz.Extensions.Hosting" Version="3.8.0" />
   </ItemGroup>
