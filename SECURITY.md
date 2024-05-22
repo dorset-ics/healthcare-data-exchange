@@ -6,7 +6,7 @@ The Healthcare Data Exchange team takes the security of our software products an
 
 **Please do not report security vulnerabilities through public GitHub issues.**
 
-If you believe you have found a security vulnerability, please submit your report to us via email.
+If you believe you have found a security vulnerability, please submit your report to us via email, or by using GitHub's security advisories feature, by following the steps in the [privately reporting a security vulnerability guide](https://docs.github.com/en/code-security/security-advisories/guidance-on-reporting-and-writing-information-about-vulnerabilities/privately-reporting-a-security-vulnerability).
 
 > **Note:** An email will be provided here, before the project is made public.
 
