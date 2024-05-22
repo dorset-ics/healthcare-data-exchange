@@ -2,11 +2,11 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "=3.74.0"
+      version = "3.104.0"
     }
     random = {
       source  = "hashicorp/random"
-      version = "=3.1.0"
+      version = "3.6.1"
     }
   }
 
@@ -18,7 +18,7 @@ provider "azurerm" {
 }
 
 module "terraform_azurerm_environment_configuration" {
-  source          = "git::https://github.com/microsoft/terraform-azurerm-environment-configuration.git?ref=0.2.0"
+  source          = "git::https://github.com/microsoft/terraform-azurerm-environment-configuration.git?ref=0.4.1"
   arm_environment = "public"
 }
 
