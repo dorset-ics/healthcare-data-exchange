@@ -6,7 +6,7 @@ The file is then used by the CD pipeline and terraform to create the API in the 
 In order to generate the swagger file for local testing, you can run the following script:
 
 ```bash
-bash ./.pipelines/scripts/generate-swagger.sh infrastructure/services/api_management
+bash ./scripts/generate-swagger.sh infrastructure/services/api_management
 ```
 
 This script will generate the swagger file and store it in the `infrastructure/services/api_management` folder. The file can then be used to create the API in the API Management via terraform.

@@ -36,7 +36,7 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                bash $(Build.SourcesDirectory)/.pipelines/scripts/generate-swagger.sh $(Build.ArtifactStagingDirectory)
+                bash $(Build.SourcesDirectory)/scripts/generate-swagger.sh $(Build.ArtifactStagingDirectory)
             displayName: 'Build and Publish Swagger Docs'
             env:
               ASPNETCORE_ENVIRONMENT: 'Local'
