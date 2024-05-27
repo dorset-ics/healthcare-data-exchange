@@ -39,7 +39,7 @@
     <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.1" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.0" />
     <PackageVersion Include="IdentityModel" Version="6.2.0" />
-    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="7.1.2" />
+    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="7.5.2" />
   </ItemGroup>
   <ItemGroup Label="Common Tests">
     <PackageVersion Include="NSubstitute" Version="5.1.0" />
