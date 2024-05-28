@@ -16,7 +16,7 @@
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
     <PackageVersion Include="NEL.MESH" Version="1.0.0.8" />
-    <PackageVersion Include="Polly" Version="8.3.0" />
+    <PackageVersion Include="Polly" Version="8.4.0" />
     <PackageVersion Include="RestSharp" Version="110.2.0" />
     <PackageVersion Include="System.IO.Abstractions" Version="21.0.2" />
     <PackageVersion Include="System.Linq.Async" Version="6.0.1" />
@@ -25,7 +25,7 @@
     <PackageVersion Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.1" />
     <PackageVersion Include="Carter" Version="8.0.0" />
     <PackageVersion Include="Hl7.Fhir.R4" Version="5.4.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="8.0.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="8.0.5" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     <PackageVersion Include="Quartz" Version="3.8.0" />
     <PackageVersion Include="Quartz.Extensions.Hosting" Version="3.8.0" />
@@ -38,8 +38,8 @@
   <ItemGroup Label="Infrastructure">
     <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.1" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.0" />
-    <PackageVersion Include="IdentityModel" Version="6.2.0" />
-    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="7.1.2" />
+    <PackageVersion Include="IdentityModel" Version="7.0.0" />
+    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="7.5.2" />
   </ItemGroup>
   <ItemGroup Label="Common Tests">
     <PackageVersion Include="NSubstitute" Version="5.1.0" />
@@ -50,7 +50,7 @@
     <PackageVersion Include="coverlet.collector" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup Label="Integration Tests">
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.5" />
   </ItemGroup>
   <ItemGroup Label="Template Tests">
     <PackageVersion Include="JsonDiffPatch.Net" Version="2.3.0" />
