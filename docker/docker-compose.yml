@@ -54,7 +54,7 @@ services:
         condition: service_healthy
 
   fhir-sql:
-    image: "mcr.microsoft.com/mssql/server:2022-CU13-ubuntu-22.04"
+    image: "mcr.microsoft.com/mssql/server"
     user: root
     environment:
       SA_PASSWORD: ${SAPASSWORD}
