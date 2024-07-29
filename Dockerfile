@@ -1,5 +1,5 @@
 ﻿# v8.0
-FROM mcr.microsoft.com/dotnet/aspnet@sha256:6c4df091e4e531bb93bdbfe7e7f0998e7ced344f54426b7e874116a3dc3233ff AS base
+FROM mcr.microsoft.com/dotnet/aspnet@sha256:3deda593cf10581cbacfa16a1fbb090353d14beaa65adca4611c7c7a458d66b0 AS base
 USER $APP_UID
 WORKDIR /app
 EXPOSE 443
