@@ -6,7 +6,7 @@ EXPOSE 443
 EXPOSE 80
 
 # v8.0
-FROM mcr.microsoft.com/dotnet/sdk@sha256:df188b6cb642450d83d3d857a992bbbef248212fd456dcb9ae582ddd1bb96dce AS build
+FROM mcr.microsoft.com/dotnet/sdk@sha256:ff705b99a06144190e2638f8ede64a753915df5ea27fff55f58d0eb5f7054b0b AS build
 ARG BUILD_CONFIGURATION=Release
 COPY ["src/Api/Api.csproj", "src/Api/"]
 COPY ["src/Infrastructure/Infrastructure.csproj", "src/Infrastructure/"]
