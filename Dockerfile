@@ -1,12 +1,12 @@
 ﻿# v8.0
-FROM mcr.microsoft.com/dotnet/aspnet@sha256:6c4df091e4e531bb93bdbfe7e7f0998e7ced344f54426b7e874116a3dc3233ff AS base
+FROM mcr.microsoft.com/dotnet/aspnet@sha256:3ded9ccf06f222ec934311be4f9facda83d144331c028340e3a694733cad7d4b AS base
 USER $APP_UID
 WORKDIR /app
 EXPOSE 443
 EXPOSE 80
 
 # v8.0
-FROM mcr.microsoft.com/dotnet/sdk@sha256:35792ea4ad1db051981f62b313f1be3b46b1f45cadbaa3c288cd0d3056eefb83 AS build
+FROM mcr.microsoft.com/dotnet/sdk@sha256:cab0284cce7bc26d41055d0ac5859a69a8b75d9a201cd226999f4f00cc983f13 AS build
 ARG BUILD_CONFIGURATION=Release
 COPY ["src/Api/Api.csproj", "src/Api/"]
 COPY ["src/Infrastructure/Infrastructure.csproj", "src/Infrastructure/"]
